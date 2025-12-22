@@ -54,7 +54,7 @@ function AdminDashboard({ user, onLogout }) {
                 Home
               </button>
               <a
-                href="http://localhost:5173"
+                href={process.env.REACT_APP_DEMO_URL || 'http://localhost:5173'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ml-2 px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors duration-200 flex items-center"

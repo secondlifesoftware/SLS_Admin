@@ -247,6 +247,7 @@ git commit -m "Update demo submodule"
 
 - [Build Documentation](./docs/BUILD.md) - Detailed build process
 - [Firebase Setup](./docs/FIREBASE_SETUP.md) - Firebase configuration guide
+- [Deployment Guide](./docs/DEPLOYMENT.md) - Production deployment instructions
 
 ## 🤝 Contributing
 
