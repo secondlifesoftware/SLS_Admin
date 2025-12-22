@@ -53,6 +53,16 @@ function AdminDashboard({ user, onLogout }) {
                 <span className="mr-1.5">🏠</span>
                 Home
               </button>
+              <a
+                href="http://localhost:5173"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-2 px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors duration-200 flex items-center"
+                title="Open demo application"
+              >
+                <span className="mr-1.5">🎨</span>
+                Demo
+              </a>
             </div>
 
             {/* Navigation Links */}

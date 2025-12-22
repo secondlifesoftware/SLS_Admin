@@ -29,6 +29,8 @@ SLS_Admin/
 ├── backend/                # Python FastAPI backend
 │   ├── main.py             # FastAPI application
 │   └── requirements.txt    # Python dependencies
+├── demo/                   # Demo application (Git submodule)
+│   └── [See demo/README.md for details]
 ├── docs/                   # Project documentation
 │   ├── README.md           # Documentation index
 │   ├── BUILD.md            # Build documentation
@@ -206,6 +208,40 @@ To create admin users, follow the steps in [Firebase Setup Guide](./docs/FIREBAS
 cd frontend
 npm test
 ```
+
+## 🎨 Demo Application
+
+This repository includes a demo application as a Git submodule located in the `demo/` directory. The demo showcases various UI/UX patterns and component libraries.
+
+### Accessing the Demo
+
+The demo is available as a separate application. To run it:
+
+```bash
+cd demo
+npm install
+npm run dev
+```
+
+The demo will be available at `http://localhost:5173` (or the port specified by Vite).
+
+### Working with the Submodule
+
+**Initial Setup (for new clones):**
+```bash
+git submodule update --init --recursive
+```
+
+**Updating the Demo:**
+```bash
+cd demo
+git pull origin main
+cd ..
+git add demo
+git commit -m "Update demo submodule"
+```
+
+**For more information:** See [demo/README.md](./demo/README.md)
 
 ## 📚 Documentation
 
