@@ -1,0 +1,155 @@
+.services {
+  padding: 60px 24px;
+  background: rgb(244, 244, 250);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.services-container {
+  max-width: 1280px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.services-cards {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  height: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.card {
+  position: absolute;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 600px;
+  height: 450px;
+  overflow: hidden;
+  will-change: transform;
+  aspect-ratio: 4 / 3;
+}
+
+.card > div {
+  position: absolute;
+  border-radius: inherit;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.card-back {
+  width: 100%;
+  height: 100%;
+}
+
+.card-left {
+  left: calc(50% - 600px / 2 - 70px);
+  transform: scale(1.05);
+  transform-origin: center center;
+  z-index: 1;
+}
+
+.card-right {
+  left: calc(50% - 600px / 2 + 70px);
+  transform: scale(1.05);
+  transform-origin: center center;
+  z-index: 2;
+}
+
+.card-front {
+  left: calc(50% - 600px / 2);
+  width: 600px;
+  height: 450px;
+  z-index: 3;
+  animation: slideInFromRight 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: none;
+  transform-origin: center center;
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+
+.services-indicators {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #9ca3af;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.indicator:hover {
+  border-color: #6366f1;
+  transform: scale(1.2);
+}
+
+.indicator.active {
+  background-color: #6366f1;
+  border-color: #6366f1;
+  width: 32px;
+  border-radius: 6px;
+}
+
+.services-cta {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .services-cards {
+    height: 350px;
+    max-width: 100%;
+  }
+  
+  .card {
+    width: 480px;
+  }
+  
+  .card-left {
+    left: calc(50% - 480px / 2 - 40px);
+  }
+  
+  .card-right {
+    left: calc(50% - 480px / 2 + 40px);
+  }
+  
+  .card-front {
+    left: calc(50% - 480px / 2);
+    width: 480px;
+  }
+}
+

@@ -1,0 +1,63 @@
+.footer {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  padding: 60px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-company {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  font-family: 'Inter', sans-serif;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-icon {
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.footer-email {
+  font-size: 16px;
+  color: #e2e8f0;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 400;
+}
+
+.footer-email:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .footer-company {
+    font-size: 16px;
+  }
+  
+  .footer-email {
+    font-size: 14px;
+  }
+}
+

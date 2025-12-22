@@ -1,5 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from database import engine, Base
+from routers import clients, invoices, scope_of_work, profiles
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="SLS Admin API",
@@ -15,6 +20,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(clients.router)
+app.include_router(invoices.router)
+app.include_router(scope_of_work.router)
+app.include_router(profiles.router)
 
 
 @app.get("/")

@@ -1,16 +1,18 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+import Home from './components/Home';
+import Admin from './components/Admin';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>SLS Admin</h1>
-        <p>Welcome to the company website</p>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/admin/*" element={<Admin />} />
+      </Routes>
+    </Router>
   );
 }
 
 export default App;
-

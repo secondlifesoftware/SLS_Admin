@@ -1,0 +1,111 @@
+.hero {
+  background: rgb(244, 244, 250);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  padding: 0 24px 20px;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-header {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+}
+
+.company-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0a0a0a;
+  letter-spacing: -0.02em;
+  font-family: 'Inter', sans-serif;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding: 60px 0 0;
+  width: 100%;
+}
+
+.hero-main {
+  max-width: 900px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-headline {
+  font-size: clamp(48px, 8vw, 80px);
+  font-weight: 800;
+  color: #0a0a0a;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  font-family: 'Inter', sans-serif;
+  margin: 0 0 12px 0;
+  text-align: center;
+}
+
+.hero-subheadline {
+  font-size: clamp(20px, 2.5vw, 28px);
+  color: #52525b;
+  line-height: 1.4;
+  font-weight: 400;
+  max-width: 700px;
+  margin: 0 auto;
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 0 20px;
+  }
+  
+  .hero-header {
+    left: 20px;
+    top: 24px;
+  }
+  
+  .company-name {
+    font-size: 16px;
+  }
+  
+  .hero-content {
+    padding: 20px 0 10px;
+  }
+}
+
