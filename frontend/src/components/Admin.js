@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
+import { signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import AdminDashboard from './AdminDashboard';
 
@@ -14,6 +14,8 @@ function Admin() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
   const [forgotPasswordMessage, setForgotPasswordMessage] = useState('');
+  const inactivityTimerRef = useRef(null);
+  const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes in milliseconds
 
   useEffect(() => {
     if (!auth) {
@@ -33,6 +35,76 @@ function Admin() {
 
     return () => unsubscribe();
   }, [navigate]);
+
+  // Set up inactivity tracking when user is logged in
+  useEffect(() => {
+    if (!user || !auth) {
+      // Clear timer if user logs out
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+        inactivityTimerRef.current = null;
+      }
+      return;
+    }
+
+    // Function to reset inactivity timer
+    const resetInactivityTimer = () => {
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+
+      inactivityTimerRef.current = setTimeout(() => {
+        handleAutoLogout();
+      }, INACTIVITY_TIMEOUT);
+    };
+
+    // Function to handle automatic logout after inactivity
+    const handleAutoLogout = async () => {
+      if (!auth) return;
+      
+      try {
+        await signOut(auth);
+        setUser(null);
+        navigate('/admin', { replace: true });
+      } catch (err) {
+        console.error('Auto logout error:', err);
+      }
+    };
+
+    // Reset timer on initial login
+    resetInactivityTimer();
+
+    // Activity events that should reset the timer
+    const activityEvents = [
+      'mousedown',
+      'mousemove',
+      'keypress',
+      'scroll',
+      'touchstart',
+      'click',
+      'keydown'
+    ];
+
+    // Add event listeners for user activity
+    const handleActivity = () => {
+      resetInactivityTimer();
+    };
+
+    activityEvents.forEach(event => {
+      window.addEventListener(event, handleActivity, true);
+    });
+
+    // Cleanup
+    return () => {
+      activityEvents.forEach(event => {
+        window.removeEventListener(event, handleActivity, true);
+      });
+      
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+    };
+  }, [user, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -56,7 +128,20 @@ function Admin() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    // Clear inactivity timer
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+      inactivityTimerRef.current = null;
+    }
+    
+    if (auth) {
+      try {
+        await signOut(auth);
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
+    }
     setUser(null);
   };
 

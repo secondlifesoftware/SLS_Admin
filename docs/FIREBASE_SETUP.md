@@ -72,3 +72,6 @@ Replace the placeholder values with your actual Firebase configuration values.
 - **"Firebase: Error (auth/user-not-found)"**: Make sure you've created the user in Firebase Console
 - **Environment variables not loading**: Make sure the `.env` file is in the `frontend` directory and restart the development server
 
+
+
+

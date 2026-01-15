@@ -13,3 +13,6 @@ build/
 .env
 *.log
 
+encryption_key.key
+backend/Keys/
+*.env.bak

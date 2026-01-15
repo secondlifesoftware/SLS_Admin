@@ -1,7 +1,47 @@
+# Core Framework
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 pydantic==2.5.0
-python-dotenv==1.0.0
+
+# Database
 sqlalchemy==2.0.23
 aiosqlite==0.19.0
+
+# Environment & Configuration
+python-dotenv==1.0.0
+
+# PDF Generation
+reportlab==4.0.7
+
+# Data Validation
+email_validator>=2.0.0
+
+# File Uploads
+python-multipart>=0.0.6
+
+# Security & Encryption
+cryptography>=41.0.0
+
+# AI Integration (for SOW generation)
+# Get API key from: https://platform.openai.com/api-keys
+# Add to .env: OPENAI_API_KEY=your-key-here
+openai>=2.14.0
+
+# Plaid Integration (for bank connections)
+# Get API keys from: https://dashboard.plaid.com/developers/keys
+# Add to .env: PLAID_CLIENT_ID=your-client-id, PLAID_SECRET=your-secret, PLAID_ENV=sandbox
+plaid-python>=11.0.0
+
+# Firebase Admin (optional - for password reveal authentication)
+# firebase-admin>=6.0.0
+
+# Google Calendar Integration
+# Get credentials from: https://console.cloud.google.com/apis/credentials
+# Add to .env: GOOGLE_CALENDAR_CREDENTIALS_JSON=path/to/credentials.json or use service account
+google-api-python-client>=2.100.0
+google-auth-httplib2>=0.1.1
+google-auth-oauthlib>=1.1.0
+
+# Background Task Scheduling
+apscheduler>=3.10.4
 

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { profileAPI } from '../../services/api';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../firebase';
+import { useTheme } from '../../contexts/ThemeContext';
 
 function MyProfile({ user }) {
+  const { theme, toggleTheme } = useTheme();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -49,6 +51,7 @@ function MyProfile({ user }) {
             bio: profile.bio || '',
           });
           setOriginalData(profile);
+          // Note: Theme is already loaded by ThemeContext, no need to update here
         } else {
           // Set defaults based on email
           const defaults = getDefaultsForEmail(user.email);
@@ -126,6 +129,7 @@ function MyProfile({ user }) {
               company: formData.company,
               bio: formData.bio,
               role: formData.role,
+              theme_preference: theme,
             }
           );
         } else {
@@ -135,6 +139,7 @@ function MyProfile({ user }) {
             company: formData.company,
             bio: formData.bio,
             role: formData.role,
+            theme_preference: theme,
           });
         }
       } else {
@@ -147,6 +152,7 @@ function MyProfile({ user }) {
           company: formData.company,
           bio: formData.bio,
           role: formData.role,
+          theme_preference: theme,
         });
       }
 
@@ -196,8 +202,8 @@ function MyProfile({ user }) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading profile...</p>
+          <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading profile...</p>
         </div>
       </div>
     );
@@ -207,17 +213,17 @@ function MyProfile({ user }) {
     <div>
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-semibold text-gray-900 mb-2">My Profile</h1>
-        <p className="text-gray-600">Manage your account settings and personal information</p>
+        <h1 className="text-3xl font-bold text-white mb-2">My Profile</h1>
+        <p className="text-gray-400">Manage your account settings and personal information</p>
       </div>
 
       {/* Message Banner */}
       {message.text && (
         <div
-          className={`mb-6 rounded-xl p-4 ${
+          className={`mb-6 rounded-xl p-4 border ${
             message.type === 'success'
-              ? 'bg-green-50 border border-green-200 text-green-800'
-              : 'bg-red-50 border border-red-200 text-red-800'
+              ? 'bg-green-500/20 border-green-500/50 text-green-400'
+              : 'bg-red-500/20 border-red-500/50 text-red-400'
           }`}
         >
           <p className="text-sm">{message.text}</p>
@@ -227,23 +233,23 @@ function MyProfile({ user }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile Card */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+          <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-8 hover:border-cyan-500/50 transition-all">
             {/* Avatar */}
             <div className="flex flex-col items-center mb-6">
-              <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4">
-                <span className="text-4xl text-white font-semibold">
+              <div className="w-24 h-24 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 border border-cyan-400/30 shadow-lg shadow-cyan-500/20">
+                <span className="text-4xl text-white font-bold">
                   {formData.name ? formData.name.charAt(0).toUpperCase() : 'U'}
                 </span>
               </div>
-              <h2 className="text-xl font-semibold text-gray-900">{formData.name || 'User'}</h2>
-              <p className="text-sm text-gray-600">{formData.role}</p>
+              <h2 className="text-xl font-bold text-white">{formData.name || 'User'}</h2>
+              <p className="text-sm text-cyan-400 font-medium">{formData.role}</p>
             </div>
 
             {/* Quick Stats */}
-            <div className="space-y-4 pt-6 border-t border-gray-200">
+            <div className="space-y-4 pt-6 border-t border-gray-800">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Member Since</span>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm text-gray-400">Member Since</span>
+                <span className="text-sm font-semibold text-white">
                   {originalData?.created_at
                     ? new Date(originalData.created_at).toLocaleDateString('en-US', {
                         month: 'short',
@@ -253,8 +259,8 @@ function MyProfile({ user }) {
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Status</span>
-                <span className="px-2.5 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                <span className="text-sm text-gray-400">Status</span>
+                <span className="px-3 py-1 text-xs font-bold bg-green-500/20 text-green-400 border border-green-500/30 rounded-full">
                   Active
                 </span>
               </div>
@@ -264,13 +270,13 @@ function MyProfile({ user }) {
 
         {/* Profile Details */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+          <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-8 hover:border-cyan-500/50 transition-all">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-semibold text-gray-900">Profile Information</h3>
+              <h3 className="text-xl font-bold text-white">Profile Information</h3>
               {!isEditing && (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                  className="px-4 py-2 text-sm font-semibold text-cyan-400 hover:bg-cyan-500/10 border border-cyan-500/30 rounded-lg transition-colors duration-200"
                 >
                   Edit Profile
                 </button>
@@ -280,24 +286,24 @@ function MyProfile({ user }) {
             <div className="space-y-6">
               {/* Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                <label className="block text-sm font-medium text-cyan-400 mb-2">Full Name</label>
                 {isEditing ? (
                   <input
                     type="text"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
                   />
                 ) : (
-                  <p className="text-gray-900">{formData.name || 'Not set'}</p>
+                  <p className="text-white font-medium">{formData.name || 'Not set'}</p>
                 )}
               </div>
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                <p className="text-gray-900">{formData.email}</p>
+                <label className="block text-sm font-medium text-cyan-400 mb-2">Email Address</label>
+                <p className="text-white font-medium">{formData.email}</p>
                 <p className="text-xs text-gray-500 mt-1">
                   Email cannot be changed. Contact support if needed.
                 </p>
@@ -305,7 +311,7 @@ function MyProfile({ user }) {
 
               {/* Phone */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                <label className="block text-sm font-medium text-cyan-400 mb-2">Phone Number</label>
                 {isEditing ? (
                   <input
                     type="tel"
@@ -313,32 +319,32 @@ function MyProfile({ user }) {
                     value={formData.phone}
                     onChange={handleInputChange}
                     placeholder="+1 (555) 123-4567"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
                   />
                 ) : (
-                  <p className="text-gray-900">{formData.phone || 'Not set'}</p>
+                  <p className="text-white font-medium">{formData.phone || 'Not set'}</p>
                 )}
               </div>
 
               {/* Company */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Company</label>
+                <label className="block text-sm font-medium text-cyan-400 mb-2">Company</label>
                 {isEditing ? (
                   <input
                     type="text"
                     name="company"
                     value={formData.company}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
                   />
                 ) : (
-                  <p className="text-gray-900">{formData.company || 'Not set'}</p>
+                  <p className="text-white font-medium">{formData.company || 'Not set'}</p>
                 )}
               </div>
 
               {/* Bio */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                <label className="block text-sm font-medium text-cyan-400 mb-2">Bio</label>
                 {isEditing ? (
                   <textarea
                     name="bio"
@@ -346,10 +352,10 @@ function MyProfile({ user }) {
                     onChange={handleInputChange}
                     rows="4"
                     placeholder="Tell us about yourself..."
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
                   />
                 ) : (
-                  <p className="text-gray-900 whitespace-pre-line">
+                  <p className="text-gray-300 whitespace-pre-line">
                     {formData.bio || 'No bio provided'}
                   </p>
                 )}
@@ -357,18 +363,18 @@ function MyProfile({ user }) {
 
               {/* Action Buttons */}
               {isEditing && (
-                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-800">
                   <button
                     onClick={handleCancel}
                     disabled={saving}
-                    className="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 disabled:opacity-50"
+                    className="px-6 py-2.5 text-sm font-medium text-gray-300 bg-[#252525] border border-gray-800 rounded-lg hover:bg-[#2a2a2a] hover:border-gray-700 transition-colors duration-200 disabled:opacity-50"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm disabled:opacity-50"
+                    className="px-6 py-2.5 text-sm font-medium text-white bg-cyan-500 rounded-lg hover:bg-cyan-600 border border-cyan-400/50 transition-colors duration-200 disabled:opacity-50"
                   >
                     {saving ? 'Saving...' : 'Save Changes'}
                   </button>
@@ -378,20 +384,49 @@ function MyProfile({ user }) {
           </div>
 
           {/* Security Settings */}
-          <div className="mt-6 bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-            <h3 className="text-xl font-semibold text-gray-900 mb-6">Security</h3>
+          <div className="mt-6 bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-8 hover:border-cyan-500/50 transition-all">
+            <h3 className="text-xl font-bold text-white mb-6">Security & Preferences</h3>
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <div>
-                  <div className="text-sm font-medium text-gray-900">Password</div>
-                  <div className="text-sm text-gray-600">Change your account password</div>
+                  <div className="text-sm font-semibold text-white">Password</div>
+                  <div className="text-sm text-gray-400">Change your account password</div>
                 </div>
                 <button
                   onClick={handleChangePassword}
-                  className="px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                  className="px-4 py-2 text-sm font-semibold text-cyan-400 hover:bg-cyan-500/10 border border-cyan-500/30 rounded-lg transition-colors duration-200"
                 >
                   Reset Password
                 </button>
+              </div>
+              
+              {/* Theme Toggle */}
+              <div className="flex justify-between items-center pt-4 border-t border-gray-800">
+                <div>
+                  <div className="text-sm font-semibold text-white">Theme</div>
+                  <div className="text-sm text-gray-400">Choose between light and dark mode</div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className={`text-sm capitalize ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>
+                    {theme} mode
+                  </span>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      await toggleTheme();
+                    }}
+                    className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 ${
+                      theme === 'dark' ? 'bg-cyan-500' : 'bg-gray-400'
+                    }`}
+                    aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+                  >
+                    <span
+                      className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-200 shadow-md ${
+                        theme === 'dark' ? 'translate-x-9' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
