@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { scopeOfWorkAPI, clientAPI } from '../../services/api';
+import { auth } from '../../firebase';
 
 function ScopeOfWorkList() {
   const navigate = useNavigate();
@@ -11,6 +12,8 @@ function ScopeOfWorkList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [viewMode, setViewMode] = useState('cards'); // 'cards' or 'table'
+  const [currentVersionIndex, setCurrentVersionIndex] = useState({}); // Track current version for each group
+  const [animatingCards, setAnimatingCards] = useState({}); // Track animation state
 
   useEffect(() => {
     fetchData();
@@ -48,6 +51,30 @@ function ScopeOfWorkList() {
       (clients[scope.client_id] && 
         `${clients[scope.client_id].first_name} ${clients[scope.client_id].last_name}`.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesSearch;
+  });
+
+  // Group SOWs by client_id + title for version display
+  const groupedScopes = filteredScopes.reduce((groups, scope) => {
+    const key = `${scope.client_id}-${scope.title}`;
+    if (!groups[key]) {
+      groups[key] = [];
+    }
+    groups[key].push(scope);
+    return groups;
+  }, {});
+
+  // Create display array with version info
+  const displayScopes = Object.values(groupedScopes).map(group => {
+    const sorted = group.sort((a, b) => {
+      const versionA = parseFloat(a.version) || 1;
+      const versionB = parseFloat(b.version) || 1;
+      return versionB - versionA; // Latest version first
+    });
+    return {
+      latest: sorted[0],
+      versions: sorted,
+      hasMultipleVersions: sorted.length > 1
+    };
   });
 
   const getStatusBadge = (status) => {
@@ -129,7 +156,8 @@ function ScopeOfWorkList() {
     }
     try {
       setLoading(true);
-      const result = await scopeOfWorkAPI.regenerateFull(scopeId);
+      const userEmail = auth?.currentUser?.email || null;
+      const result = await scopeOfWorkAPI.regenerateFull(scopeId, userEmail);
       if (result.sections) {
         navigate(`/admin/scope/${scopeId}/edit`, { 
           state: { 
@@ -307,7 +335,7 @@ function ScopeOfWorkList() {
         </div>
       </div>
 
-      {/* SOW List */}
+      {/* SOW List - Group by client+title for versions */}
       {filteredScopes.length === 0 ? (
         <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-12 text-center">
           <div className="text-6xl mb-4">📋</div>
@@ -330,13 +358,80 @@ function ScopeOfWorkList() {
         </div>
       ) : viewMode === 'cards' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredScopes.map((scope) => {
+          {displayScopes.map((scopeGroup, groupIndex) => {
+            const groupKey = `${scopeGroup.latest.client_id}-${scopeGroup.latest.title}`;
+            const currentIndex = currentVersionIndex[groupKey] || 0;
+            const scope = scopeGroup.versions[currentIndex];
             const client = clients[scope.client_id];
+            const isAnimating = animatingCards[groupKey];
+
+            const handlePrevious = (e) => {
+              e.stopPropagation();
+              if (currentIndex < scopeGroup.versions.length - 1) {
+                setAnimatingCards({ ...animatingCards, [groupKey]: 'left' });
+                setTimeout(() => {
+                  setCurrentVersionIndex({ ...currentVersionIndex, [groupKey]: currentIndex + 1 });
+                  setTimeout(() => setAnimatingCards({ ...animatingCards, [groupKey]: null }), 50);
+                }, 200);
+              }
+            };
+
+            const handleNext = (e) => {
+              e.stopPropagation();
+              if (currentIndex > 0) {
+                setAnimatingCards({ ...animatingCards, [groupKey]: 'right' });
+                setTimeout(() => {
+                  setCurrentVersionIndex({ ...currentVersionIndex, [groupKey]: currentIndex - 1 });
+                  setTimeout(() => setAnimatingCards({ ...animatingCards, [groupKey]: null }), 50);
+                }, 200);
+              }
+            };
+
             return (
               <div
-                key={scope.id}
-                className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/60 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-200"
+                key={groupKey}
+                className="relative"
+                style={{ marginBottom: scopeGroup.hasMultipleVersions ? '20px' : '0' }}
               >
+                {/* Stacked versions visual effect */}
+                {scopeGroup.hasMultipleVersions && (
+                  <>
+                    <div className="absolute top-2 left-2 right-2 h-full bg-[#252525] border border-cyan-500/20 rounded-2xl z-0" />
+                    <div className="absolute top-4 left-4 right-4 h-full bg-[#282828] border border-cyan-500/15 rounded-2xl z-0" />
+                  </>
+                )}
+                <div
+                  className={`relative bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl hover:border-cyan-500/60 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-200 z-10 ${
+                    scopeGroup.hasMultipleVersions ? 'px-12 py-6' : 'p-6'
+                  } ${
+                    isAnimating === 'left' ? 'animate-slide-out-left' : isAnimating === 'right' ? 'animate-slide-out-right' : 'animate-slide-in'
+                  }`}
+                >
+                {/* Navigation Arrows for Multiple Versions */}
+                {scopeGroup.hasMultipleVersions && (
+                  <>
+                    <button
+                      onClick={handlePrevious}
+                      disabled={currentIndex >= scopeGroup.versions.length - 1}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-[#252525] border border-cyan-500/30 rounded-full flex items-center justify-center text-cyan-400 hover:bg-[#2a2a2a] hover:border-cyan-500/60 disabled:opacity-30 disabled:cursor-not-allowed transition-all z-20"
+                      title="Previous version"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={handleNext}
+                      disabled={currentIndex <= 0}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-[#252525] border border-cyan-500/30 rounded-full flex items-center justify-center text-cyan-400 hover:bg-[#2a2a2a] hover:border-cyan-500/60 disabled:opacity-30 disabled:cursor-not-allowed transition-all z-20"
+                      title="Next version"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </>
+                )}
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1 min-w-0">
@@ -367,7 +462,14 @@ function ScopeOfWorkList() {
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-2 text-sm text-gray-400">
                     <span>📅</span>
-                    <span>v{scope.version}</span>
+                    <span className="font-semibold text-cyan-400">v{scope.version}</span>
+                    {scopeGroup.hasMultipleVersions && (
+                      <span className="text-gray-500">of {scopeGroup.versions.length}</span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <span>🕒</span>
+                    <span>Created: {new Date(scope.created_at).toLocaleDateString()} at {new Date(scope.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
                   {scope.start_date && (
                     <div className="flex items-center gap-2 text-sm text-gray-400">
@@ -406,6 +508,7 @@ function ScopeOfWorkList() {
                   >
                     <span>🗑️</span>
                   </button>
+                </div>
                 </div>
               </div>
             );

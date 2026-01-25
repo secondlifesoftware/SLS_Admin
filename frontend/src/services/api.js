@@ -674,8 +674,11 @@ export const scopeOfWorkAPI = {
     return handleResponse(response);
   },
 
-  generateWithAI: async (requestData) => {
-    const response = await fetch(`${API_BASE_URL}/api/scope-of-work/ai/generate-sow`, {
+  generateWithAI: async (requestData, userEmail = null) => {
+    const url = userEmail 
+      ? `${API_BASE_URL}/api/scope-of-work/ai/generate-sow?user_email=${encodeURIComponent(userEmail)}`
+      : `${API_BASE_URL}/api/scope-of-work/ai/generate-sow`;
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -690,8 +693,11 @@ export const scopeOfWorkAPI = {
     return handleResponse(response);
   },
 
-  regenerateSection: async (scopeId, sectionTitle) => {
-    const response = await fetch(`${API_BASE_URL}/api/scope-of-work/ai/regenerate-section`, {
+  regenerateSection: async (scopeId, sectionTitle, userEmail = null) => {
+    const url = userEmail 
+      ? `${API_BASE_URL}/api/scope-of-work/ai/regenerate-section?user_email=${encodeURIComponent(userEmail)}`
+      : `${API_BASE_URL}/api/scope-of-work/ai/regenerate-section`;
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -704,8 +710,11 @@ export const scopeOfWorkAPI = {
     return handleResponse(response);
   },
 
-  regenerateFull: async (scopeId) => {
-    const response = await fetch(`${API_BASE_URL}/api/scope-of-work/${scopeId}/ai/regenerate-full`, {
+  regenerateFull: async (scopeId, userEmail = null) => {
+    const url = userEmail 
+      ? `${API_BASE_URL}/api/scope-of-work/${scopeId}/ai/regenerate-full?user_email=${encodeURIComponent(userEmail)}`
+      : `${API_BASE_URL}/api/scope-of-work/${scopeId}/ai/regenerate-full`;
+    const response = await fetch(url, {
       method: 'POST',
     });
     return handleResponse(response);

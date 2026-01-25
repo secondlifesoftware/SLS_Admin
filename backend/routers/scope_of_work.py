@@ -39,14 +39,29 @@ def get_scope(scope_id: int, db: Session = Depends(get_db)):
 
 @router.post("/", response_model=ScopeOfWorkSchema)
 def create_scope(scope: ScopeOfWorkCreate, db: Session = Depends(get_db)):
-    """Create a new scope of work"""
+    """Create a new scope of work with auto-incrementing version"""
     # Verify client exists
     client = db.query(Client).filter(Client.id == scope.client_id).first()
     if not client:
         raise HTTPException(status_code=404, detail="Client not found")
     
+    # Auto-increment version for same client+title
+    existing_versions = db.query(ScopeOfWork).filter(
+        ScopeOfWork.client_id == scope.client_id,
+        ScopeOfWork.title == scope.title
+    ).all()
+    
+    # Determine next version number
+    if existing_versions:
+        # Get highest version and increment
+        max_version = max([int(float(s.version)) if s.version else 1 for s in existing_versions])
+        next_version = str(max_version + 1)
+    else:
+        next_version = "1"
+    
     # Create scope
     scope_data = scope.dict(exclude={"sections"})
+    scope_data["version"] = next_version
     db_scope = ScopeOfWork(**scope_data)
     db.add(db_scope)
     db.flush()  # Get the scope ID
@@ -111,11 +126,12 @@ def get_rate_limit_status():
 @router.post("/ai/regenerate-section")
 def regenerate_section_with_ai(
     request: dict,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    user_email: Optional[str] = None
 ):
     """Regenerate a specific section of an existing SOW using AI"""
-    # Check rate limit
-    is_allowed, error_message = sow_ai_rate_limiter.check_rate_limit()
+    # Check rate limit (admin users bypass)
+    is_allowed, error_message = sow_ai_rate_limiter.check_rate_limit(user_email=user_email)
     if not is_allowed:
         raise HTTPException(status_code=429, detail=error_message)
     
@@ -241,11 +257,12 @@ CONTENT: [regenerated content]
 @router.post("/{scope_id}/ai/regenerate-full")
 def regenerate_full_sow_with_ai(
     scope_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    user_email: Optional[str] = None
 ):
     """Regenerate the entire SOW for an existing scope using AI"""
-    # Check rate limit
-    is_allowed, error_message = sow_ai_rate_limiter.check_rate_limit()
+    # Check rate limit (admin users bypass)
+    is_allowed, error_message = sow_ai_rate_limiter.check_rate_limit(user_email=user_email)
     if not is_allowed:
         raise HTTPException(status_code=429, detail=error_message)
     
@@ -400,7 +417,8 @@ class AIGenerateSOWRequest(BaseModel):
 @router.post("/ai/generate-sow")
 def generate_sow_with_ai(
     request: AIGenerateSOWRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    user_email: Optional[str] = None
 ):
     """
     Generate complete SOW with all sections using AI
@@ -412,8 +430,8 @@ def generate_sow_with_ai(
     
     Returns all 19 sections with AI-generated content.
     """
-    # Check rate limit
-    is_allowed, error_message = sow_ai_rate_limiter.check_rate_limit()
+    # Check rate limit (admin users bypass)
+    is_allowed, error_message = sow_ai_rate_limiter.check_rate_limit(user_email=user_email)
     if not is_allowed:
         raise HTTPException(status_code=429, detail=error_message)
     

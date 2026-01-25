@@ -81,20 +81,95 @@ def generate_sow_pdf(scope, client, sections):
         leading=16
     )
     
-    # Body text style
+    # Body text style  
     body_style = ParagraphStyle(
         'Body',
         parent=styles['Normal'],
         fontSize=base_font_size,
-        textColor=colors.black,
+        textColor=colors.HexColor('#374151'),
+        spaceAfter=12,
+        alignment=TA_JUSTIFY,
+        fontName=base_font,
+        leading=15,
+        bulletIndent=25,
+        leftIndent=0,
+        rightIndent=0
+    )
+    
+    # Bullet point style - More pronounced
+    bullet_style = ParagraphStyle(
+        'Bullet',
+        parent=styles['Normal'],
+        fontSize=base_font_size,
+        textColor=colors.HexColor('#374151'),
         spaceAfter=6,
         alignment=TA_LEFT,
         fontName=base_font,
-        leading=12,
-        wordWrap='LTR',
-        bulletIndent=20,  # Indent for bullet points
+        leading=14,
+        leftIndent=25,
+        bulletIndent=5,
+        bulletFontName='ZapfDingbats',
+        bulletFontSize=8
+    )
+    
+    # Milestone header style
+    milestone_style = ParagraphStyle(
+        'Milestone',
+        parent=styles['Normal'],
+        fontSize=12,
+        textColor=colors.HexColor('#1F2937'),
+        spaceAfter=8,
+        spaceBefore=16,
+        alignment=TA_LEFT,
+        fontName=base_font_bold,
+        leading=16,
         leftIndent=0,
-        rightIndent=0
+        backColor=colors.HexColor('#EFF6FF'),
+        borderPadding=8,
+        borderWidth=1,
+        borderColor=colors.HexColor('#DBEAFE')
+    )
+    
+    # Milestone detail style
+    milestone_detail_style = ParagraphStyle(
+        'MilestoneDetail',
+        parent=styles['Normal'],
+        fontSize=10,
+        textColor=colors.HexColor('#4B5563'),
+        spaceAfter=4,
+        alignment=TA_LEFT,
+        fontName=base_font,
+        leading=13,
+        leftIndent=30,
+        bulletIndent=8
+    )
+    
+    # Numbered deliverable style
+    numbered_deliverable_style = ParagraphStyle(
+        'NumberedDeliverable',
+        parent=styles['Normal'],
+        fontSize=11,
+        textColor=colors.HexColor('#1F2937'),
+        spaceAfter=8,
+        spaceBefore=6,
+        alignment=TA_LEFT,
+        fontName=base_font_bold,
+        leading=14,
+        leftIndent=15
+    )
+    
+    # Sub-deliverable style (indented under main deliverable)
+    sub_deliverable_style = ParagraphStyle(
+        'SubDeliverable',
+        parent=styles['Normal'],
+        fontSize=10,
+        textColor=colors.HexColor('#4B5563'),
+        spaceAfter=4,
+        alignment=TA_LEFT,
+        fontName=base_font,
+        leading=13,
+        leftIndent=45,
+        bulletIndent=8
     )
     
     # Company header
@@ -117,14 +192,14 @@ def generate_sow_pdf(scope, client, sections):
     if client.get('address'):
         client_info.append(Paragraph(f"<b>Address:</b> {client.get('address')}", header_style))
     
-    # Header table
+    # Header table - Company left, Client right
     header_data = [
         [company_header, client_info],
     ]
     header_table = Table(header_data, colWidths=[3.5*inch, 3.5*inch])
     header_table.setStyle(TableStyle([
         ('ALIGN', (0, 0), (0, -1), 'LEFT'),
-        ('ALIGN', (1, 0), (1, -1), 'LEFT'),
+        ('ALIGN', (1, 0), (1, -1), 'RIGHT'),  # Align client info to RIGHT
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('LEFTPADDING', (0, 0), (-1, -1), 0),
         ('RIGHTPADDING', (0, 0), (-1, -1), 0),
@@ -159,23 +234,119 @@ def generate_sow_pdf(scope, client, sections):
     
     # Sections
     for section in sorted(sections, key=lambda s: s.order):
-        # Section title
+        # Section title - with gray background box
         elements.append(Paragraph(section.title, section_title_style))
+        elements.append(Spacer(1, 0.1*inch))
         
-        # Section content - convert newlines to paragraphs
+        # Section content - convert newlines to paragraphs with better formatting
         if section.content:
             # First convert markdown to HTML (handles **bold** and *italic*)
             content_html = markdown_to_html(section.content)
             
+            # Check section type
+            is_milestone_section = 'Milestone' in section.title and 'Timeline' in section.title
+            is_deliverables_section = 'Deliverable' in section.title
+            
             # Split by double newlines for paragraphs
             paragraphs = content_html.split('\n\n')
+            
+            deliverable_counter = 1
+            
             for para in paragraphs:
                 if para.strip():
-                    # Replace single newlines with <br/>
-                    para_text = para.strip().replace('\n', '<br/>')
-                    elements.append(Paragraph(para_text, body_style))
+                    # MILESTONES SECTION - Special handling
+                    if is_milestone_section:
+                        # Check if this is a milestone header
+                        if re.match(r'^(Milestone \d+:|Project Timeline|Total Estimated)', para.strip()):
+                            elements.append(Paragraph(para.strip(), milestone_style))
+                            elements.append(Spacer(1, 0.05*inch))
+                            continue
+                        
+                        # Handle milestone details (lines starting with "- ")
+                        lines = para.strip().split('\n')
+                        for line in lines:
+                            line = line.strip()
+                            if not line:
+                                continue
+                            
+                            if line.startswith('- ') or line.startswith('• '):
+                                bullet_text = line[2:].strip()
+                                # Make the label bold if it has a colon
+                                if ':' in bullet_text:
+                                    parts = bullet_text.split(':', 1)
+                                    formatted_text = f'<b>{parts[0]}:</b>{parts[1]}'
+                                    elements.append(Paragraph(f'  • {formatted_text}', milestone_detail_style))
+                                else:
+                                    elements.append(Paragraph(f'  • {bullet_text}', milestone_detail_style))
+                            elif ':' in line:
+                                parts = line.split(':', 1)
+                                formatted_line = f'<b>{parts[0]}:</b> {parts[1]}'
+                                elements.append(Paragraph(formatted_line, milestone_detail_style))
+                            else:
+                                elements.append(Paragraph(line, body_style))
+                    
+                    # DELIVERABLES SECTION - Numbered bullets with indented details
+                    elif is_deliverables_section:
+                        lines = para.strip().split('\n')
+                        current_deliverable_has_subitems = False
+                        
+                        for i, line in enumerate(lines):
+                            line = line.strip()
+                            if not line:
+                                continue
+                            
+                            # Check if this is a bullet point
+                            if line.startswith('- ') or line.startswith('• '):
+                                bullet_text = line[2:].strip()
+                                
+                                # Check next line to see if there are sub-items
+                                has_subitems = i + 1 < len(lines) and (lines[i + 1].strip().startswith('  -') or lines[i + 1].strip().startswith('  •'))
+                                
+                                # Main deliverable - always numbered
+                                # Check if it's not indented (main level)
+                                if not line.startswith('  '):
+                                    if ':' in bullet_text:
+                                        parts = bullet_text.split(':', 1)
+                                        formatted_text = f'{deliverable_counter}. <b>{parts[0]}:</b>{parts[1]}'
+                                    else:
+                                        formatted_text = f'{deliverable_counter}. {bullet_text}'
+                                    elements.append(Paragraph(formatted_text, numbered_deliverable_style))
+                                    deliverable_counter += 1
+                                    current_deliverable_has_subitems = has_subitems
+                                else:
+                                    # Sub-item (indented) - use bullets with extra indent
+                                    clean_text = bullet_text
+                                    if ':' in clean_text:
+                                        parts = clean_text.split(':', 1)
+                                        formatted_text = f'<b>{parts[0]}:</b>{parts[1]}'
+                                    else:
+                                        formatted_text = clean_text
+                                    elements.append(Paragraph(f'  • {formatted_text}', sub_deliverable_style))
+                            else:
+                                # Regular text (intro, summary, etc.)
+                                elements.append(Paragraph(line, body_style))
+                    
+                    # REGULAR SECTIONS - Standard bullet handling
+                    else:
+                        lines = para.strip().split('\n')
+                        for line in lines:
+                            line = line.strip()
+                            if not line:
+                                continue
+                            
+                            if line.startswith('- ') or line.startswith('• '):
+                                bullet_text = line[2:].strip()
+                                # Make labels bold if they have colons
+                                if ':' in bullet_text:
+                                    parts = bullet_text.split(':', 1)
+                                    formatted_text = f'<b>{parts[0]}:</b>{parts[1]}'
+                                    elements.append(Paragraph(f'• {formatted_text}', bullet_style))
+                                else:
+                                    elements.append(Paragraph(f'• {bullet_text}', bullet_style))
+                            else:
+                                elements.append(Paragraph(line, body_style))
         
-        elements.append(Spacer(1, 0.15*inch))
+        elements.append(Spacer(1, 0.2*inch))
     
     # Signature section
     elements.append(Spacer(1, 0.3*inch))

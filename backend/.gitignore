@@ -16,3 +16,4 @@ build/
 encryption_key.key
 backend/Keys/
 *.env.bak
+backend/Keys/

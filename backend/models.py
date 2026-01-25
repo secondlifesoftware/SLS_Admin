@@ -328,6 +328,7 @@ class UserProfile(Base):
     company = Column(String(255))
     bio = Column(Text)
     role = Column(String(100), default="Administrator")
+    is_admin = Column(Boolean, default=False)  # True for admin users who bypass rate limits
     avatar_url = Column(String(500))
     theme_preference = Column(String(20), default="dark")  # 'light' or 'dark'
     created_at = Column(DateTime(timezone=True), server_default=func.now())

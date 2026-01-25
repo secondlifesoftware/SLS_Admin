@@ -29,15 +29,16 @@
   font-size: clamp(18px, 2vw, 20px);
   color: #666666;
   line-height: 1.6;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   letter-spacing: -0.01em;
 }
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 24px;
+  margin-bottom: 64px;
 }
 
 .service-card {
@@ -46,27 +47,91 @@
   border-radius: 8px;
   padding: 32px;
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .service-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+  border-color: rgba(47, 112, 248, 0.2);
+}
+
+.service-number {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2F70F8;
+  margin-bottom: 16px;
+  font-family: 'Inter', sans-serif;
 }
 
 .service-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
   color: #2d2d2d;
-  margin: 0 0 12px 0;
+  margin: 0 0 16px 0;
   letter-spacing: -0.02em;
   font-family: 'Inter', sans-serif;
+  line-height: 1.3;
 }
 
 .service-description {
   font-size: 16px;
   color: #666666;
-  line-height: 1.6;
-  margin: 0;
+  line-height: 1.7;
+  margin: 0 0 20px 0;
   letter-spacing: -0.01em;
+}
+
+.service-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.service-highlight-tag {
+  background: #F0F4FF;
+  color: #2F70F8;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.services-cta {
+  text-align: center;
+  padding: 48px 24px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.services-cta-text {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0 0 24px 0;
+  letter-spacing: -0.02em;
+}
+
+.services-cta-button {
+  background: #2d2d2d;
+  color: #ffffff;
+  border: none;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.services-cta-button:hover {
+  background: #1a1a1a;
 }
 
 @media (max-width: 768px) {
@@ -80,6 +145,18 @@
 
   .services-grid {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 24px;
+  }
+
+  .service-card {
+    padding: 24px;
+  }
+
+  .services-cta {
+    padding: 32px 20px;
+  }
+
+  .services-cta-text {
+    font-size: 20px;
   }
 }

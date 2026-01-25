@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { scopeOfWorkAPI, clientAPI } from '../../services/api';
+import { auth } from '../../firebase';
+import TextEditorModal from './TextEditorModal';
 
 const SOW_SECTIONS = [
   { title: "1. Executive Summary / Purpose", order: 1 },
@@ -28,6 +30,8 @@ function ScopeOfWorkEdit() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [scope, setScope] = useState(null);
+  const [editingSectionIndex, setEditingSectionIndex] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [client, setClient] = useState(null);
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -133,7 +137,8 @@ function ScopeOfWorkEdit() {
       setRegeneratingSection(sectionIndex);
       setError('');
       
-      const result = await scopeOfWorkAPI.regenerateSection(id, section.title);
+      const userEmail = auth?.currentUser?.email || null;
+      const result = await scopeOfWorkAPI.regenerateSection(id, section.title, userEmail);
       
       // Update the section content
       const updatedSections = [...sections];
@@ -163,7 +168,8 @@ function ScopeOfWorkEdit() {
       setRegeneratingFull(true);
       setError('');
       
-      const result = await scopeOfWorkAPI.regenerateFull(id);
+      const userEmail = auth?.currentUser?.email || null;
+      const result = await scopeOfWorkAPI.regenerateFull(id, userEmail);
       
       if (result.sections) {
         // Sort sections by order
@@ -483,6 +489,22 @@ function ScopeOfWorkEdit() {
                       </div>
                     )}
                     <div className="space-y-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="text-sm font-medium text-gray-700">Section Content</label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingSectionIndex(index);
+                            setIsModalOpen(true);
+                          }}
+                          className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                          </svg>
+                          Expand Editor
+                        </button>
+                      </div>
                       <textarea
                         value={section.content || ''}
                         onChange={(e) => handleSectionChange(index, e.target.value)}
@@ -551,6 +573,24 @@ function ScopeOfWorkEdit() {
           )}
         </div>
       </div>
+
+      {/* Text Editor Modal for Sections */}
+      {isModalOpen && editingSectionIndex !== null && (
+        <TextEditorModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingSectionIndex(null);
+          }}
+          onSave={(newValue) => {
+            handleSectionChange(editingSectionIndex, newValue);
+            setEditingSectionIndex(null);
+          }}
+          title={`Edit: ${sections[editingSectionIndex]?.title || 'Section'}`}
+          initialValue={sections[editingSectionIndex]?.content || ''}
+          placeholder="Enter section content..."
+        />
+      )}
     </div>
   );
 }

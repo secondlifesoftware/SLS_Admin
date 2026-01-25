@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { clientAPI, scopeOfWorkAPI, clientTechStackAPI, contractAPI } from '../../services/api';
+import { auth } from '../../firebase';
+import TextEditorModal from './TextEditorModal';
 
 // Import section templates
 const SOW_SECTIONS = [
@@ -28,6 +30,10 @@ const SOW_SECTIONS = [
 function ScopeOfWorkGenerator() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
+  const [editingSectionIndex, setEditingSectionIndex] = useState(null);
+  const [isSectionModalOpen, setIsSectionModalOpen] = useState(false);
+  const [regeneratingSectionIndex, setRegeneratingSectionIndex] = useState(null);
   const [clients, setClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState(null);
   const [clientDetails, setClientDetails] = useState(null);
@@ -48,6 +54,8 @@ function ScopeOfWorkGenerator() {
     budget: null,
     start_date: '',
     end_date: '',
+    duration_value: null,
+    duration_unit: 'weeks', // 'days', 'weeks', 'months'
     pricing_type: 'milestones', // 'milestones' or 'hourly'
     num_milestones: 3,
     hourly_rate: null,
@@ -279,6 +287,7 @@ function ScopeOfWorkGenerator() {
           });
         }, 500); // Update every 500ms
         
+        const userEmail = auth?.currentUser?.email || null;
         const data = await scopeOfWorkAPI.generateWithAI({
           client_id: selectedClient,
           project_title: sowData.title,
@@ -289,7 +298,7 @@ function ScopeOfWorkGenerator() {
           pricing_type: sowData.pricing_type,
           num_milestones: sowData.pricing_type === 'milestones' ? sowData.num_milestones : null,
           hourly_rate: sowData.pricing_type === 'hourly' ? sowData.hourly_rate : null,
-        });
+        }, userEmail);
         
         clearInterval(progressInterval);
         setAiProgress({ current: 19, total: 19, status: 'Finalizing...' });
@@ -346,7 +355,13 @@ function ScopeOfWorkGenerator() {
       
       // Handle milestones
       if (section.title.includes('Milestones')) {
-        content = generateMilestonesTemplate(sowData.num_milestones, sowData.start_date, sowData.end_date);
+        content = generateMilestonesTemplate(
+          sowData.num_milestones, 
+          sowData.start_date, 
+          sowData.end_date,
+          sowData.budget,
+          sowData.hourly_rate
+        );
       }
       
       // Handle tech stack
@@ -380,20 +395,47 @@ function ScopeOfWorkGenerator() {
     return `[Loading template for ${title}...]`;
   };
 
-  const generateMilestonesTemplate = (numMilestones, startDate, endDate) => {
+  const generateMilestonesTemplate = (numMilestones, startDate, endDate, budget = null, hourlyRate = null) => {
     if (numMilestones <= 0) return "No milestones defined.";
     
+    // Calculate hourly estimates if we have budget and hourly rate
+    let totalEstimatedHours = null;
+    let hoursPerMilestone = null;
+    
+    if (budget && hourlyRate && hourlyRate > 0) {
+      totalEstimatedHours = Math.round(budget / hourlyRate);
+      hoursPerMilestone = Math.round(totalEstimatedHours / numMilestones);
+    }
+    
     const milestones = [];
+    const header = `Project Timeline & Milestones
+
+Total Estimated Hours: ${totalEstimatedHours || '[TBD]'} hours
+Budget: $${budget ? budget.toLocaleString() : '[TBD]'}
+Hourly Rate: $${hourlyRate || '[TBD]'}/hour
+
+---
+
+`;
+    
     for (let i = 1; i <= numMilestones; i++) {
-      milestones.push(`Milestone ${i}:
+      let milestoneText = `Milestone ${i}:
 - Name: [MILESTONE_${i}_NAME]
 - Description: [MILESTONE_${i}_DESCRIPTION]
-- Estimated Duration: [DURATION]
-- Start Date: ${startDate || '[START_DATE]'}
+- Estimated Duration: [DURATION]`;
+      
+      if (hoursPerMilestone) {
+        milestoneText += `\n- Estimated Hours: ~${hoursPerMilestone} hours`;
+        milestoneText += `\n- Estimated Cost: $${(hoursPerMilestone * hourlyRate).toLocaleString()}`;
+      }
+      
+      milestoneText += `\n- Start Date: ${startDate || '[START_DATE]'}
 - End Date: ${endDate || '[END_DATE]'}
-- Approval Checkpoint: [APPROVAL_REQUIRED]`);
+- Approval Checkpoint: [APPROVAL_REQUIRED]`;
+      
+      milestones.push(milestoneText);
     }
-    return milestones.join('\n\n');
+    return header + milestones.join('\n\n');
   };
 
   const handleNext = () => {
@@ -628,7 +670,19 @@ function ScopeOfWorkGenerator() {
 
             {/* Project Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Project Description (Optional)</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-700">Project Description (Optional)</label>
+                <button
+                  type="button"
+                  onClick={() => setIsDescriptionModalOpen(true)}
+                  className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Edit
+                </button>
+              </div>
               <textarea
                 value={sowData.project_description}
                 onChange={(e) => setSowData({ ...sowData, project_description: e.target.value })}
@@ -636,7 +690,7 @@ function ScopeOfWorkGenerator() {
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Describe the project goals, objectives, and key requirements. This will help AI generate more accurate SOW content."
               />
-              <p className="text-xs text-gray-500 mt-1">Provide detailed project information to help AI generate better SOW content</p>
+              <p className="text-xs text-gray-500 mt-1">Provide detailed project information to help AI generate better SOW content. Click "Edit" for a larger editor.</p>
             </div>
 
             {/* Budget */}
@@ -661,7 +715,19 @@ function ScopeOfWorkGenerator() {
                 <input
                   type="date"
                   value={sowData.start_date}
-                  onChange={(e) => setSowData({ ...sowData, start_date: e.target.value })}
+                  onChange={(e) => {
+                    setSowData({ ...sowData, start_date: e.target.value });
+                    // If we have a duration and start date changes, recalculate end date
+                    if (e.target.value && sowData.duration_value && !sowData.end_date) {
+                      const startDate = new Date(e.target.value);
+                      const durationDays = sowData.duration_unit === 'days' ? sowData.duration_value :
+                                         sowData.duration_unit === 'weeks' ? sowData.duration_value * 7 :
+                                         sowData.duration_value * 30;
+                      const endDate = new Date(startDate);
+                      endDate.setDate(endDate.getDate() + durationDays);
+                      setSowData(prev => ({ ...prev, end_date: endDate.toISOString().split('T')[0] }));
+                    }
+                  }}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -670,11 +736,80 @@ function ScopeOfWorkGenerator() {
                 <input
                   type="date"
                   value={sowData.end_date}
-                  onChange={(e) => setSowData({ ...sowData, end_date: e.target.value })}
+                  onChange={(e) => {
+                    setSowData({ ...sowData, end_date: e.target.value });
+                    // Clear duration when end date is manually set
+                    if (e.target.value) {
+                      setSowData(prev => ({ ...prev, duration_value: null }));
+                    }
+                  }}
+                  min={sowData.start_date}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
+
+            {/* Duration (only show if start date exists and no end date) */}
+            {sowData.start_date && !sowData.end_date && (
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Or estimate project duration:
+                </label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <input
+                      type="number"
+                      min="1"
+                      value={sowData.duration_value || ''}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value) || null;
+                        setSowData({ ...sowData, duration_value: value });
+                        
+                        // Auto-calculate end date
+                        if (value && sowData.start_date) {
+                          const startDate = new Date(sowData.start_date);
+                          const durationDays = sowData.duration_unit === 'days' ? value :
+                                             sowData.duration_unit === 'weeks' ? value * 7 :
+                                             value * 30;
+                          const endDate = new Date(startDate);
+                          endDate.setDate(endDate.getDate() + durationDays);
+                          setSowData(prev => ({ ...prev, end_date: endDate.toISOString().split('T')[0] }));
+                        }
+                      }}
+                      placeholder="How long?"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <select
+                      value={sowData.duration_unit}
+                      onChange={(e) => {
+                        setSowData({ ...sowData, duration_unit: e.target.value });
+                        
+                        // Recalculate end date with new unit
+                        if (sowData.duration_value && sowData.start_date) {
+                          const startDate = new Date(sowData.start_date);
+                          const durationDays = e.target.value === 'days' ? sowData.duration_value :
+                                             e.target.value === 'weeks' ? sowData.duration_value * 7 :
+                                             sowData.duration_value * 30;
+                          const endDate = new Date(startDate);
+                          endDate.setDate(endDate.getDate() + durationDays);
+                          setSowData(prev => ({ ...prev, end_date: endDate.toISOString().split('T')[0] }));
+                        }
+                      }}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="days">Days</option>
+                      <option value="weeks">Weeks</option>
+                      <option value="months">Months</option>
+                    </select>
+                  </div>
+                </div>
+                <p className="text-xs text-blue-700 mt-2">
+                  💡 This will automatically calculate the end date
+                </p>
+              </div>
+            )}
 
             {/* Pricing Type */}
             <div>
@@ -969,28 +1104,80 @@ function ScopeOfWorkGenerator() {
                           }`}
                           placeholder={isCustomizable ? "Customize this section for this project..." : "Standard terms (edit only if needed)..."}
                         />
-                        {isCustomizable && (
+                        <div className="flex items-center justify-between">
                           <button
-                            onClick={async () => {
-                              if (!window.confirm(`Regenerate "${section.title}" using AI? This will replace the current content.`)) {
-                                return;
-                              }
-                              try {
-                                setLoading(true);
-                                // For new SOWs, we can't regenerate individual sections yet (need scope_id)
-                                // This will be available after saving
-                                showToastNotification('Section regeneration is available after saving the SOW. Please use "Generate with AI" to regenerate all sections.', 'info');
-                              } catch (err) {
-                                showToastNotification(`Failed to regenerate section: ${err.message}`, 'error');
-                              } finally {
-                                setLoading(false);
-                              }
+                            type="button"
+                            onClick={() => {
+                              setEditingSectionIndex(index);
+                              setIsSectionModalOpen(true);
                             }}
-                            className="text-xs px-3 py-1.5 text-purple-700 bg-purple-50 border border-purple-200 rounded-lg hover:bg-purple-100 transition-colors"
+                            className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
                           >
-                            🔄 Regenerate Section with AI
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                            </svg>
+                            Expand Editor
                           </button>
-                        )}
+                          {isCustomizable && aiGeneratedSections.size > 0 && (
+                            <button
+                              onClick={async () => {
+                                if (!window.confirm(`Regenerate "${section.title}" using AI? This will replace the current content.`)) {
+                                  return;
+                                }
+                                try {
+                                  setRegeneratingSectionIndex(index);
+                                  showToastNotification('Regenerating section with AI...', 'info');
+                                  
+                                  // Call AI to regenerate just this section
+                                  const userEmail = auth?.currentUser?.email || null;
+                                  const response = await fetch(`http://localhost:8000/api/scope-of-work/ai/regenerate-section${userEmail ? `?user_email=${encodeURIComponent(userEmail)}` : ''}`, {
+                                    method: 'POST',
+                                    headers: {
+                                      'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                      scope_id: null, // No scope_id for unsaved SOWs
+                                      section_title: section.title,
+                                      client_name: clientDetails?.name || '',
+                                      project_title: sowData.title,
+                                      project_description: sowData.project_description,
+                                    }),
+                                  });
+                                  
+                                  if (!response.ok) {
+                                    throw new Error('Failed to regenerate section');
+                                  }
+                                  
+                                  const result = await response.json();
+                                  
+                                  // Update the section
+                                  const updatedSections = [...sections];
+                                  updatedSections[index].content = result.content;
+                                  setSections(updatedSections);
+                                  
+                                  showToastNotification('Section regenerated successfully!', 'success');
+                                } catch (err) {
+                                  showToastNotification(`Failed to regenerate section: ${err.message}`, 'error');
+                                } finally {
+                                  setRegeneratingSectionIndex(null);
+                                }
+                              }}
+                              disabled={regeneratingSectionIndex === index}
+                              className="text-xs px-3 py-1.5 text-purple-700 bg-purple-50 border border-purple-200 rounded-lg hover:bg-purple-100 transition-colors disabled:opacity-50 flex items-center gap-1"
+                            >
+                              {regeneratingSectionIndex === index ? (
+                                <>
+                                  <div className="w-3 h-3 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+                                  <span>Regenerating...</span>
+                                </>
+                              ) : (
+                                <>
+                                  🔄 Regenerate Section
+                                </>
+                              )}
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -1122,6 +1309,34 @@ function ScopeOfWorkGenerator() {
           </div>
         )}
       </div>
+
+      {/* Text Editor Modals */}
+      <TextEditorModal
+        isOpen={isDescriptionModalOpen}
+        onClose={() => setIsDescriptionModalOpen(false)}
+        onSave={(newValue) => setSowData({ ...sowData, project_description: newValue })}
+        title="Edit Project Description"
+        initialValue={sowData.project_description}
+        placeholder="Describe the project goals, objectives, and key requirements. This will help AI generate more accurate SOW content."
+      />
+
+      {/* Section Editor Modal */}
+      {isSectionModalOpen && editingSectionIndex !== null && (
+        <TextEditorModal
+          isOpen={isSectionModalOpen}
+          onClose={() => {
+            setIsSectionModalOpen(false);
+            setEditingSectionIndex(null);
+          }}
+          onSave={(newValue) => {
+            handleSectionChange(editingSectionIndex, newValue);
+            setEditingSectionIndex(null);
+          }}
+          title={`Edit: ${sections[editingSectionIndex]?.title || 'Section'}`}
+          initialValue={sections[editingSectionIndex]?.content || ''}
+          placeholder="Enter section content..."
+        />
+      )}
     </div>
   );
 }

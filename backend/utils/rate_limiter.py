@@ -1,15 +1,23 @@
 """
 Rate limiter for AI SOW generation
 Allows 3 uses, then 5-minute cooldown before it can be used again
+Admin users bypass rate limiting
 """
 from datetime import datetime, timedelta
 from typing import Optional
 import threading
 
+# List of admin emails that bypass rate limiting
+ADMIN_EMAILS = [
+    "dks1018@gmail.com",
+    "info@secondlifesoftware.com"
+]
+
 class RateLimiter:
     """
-    Simple in-memory rate limiter
+    Simple in-memory rate limiter with admin bypass
     Tracks: number of requests and cooldown expiration time
+    Admin users bypass all rate limits
     """
     def __init__(self, max_requests: int = 3, cooldown_seconds: int = 300):
         """
@@ -24,15 +32,23 @@ class RateLimiter:
         self.cooldown_until: Optional[datetime] = None
         self.lock = threading.Lock()
     
-    def check_rate_limit(self) -> tuple[bool, Optional[str]]:
+    def check_rate_limit(self, user_email: Optional[str] = None, is_admin: bool = False) -> tuple[bool, Optional[str]]:
         """
         Check if request is allowed
+        
+        Args:
+            user_email: Email of the user making the request
+            is_admin: Whether the user is an admin (bypasses rate limiting)
         
         Returns:
             (is_allowed, error_message)
             - is_allowed: True if request can proceed, False if rate limited
             - error_message: None if allowed, or error message if rate limited
         """
+        # Admin users bypass rate limiting
+        if is_admin or (user_email and user_email.lower() in [email.lower() for email in ADMIN_EMAILS]):
+            return True, None
+        
         with self.lock:
             now = datetime.now()
             

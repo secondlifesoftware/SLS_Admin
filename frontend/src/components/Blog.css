@@ -1,0 +1,133 @@
+.blog {
+  background: #FCF8F4;
+  padding: 100px 24px;
+  position: relative;
+}
+
+.blog-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.blog-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.blog-title {
+  font-size: clamp(36px, 5vw, 48px);
+  font-weight: 700;
+  color: #2d2d2d;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  font-family: 'Inter', sans-serif;
+  margin: 0 0 16px 0;
+}
+
+.blog-subtitle {
+  font-size: clamp(18px, 2vw, 20px);
+  color: #666666;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+  letter-spacing: -0.01em;
+}
+
+.blog-linkedin-link {
+  color: #2F70F8;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.blog-linkedin-link:hover {
+  text-decoration: underline;
+}
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.blog-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  padding: 32px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.blog-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.blog-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #E8F0FE;
+  color: #2F70F8;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.blog-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+.blog-card-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.02em;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.3;
+}
+
+.blog-card-excerpt {
+  font-size: 16px;
+  color: #666666;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  letter-spacing: -0.01em;
+}
+
+.blog-card-meta {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  font-size: 14px;
+  color: #999999;
+}
+
+.blog-date {
+  font-weight: 400;
+}
+
+.blog-read-time {
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .blog {
+    padding: 60px 20px;
+  }
+
+  .blog-header {
+    margin-bottom: 40px;
+  }
+
+  .blog-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
