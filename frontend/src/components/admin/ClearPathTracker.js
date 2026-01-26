@@ -448,7 +448,7 @@ function ClearPathTracker() {
           <p className="text-gray-300 mb-4">{error}</p>
           <button
             onClick={fetchData}
-            className="px-6 py-2 bg-cyan-500 text-white rounded-lg font-semibold hover:bg-cyan-600 transition-all"
+            className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-bold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all"
           >
             Retry
           </button>
@@ -460,12 +460,12 @@ function ClearPathTracker() {
   if (!summary && allAccounts.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-6 max-w-2xl mx-auto">
+        <div className="bg-white border-2 border-purple-200 rounded-xl p-6 max-w-2xl mx-auto">
           <p className="text-gray-300 text-lg mb-4">No debt accounts found</p>
           <p className="text-gray-400 mb-6">Get started by adding your first debt account</p>
           <button
             onClick={() => setShowAddModal(true)}
-            className="px-6 py-3 bg-cyan-500 text-white rounded-lg font-semibold hover:bg-cyan-600 transition-all"
+            className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-bold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all"
           >
             + Add Debt Account
           </button>
@@ -619,7 +619,7 @@ function ClearPathTracker() {
                   >
                     <span className="text-2xl">⚠️</span>
                     <div>
-                      <p className="text-white font-semibold">
+                      <p className="text-gray-800 font-semibold">
                         {account.name} - {account.owner}
                       </p>
                       <p className="text-red-300 text-sm">
@@ -633,13 +633,13 @@ function ClearPathTracker() {
                       className="text-right cursor-pointer"
                       onClick={() => handleNotificationClick(account)}
                     >
-                      <p className="text-white font-bold">${account.current_balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                      <p className="text-gray-800 font-bold">${account.current_balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                       <p className="text-red-300 text-xs">Due: {dueDate.toLocaleDateString()}</p>
                     </div>
                     <button
                       type="button"
                       onClick={(e) => handleDismissNotification(account.id, e)}
-                      className="text-gray-400 hover:text-white transition-colors p-1 rounded-full hover:bg-red-500/30 flex-shrink-0"
+                      className="text-gray-600 hover:text-red-600 transition-colors p-1 rounded-full hover:bg-red-500/30 flex-shrink-0"
                       title="Dismiss notification"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -658,7 +658,7 @@ function ClearPathTracker() {
       {celebrations.map(celeb => (
         <div
           key={celeb.id}
-          className="fixed top-20 right-6 bg-[#1f1f1f] text-cyan-400 px-8 py-4 rounded-xl shadow-2xl z-50 animate-bounce border-2 border-cyan-500/50"
+          className="fixed top-20 right-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-4 rounded-xl shadow-2xl z-50 animate-bounce border-2 border-cyan-500/50"
           style={{
             boxShadow: '0 0 30px rgba(6, 182, 212, 0.4)'
           }}
@@ -672,18 +672,18 @@ function ClearPathTracker() {
 
       {/* Main Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-xl p-6 shadow-lg hover:shadow-cyan-500/20 hover:border-cyan-500/50 transition-all duration-300">
+        <div className="bg-white border-2 border-purple-200 rounded-xl p-6 shadow-lg hover:shadow-cyan-500/20 hover:border-cyan-500/50 transition-all duration-300">
           <p className="text-gray-400 text-sm mb-1">Total Debt</p>
-          <p className="text-3xl font-bold text-white mb-2">${(summary?.total_debt || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+          <p className="text-3xl font-bold text-gray-800 mb-2">${(summary?.total_debt || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           <p className="text-xs text-cyan-400 font-medium">{totalDebtMessage}</p>
         </div>
         {summary?.debt_by_owner && Object.entries(summary.debt_by_owner).slice(0, 2).map(([owner, debt]) => {
           const monthlyPayment = monthlyPayments[owner] || 0;
           const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long' });
           return (
-            <div key={owner} className="bg-[#1f1f1f] border border-cyan-500/30 rounded-xl p-6 shadow-lg hover:shadow-cyan-500/20 hover:border-cyan-500/50 transition-all duration-300">
+            <div key={owner} className="bg-white border-2 border-purple-200 rounded-xl p-6 shadow-lg hover:shadow-cyan-500/20 hover:border-cyan-500/50 transition-all duration-300">
               <p className="text-gray-400 text-sm mb-1">{owner}'s Debt</p>
-              <p className="text-3xl font-bold text-white mb-4">${(debt || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              <p className="text-3xl font-bold text-gray-800 mb-4">${(debt || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
               {monthlyPayment > 0 && (
                 <div 
                   onClick={() => setMonthlyPaymentModal({
@@ -691,7 +691,7 @@ function ClearPathTracker() {
                     selectedMonth: new Date().toISOString().slice(0, 7), // Current month in YYYY-MM format
                     selectedTypes: {...visibleTypes}
                   })}
-                  className="bg-[#1a1a1a] border border-cyan-500/30 rounded-lg p-3 mt-3 cursor-pointer hover:bg-[#252525] hover:border-cyan-500/50 transition-all"
+                  className="bg-purple-50 border-2 border-purple-200 rounded-lg p-3 mt-3 cursor-pointer hover:bg-purple-100 hover:border-purple-300 transition-all"
                 >
                   <p className="text-xs text-gray-400 mb-1">{owner} - {currentMonth}</p>
                   <p className="text-xl font-bold text-cyan-400">${monthlyPayment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
@@ -700,7 +700,7 @@ function ClearPathTracker() {
             </div>
           );
         })}
-        <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-xl p-6 shadow-lg hover:shadow-cyan-500/20 hover:border-cyan-500/50 transition-all duration-300">
+        <div className="bg-white border-2 border-purple-200 rounded-xl p-6 shadow-lg hover:shadow-cyan-500/20 hover:border-cyan-500/50 transition-all duration-300">
           <p className="text-gray-400 text-sm mb-1">Paid Off</p>
           <p className="text-3xl font-bold text-cyan-400 mb-2">${(summary?.total_paid_off || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           <p className="text-xs text-cyan-400 font-medium">{paidOffMessage}</p>
@@ -708,7 +708,7 @@ function ClearPathTracker() {
       </div>
 
       {/* Overall Progress Bar */}
-      <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-6 shadow-lg">
+      <div className="bg-white border-2 border-purple-200 rounded-xl p-6 shadow-lg">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-gray-300">Overall Progress to Debt-Free</span>
           <span className="text-sm font-semibold text-cyan-400">{progressPercentage}%</span>
@@ -726,7 +726,7 @@ function ClearPathTracker() {
       </div>
 
       {/* Type Visibility Toggles */}
-      <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-4 shadow-lg">
+      <div className="bg-white border-2 border-purple-200 rounded-xl p-4 shadow-lg">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-lg font-semibold text-white">Show/Hide Debt Types</h3>
           <button
@@ -736,7 +736,7 @@ function ClearPathTracker() {
                 Object.keys(visibleTypes).map(key => [key, !allVisible])
               ));
             }}
-            className="px-4 py-2 bg-[#1a1a1a] text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-[#252525] hover:border-cyan-500/50 transition-all text-sm font-semibold"
+            className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-2 border-purple-300 rounded-lg hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all text-sm font-semibold"
           >
             {Object.values(visibleTypes).every(v => v) ? 'Hide All' : 'Show All'}
           </button>
@@ -759,8 +759,8 @@ function ClearPathTracker() {
               onClick={() => setVisibleTypes({...visibleTypes, [key]: !visibleTypes[key]})}
               className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 border ${
                 visibleTypes[key]
-                  ? 'bg-[#1a1a1a] text-cyan-400 border-cyan-500/30 hover:border-cyan-500/50'
-                  : 'bg-[#1a1a1a] text-gray-500 border border-gray-700 opacity-50 hover:opacity-75'
+                  ? 'bg-white text-purple-600 border-2 border-purple-200 hover:bg-purple-50 hover:border-purple-300'
+                  : 'bg-gray-100 text-gray-500 border-2 border-gray-300 opacity-75 hover:opacity-100'
               }`}
             >
               {label}
@@ -770,7 +770,7 @@ function ClearPathTracker() {
         
         {/* Progress Bar for Selected Types */}
         {selectedTypesSummary.originalTotal > 0 && (
-          <div className="bg-[#1a1a1a] border border-cyan-500/30 rounded-lg p-4">
+          <div className="bg-white border-2 border-purple-200 rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-300">Selected Debt Types Progress</span>
               <span className="text-sm font-semibold text-cyan-400">{selectedTypesSummary.progress}%</span>
@@ -793,12 +793,12 @@ function ClearPathTracker() {
       {/* Monthly Payment Modal */}
       {monthlyPaymentModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-xl p-6 max-w-2xl w-full shadow-2xl">
+          <div className="bg-white border-2 border-purple-200 rounded-xl p-6 max-w-2xl w-full shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-bold text-white">{monthlyPaymentModal.owner}'s Monthly Payment</h3>
               <button
                 onClick={() => setMonthlyPaymentModal(null)}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-600 hover:text-red-600 transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -813,7 +813,7 @@ function ClearPathTracker() {
                 type="month"
                 value={monthlyPaymentModal.selectedMonth}
                 onChange={(e) => setMonthlyPaymentModal({...monthlyPaymentModal, selectedMonth: e.target.value})}
-                className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
+                className="w-full bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2 text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
@@ -841,7 +841,7 @@ function ClearPathTracker() {
                         ...monthlyPaymentModal,
                         selectedTypes: {...monthlyPaymentModal.selectedTypes, [key]: e.target.checked}
                       })}
-                      className="w-4 h-4 text-cyan-500 bg-[#1a1a1a] border-gray-700 rounded focus:ring-cyan-500"
+                      className="w-4 h-4 text-purple-600 bg-white border-purple-200 rounded focus:ring-cyan-500"
                     />
                     <span className="text-gray-300 text-sm">{label}</span>
                   </label>
@@ -850,7 +850,7 @@ function ClearPathTracker() {
             </div>
 
             {/* Calculated Amount */}
-            <div className="bg-[#1a1a1a] border border-cyan-500/30 rounded-lg p-4 mb-6">
+            <div className="bg-white border-2 border-purple-200 rounded-lg p-4 mb-6">
               <p className="text-sm text-gray-400 mb-1">
                 Total Minimum Payment for {new Date(monthlyPaymentModal.selectedMonth + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
               </p>
@@ -867,7 +867,7 @@ function ClearPathTracker() {
             <div className="flex justify-end">
               <button
                 onClick={() => setMonthlyPaymentModal(null)}
-                className="px-6 py-2 bg-cyan-500 text-white rounded-lg font-semibold hover:bg-cyan-600 transition-all"
+                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-bold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all"
               >
                 Close
               </button>
@@ -881,7 +881,7 @@ function ClearPathTracker() {
         <button
           onClick={handleAISuggestions}
           disabled={loadingAI}
-          className="px-6 py-3 bg-[#1f1f1f] text-cyan-400 border border-cyan-500/30 rounded-xl font-semibold hover:bg-[#252525] hover:border-cyan-500/50 transition-all duration-200 disabled:opacity-50 shadow-lg hover:shadow-cyan-500/20"
+          className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white border border-cyan-500/30 rounded-xl font-semibold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all duration-200 disabled:opacity-50 shadow-lg hover:shadow-cyan-500/20"
         >
           {loadingAI ? '🤖 AI Thinking...' : '🤖 Get AI Payment Strategy'}
         </button>
@@ -895,8 +895,8 @@ function ClearPathTracker() {
 
       {/* AI Suggestions Panel */}
       {aiSuggestions && (
-        <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-xl p-6 shadow-lg">
-          <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <div className="bg-white border-2 border-purple-200 rounded-xl p-6 shadow-lg">
+          <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
             <span>🤖</span>
             <span>AI Payment Strategy</span>
           </h3>
@@ -928,7 +928,7 @@ function ClearPathTracker() {
           </div>
           <button
             onClick={() => setAiSuggestions(null)}
-            className="mt-4 px-4 py-2 bg-[#1a1a1a] text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-[#252525] hover:border-cyan-500/50 transition-all"
+            className="mt-4 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-2 border-purple-300 rounded-lg hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all"
           >
             Close
           </button>
@@ -954,7 +954,7 @@ function ClearPathTracker() {
 
       {/* Debt Accounts List */}
       {accounts.length === 0 ? (
-        <div className="text-center py-12 bg-[#1f1f1f] border border-gray-700 rounded-xl">
+        <div className="text-center py-12 bg-white border-2 border-purple-200 rounded-xl">
           <p className="text-gray-400 text-lg">No accounts found for this category</p>
           <p className="text-gray-500 text-sm mt-2">Try adjusting filters or switch to a different tab</p>
         </div>
@@ -979,11 +979,11 @@ function ClearPathTracker() {
               <div
                 id={`account-${account.id}`}
                 key={account.id}
-                className={`bg-[#1f1f1f] border rounded-xl p-6 transition-all duration-300 shadow-lg ${
+                className={`bg-white border-2 border-purple-200 rounded-xl p-6 transition-all duration-300 shadow-lg ${
                   highlightedAccount === account.id
                     ? 'border-red-500/50 bg-red-500/10 shadow-red-500/30 ring-2 ring-red-500/50'
                     : account.is_paid_off
-                    ? 'border-cyan-500/50 bg-[#1a1a1a]'
+                    ? 'border-purple-300 bg-purple-50'
                     : 'border-gray-700 hover:border-cyan-500/50 hover:shadow-cyan-500/20'
                 }`}
               >
@@ -992,11 +992,11 @@ function ClearPathTracker() {
                     <div className="flex items-center gap-3 mb-2 flex-wrap">
                       <span className="text-2xl">{categoryIcons[categoryType] || '💰'}</span>
                       <h3 className="text-xl font-bold text-white">{account.name}</h3>
-                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#1a1a1a] text-cyan-400 border border-cyan-500/30">
+                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white border-2 border-purple-300">
                         {account.owner}
                       </span>
                       {account.is_paid_off && (
-                        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#1a1a1a] text-cyan-400 border border-cyan-500/30">
+                        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white border-2 border-purple-300">
                           ✓ Paid Off
                         </span>
                       )}
@@ -1007,7 +1007,7 @@ function ClearPathTracker() {
                             <button
                               type="button"
                               onClick={(e) => handleMinimumPayment(account.id, e)}
-                              className="px-3 py-1.5 bg-[#1a1a1a] text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-[#252525] hover:border-cyan-500/50 transition-all text-xs font-semibold shadow-md hover:shadow-cyan-500/20 whitespace-nowrap"
+                              className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-2 border-purple-300 rounded-lg hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all text-xs font-semibold shadow-md hover:shadow-cyan-500/20 whitespace-nowrap"
                             >
                               Pay Min (${account.minimum_payment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
                             </button>
@@ -1020,14 +1020,14 @@ function ClearPathTracker() {
                                 e.stopPropagation();
                                 handlePayment(account.id, 'custom', account.suggested_minimum_payment);
                               }}
-                              className="px-3 py-1.5 bg-[#1a1a1a] text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-[#252525] hover:border-cyan-500/50 transition-all text-xs font-semibold shadow-md hover:shadow-cyan-500/20 whitespace-nowrap"
+                              className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-2 border-purple-300 rounded-lg hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all text-xs font-semibold shadow-md hover:shadow-cyan-500/20 whitespace-nowrap"
                             >
                               Pay AI (${account.suggested_minimum_payment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
                             </button>
                           )}
                           <button
                             onClick={() => setShowPaymentModal(account.id)}
-                            className="px-3 py-1.5 bg-[#1a1a1a] text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-[#252525] hover:border-cyan-500/50 transition-all text-xs font-semibold shadow-md hover:shadow-cyan-500/20 whitespace-nowrap"
+                            className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-2 border-purple-300 rounded-lg hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all text-xs font-semibold shadow-md hover:shadow-cyan-500/20 whitespace-nowrap"
                           >
                             Custom Payment
                           </button>
@@ -1040,7 +1040,7 @@ function ClearPathTracker() {
                                 handleAIEstimate(account.id);
                               }}
                               disabled={loadingAI}
-                              className="px-3 py-1.5 bg-[#1a1a1a] text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-[#252525] hover:border-cyan-500/50 transition-all text-xs font-semibold disabled:opacity-50 shadow-md hover:shadow-cyan-500/20 whitespace-nowrap"
+                              className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-2 border-purple-300 rounded-lg hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all text-xs font-semibold disabled:opacity-50 shadow-md hover:shadow-cyan-500/20 whitespace-nowrap"
                             >
                               {loadingAI ? '🤖...' : '🤖 Estimate'}
                             </button>
@@ -1076,13 +1076,13 @@ function ClearPathTracker() {
                   {account.interest_rate && (
                     <div>
                       <p className="text-gray-400">Interest Rate</p>
-                      <p className="text-white font-semibold">{account.interest_rate}% APR</p>
+                      <p className="text-gray-800 font-semibold">{account.interest_rate}% APR</p>
                     </div>
                   )}
                   {account.minimum_payment && (
                     <div>
                       <p className="text-gray-400">Min Payment</p>
-                      <p className="text-white font-semibold">${account.minimum_payment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                      <p className="text-gray-800 font-semibold">${account.minimum_payment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     </div>
                   )}
                   {account.suggested_minimum_payment && (
@@ -1118,7 +1118,7 @@ function ClearPathTracker() {
                       });
                       setShowEditModal(account);
                     }}
-                    className="px-4 py-2 bg-[#1a1a1a] text-white border border-gray-700 rounded-lg hover:bg-[#252525] hover:border-gray-600 transition-all text-sm font-semibold shadow-md"
+                    className="px-4 py-2 bg-white text-gray-700 border-2 border-gray-300 rounded-lg hover:bg-gray-100 hover:border-gray-400 font-bold transition-all text-sm font-semibold shadow-md"
                   >
                     Edit
                   </button>
@@ -1132,14 +1132,14 @@ function ClearPathTracker() {
                           alert('Error syncing: ' + err.message);
                         }
                       }}
-                      className="px-4 py-2 bg-[#1a1a1a] text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-[#252525] hover:border-cyan-500/50 transition-all text-sm font-semibold shadow-md hover:shadow-cyan-500/20"
+                      className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-2 border-purple-300 rounded-lg hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all text-sm font-semibold shadow-md hover:shadow-cyan-500/20"
                     >
                       🔄 Sync from Bank
                     </button>
                   )}
                   <button
                     onClick={() => handleDeleteAccount(account.id)}
-                    className="px-4 py-2 bg-[#1a1a1a] text-red-400 border border-red-500/30 rounded-lg hover:bg-[#252525] hover:border-red-500/50 transition-all text-sm font-semibold shadow-md"
+                    className="px-4 py-2 bg-white text-red-600 border-2 border-red-300 rounded-lg hover:bg-red-50 hover:border-red-400 font-bold transition-all text-sm font-semibold shadow-md"
                   >
                     Delete
                   </button>
@@ -1148,7 +1148,7 @@ function ClearPathTracker() {
                       href={account.payment_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 bg-[#1a1a1a] text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-[#252525] hover:border-cyan-500/50 transition-all text-sm font-semibold shadow-md hover:shadow-cyan-500/20"
+                      className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-2 border-purple-300 rounded-lg hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all text-sm font-semibold shadow-md hover:shadow-cyan-500/20"
                     >
                       🔗 Payment Link
                     </a>
@@ -1163,15 +1163,15 @@ function ClearPathTracker() {
       {/* Add Account Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-          <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold text-white mb-4">Add Debt Account</h2>
+          <div className="bg-white border-2 border-purple-200 rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Add Debt Account</h2>
             <form onSubmit={handleAddAccount} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">Owner</label>
                 <select
                   value={newAccount.owner}
                   onChange={(e) => setNewAccount({...newAccount, owner: e.target.value})}
-                  className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 >
                   <option value="">Select Owner</option>
@@ -1185,7 +1185,7 @@ function ClearPathTracker() {
                     value={newAccount.customOwner || ''}
                     onChange={(e) => setNewAccount({...newAccount, customOwner: e.target.value})}
                     placeholder="Enter custom owner name"
-                    className="w-full mt-2 px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                    className="w-full mt-2 px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     required
                   />
                 )}
@@ -1196,7 +1196,7 @@ function ClearPathTracker() {
                   <select
                     value={newAccount.account_type}
                     onChange={(e) => setNewAccount({...newAccount, account_type: e.target.value})}
-                    className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     required
                   >
                     <option value="credit_card">💳 Credit Card</option>
@@ -1216,7 +1216,7 @@ function ClearPathTracker() {
                   type="text"
                   value={newAccount.name}
                   onChange={(e) => setNewAccount({...newAccount, name: e.target.value})}
-                  className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
               </div>
@@ -1226,7 +1226,7 @@ function ClearPathTracker() {
                   type="text"
                   value={newAccount.institution_name}
                   onChange={(e) => setNewAccount({...newAccount, institution_name: e.target.value})}
-                  className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
               </div>
@@ -1238,7 +1238,7 @@ function ClearPathTracker() {
                     step="0.01"
                     value={newAccount.original_balance}
                     onChange={(e) => setNewAccount({...newAccount, original_balance: e.target.value})}
-                    className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     required
                   />
                 </div>
@@ -1249,7 +1249,7 @@ function ClearPathTracker() {
                     step="0.01"
                     value={newAccount.current_balance}
                     onChange={(e) => setNewAccount({...newAccount, current_balance: e.target.value})}
-                    className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     required
                   />
                 </div>
@@ -1262,7 +1262,7 @@ function ClearPathTracker() {
                     step="0.01"
                     value={newAccount.interest_rate}
                     onChange={(e) => setNewAccount({...newAccount, interest_rate: e.target.value})}
-                    className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
@@ -1272,7 +1272,7 @@ function ClearPathTracker() {
                     step="0.01"
                     value={newAccount.minimum_payment}
                     onChange={(e) => setNewAccount({...newAccount, minimum_payment: e.target.value})}
-                    className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
               </div>
@@ -1284,7 +1284,7 @@ function ClearPathTracker() {
                     step="0.01"
                     value={newAccount.monthly_payment}
                     onChange={(e) => setNewAccount({...newAccount, monthly_payment: e.target.value})}
-                    className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
@@ -1293,7 +1293,7 @@ function ClearPathTracker() {
                     type="date"
                     value={newAccount.due_date}
                     onChange={(e) => setNewAccount({...newAccount, due_date: e.target.value})}
-                    className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
               </div>
@@ -1302,7 +1302,7 @@ function ClearPathTracker() {
                 <textarea
                   value={newAccount.payment_terms}
                   onChange={(e) => setNewAccount({...newAccount, payment_terms: e.target.value})}
-                  className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   rows="3"
                 />
               </div>
@@ -1312,13 +1312,13 @@ function ClearPathTracker() {
                   type="url"
                   value={newAccount.payment_link}
                   onChange={(e) => setNewAccount({...newAccount, payment_link: e.target.value})}
-                  className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
               <div className="flex gap-3">
                 <button
                   type="submit"
-                  className="flex-1 px-6 py-3 bg-cyan-500 text-white rounded-lg font-semibold hover:bg-cyan-600 transition-all transform hover:scale-105"
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-bold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all transform hover:scale-105"
                 >
                   Add Account
                 </button>
@@ -1338,8 +1338,8 @@ function ClearPathTracker() {
       {/* Payment Modal */}
       {showPaymentModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-          <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-6 max-w-md w-full">
-            <h2 className="text-2xl font-bold text-white mb-4">Record Payment</h2>
+          <div className="bg-white border-2 border-purple-200 rounded-xl p-6 max-w-md w-full">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Record Payment</h2>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">Payment Amount</label>
@@ -1348,7 +1348,7 @@ function ClearPathTracker() {
                   step="0.01"
                   value={paymentData.payment_amount}
                   onChange={(e) => setPaymentData({...paymentData, payment_amount: e.target.value})}
-                  className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
               </div>
@@ -1357,7 +1357,7 @@ function ClearPathTracker() {
                 <textarea
                   value={paymentData.notes}
                   onChange={(e) => setPaymentData({...paymentData, notes: e.target.value})}
-                  className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   rows="3"
                 />
               </div>
@@ -1386,8 +1386,8 @@ function ClearPathTracker() {
       {/* Edit Modal */}
       {showEditModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-          <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold text-white mb-4">Edit Debt Account</h2>
+          <div className="bg-white border-2 border-purple-200 rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Edit Debt Account</h2>
             <form onSubmit={async (e) => {
               e.preventDefault();
               try {
@@ -1413,7 +1413,7 @@ function ClearPathTracker() {
                   type="text"
                   value={editFormData.name}
                   onChange={(e) => setEditFormData({...editFormData, name: e.target.value})}
-                  className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
               </div>
@@ -1425,7 +1425,7 @@ function ClearPathTracker() {
                     step="0.01"
                     value={editFormData.current_balance}
                     onChange={(e) => setEditFormData({...editFormData, current_balance: e.target.value})}
-                    className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     required
                   />
                 </div>
@@ -1436,7 +1436,7 @@ function ClearPathTracker() {
                     step="0.01"
                     value={editFormData.interest_rate || ''}
                     onChange={(e) => setEditFormData({...editFormData, interest_rate: e.target.value})}
-                    className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
               </div>
@@ -1448,7 +1448,7 @@ function ClearPathTracker() {
                     step="0.01"
                     value={editFormData.minimum_payment || ''}
                     onChange={(e) => setEditFormData({...editFormData, minimum_payment: e.target.value})}
-                    className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
@@ -1458,7 +1458,7 @@ function ClearPathTracker() {
                     step="0.01"
                     value={editFormData.monthly_payment || ''}
                     onChange={(e) => setEditFormData({...editFormData, monthly_payment: e.target.value})}
-                    className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
               </div>
@@ -1468,7 +1468,7 @@ function ClearPathTracker() {
                   type="date"
                   value={editFormData.due_date ? new Date(editFormData.due_date).toISOString().split('T')[0] : ''}
                   onChange={(e) => setEditFormData({...editFormData, due_date: e.target.value})}
-                  className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
               <div>
@@ -1476,7 +1476,7 @@ function ClearPathTracker() {
                 <textarea
                   value={editFormData.payment_terms || ''}
                   onChange={(e) => setEditFormData({...editFormData, payment_terms: e.target.value})}
-                  className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   rows="3"
                 />
               </div>
@@ -1486,13 +1486,13 @@ function ClearPathTracker() {
                   type="url"
                   value={editFormData.payment_link || ''}
                   onChange={(e) => setEditFormData({...editFormData, payment_link: e.target.value})}
-                  className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white"
+                  className="w-full px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
               <div className="flex gap-3">
                 <button
                   type="submit"
-                  className="flex-1 px-6 py-3 bg-cyan-500 text-white rounded-lg font-semibold hover:bg-cyan-600 transition-all transform hover:scale-105"
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-bold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all transform hover:scale-105"
                 >
                   Update Account
                 </button>

@@ -27,7 +27,7 @@ function TextEditorModal({ isOpen, onClose, onSave, title, initialValue, placeho
           <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
           <button
             onClick={handleCancel}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-600 hover:text-gray-600 transition-colors"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

@@ -125,7 +125,7 @@ function ClientNotesView({ clientId, onRefresh }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -133,10 +133,10 @@ function ClientNotesView({ clientId, onRefresh }) {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-white">Client Notes</h2>
+        <h2 className="text-2xl font-black text-gray-800">Client Notes</h2>
         <button
           onClick={() => setShowAddModal(true)}
-          className="px-5 py-2.5 bg-cyan-500 text-white rounded-xl font-semibold hover:bg-cyan-600 transition-all border border-cyan-400/50 hover:border-cyan-400"
+          className="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 rounded-xl transition-all"
         >
           + Add Note
         </button>
@@ -149,13 +149,13 @@ function ClientNotesView({ clientId, onRefresh }) {
       )}
 
       {notes.length === 0 && (!client || !client.notes_from_last_meeting) ? (
-        <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-12 text-center">
+        <div className="bg-white border-2 border-purple-200 rounded-2xl p-12 text-center hover:border-purple-300 hover:shadow-xl transition-all">
           <div className="text-6xl mb-4">📝</div>
-          <h3 className="text-xl font-bold text-white mb-2">No notes yet</h3>
-          <p className="text-gray-400 mb-6">Start documenting your conversations and meetings</p>
+          <h3 className="text-xl font-black text-gray-800 mb-2">No notes yet</h3>
+          <p className="text-gray-600 font-semibold mb-6">Start documenting your conversations and meetings</p>
           <button
             onClick={() => setShowAddModal(true)}
-            className="px-6 py-3 bg-cyan-500 text-white rounded-xl font-semibold hover:bg-cyan-600 transition-all border border-cyan-400/50"
+            className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 rounded-xl transition-all"
           >
             Add First Note
           </button>
@@ -164,64 +164,64 @@ function ClientNotesView({ clientId, onRefresh }) {
         <div className="space-y-4">
           {/* Show legacy notes_from_last_meeting if it exists and hasn't been converted to a note */}
           {client && client.notes_from_last_meeting && !notes.some(n => n.content === client.notes_from_last_meeting) && (
-            <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/50 transition-all">
+            <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:shadow-xl transition-all">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="px-3 py-1 text-xs font-bold bg-gray-700 text-gray-300 border border-gray-600 rounded-full">
+                    <span className="px-3 py-1 text-xs font-bold bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 border-2 border-gray-300 rounded-full">
                       Legacy Meeting
                     </span>
                     {client.updated_at && (
-                      <span className="text-sm text-gray-400">
+                      <span className="text-sm text-gray-600 font-semibold">
                         Meeting: {formatDate(client.updated_at)}
                       </span>
                     )}
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">Meeting Notes</h3>
-                  <p className="text-gray-300 whitespace-pre-wrap mb-3">{client.notes_from_last_meeting}</p>
+                  <h3 className="text-lg font-black text-gray-800 mb-2">Meeting Notes</h3>
+                  <p className="text-gray-700 font-semibold whitespace-pre-wrap mb-3">{client.notes_from_last_meeting}</p>
                 </div>
               </div>
-              <div className="text-xs text-gray-500 border-t border-gray-800 pt-3">
+              <div className="text-xs text-gray-600 font-semibold border-t border-purple-200 pt-3">
                 {client.updated_at && `Last updated ${formatDateTime(client.updated_at)}`}
               </div>
             </div>
           )}
-          
+
           {notes.map((note) => (
-            <div key={note.id} className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/50 transition-all">
+            <div key={note.id} className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:shadow-xl transition-all">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="px-3 py-1 text-xs font-bold bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-full">
+                    <span className="px-3 py-1 text-xs font-bold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-600 border-2 border-purple-200 rounded-full">
                       {note.note_type}
                     </span>
                     {note.meeting_date && (
-                      <span className="text-sm text-gray-400">
+                      <span className="text-sm text-gray-600 font-semibold">
                         Meeting: {formatDate(note.meeting_date)}
                       </span>
                     )}
                   </div>
                   {note.title && (
-                    <h3 className="text-lg font-bold text-white mb-2">{note.title}</h3>
+                    <h3 className="text-lg font-black text-gray-800 mb-2">{note.title}</h3>
                   )}
-                  <p className="text-gray-300 whitespace-pre-wrap mb-3">{note.content}</p>
+                  <p className="text-gray-700 font-semibold whitespace-pre-wrap mb-3">{note.content}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleEdit(note)}
-                    className="px-3 py-2 text-sm font-semibold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 rounded-xl hover:bg-cyan-500/20 transition-all"
+                    className="px-3 py-2 text-sm font-bold text-purple-600 bg-white border-2 border-purple-200 rounded-xl hover:bg-purple-50 transition-all"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(note.id)}
-                    className="px-3 py-2 text-sm font-semibold text-red-400 bg-red-500/10 border border-red-500/30 rounded-xl hover:bg-red-500/20 transition-all"
+                    className="px-3 py-2 text-sm font-bold text-red-400 bg-red-500/10 border border-red-500/30 rounded-xl hover:bg-red-500/20 transition-all"
                   >
                     Delete
                   </button>
                 </div>
               </div>
-              <div className="text-xs text-gray-500 border-t border-gray-800 pt-3">
+              <div className="text-xs text-gray-600 font-semibold border-t border-purple-200 pt-3">
                 Created {formatDateTime(note.created_at)}
                 {note.created_by && ` by ${note.created_by}`}
               </div>
@@ -233,17 +233,17 @@ function ClientNotesView({ clientId, onRefresh }) {
       {/* Add/Edit Note Modal */}
       {(showAddModal || editingNote) && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-[#1f1f1f] border border-cyan-500/40 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-800">
-              <h3 className="text-xl font-bold text-white">{editingNote ? 'Edit Note' : 'Add Note'}</h3>
+          <div className="bg-white border-2 border-purple-200 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-purple-200">
+              <h3 className="text-xl font-black text-gray-800">{editingNote ? 'Edit Note' : 'Add Note'}</h3>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
               <div>
-                <label className="block text-sm font-medium text-cyan-400 mb-2">Note Type</label>
+                <label className="block text-sm font-bold text-purple-600 mb-2">Note Type</label>
                 <select
                   value={formData.note_type}
                   onChange={(e) => setFormData({ ...formData, note_type: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                  className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
                 >
                   {noteTypes.map((type) => (
                     <option key={type} value={type}>
@@ -255,40 +255,40 @@ function ClientNotesView({ clientId, onRefresh }) {
 
               {formData.note_type === 'Meeting' && (
                 <div>
-                  <label className="block text-sm font-medium text-cyan-400 mb-2">Meeting Date</label>
+                  <label className="block text-sm font-bold text-purple-600 mb-2">Meeting Date</label>
                   <input
                     type="date"
                     value={formData.meeting_date}
                     onChange={(e) => setFormData({ ...formData, meeting_date: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                    className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
                   />
                 </div>
               )}
 
               <div>
-                <label className="block text-sm font-medium text-cyan-400 mb-2">Title (Optional)</label>
+                <label className="block text-sm font-bold text-purple-600 mb-2">Title (Optional)</label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                  className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
                   placeholder="Brief title for this note"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-cyan-400 mb-2">Content *</label>
+                <label className="block text-sm font-bold text-purple-600 mb-2">Content *</label>
                 <textarea
                   value={formData.content}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                   rows="8"
-                  className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                  className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
                   required
                   placeholder="Write your notes here..."
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-gray-800">
+              <div className="flex justify-end gap-3 pt-4 border-t border-purple-200">
                 <button
                   type="button"
                   onClick={() => {
@@ -298,13 +298,13 @@ function ClientNotesView({ clientId, onRefresh }) {
                       setShowAddModal(false);
                     }
                   }}
-                  className="px-6 py-2.5 text-sm font-medium text-gray-300 bg-[#252525] border border-gray-800 rounded-xl hover:bg-[#2a2a2a] hover:border-gray-700 transition-all"
+                  className="px-6 py-2.5 text-sm font-bold text-purple-600 bg-white border-2 border-purple-200 rounded-xl hover:bg-purple-50 transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 text-sm font-medium text-white bg-cyan-500 rounded-xl hover:bg-cyan-600 border border-cyan-400/50 transition-all"
+                  className="px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all"
                 >
                   {editingNote ? 'Update Note' : 'Add Note'}
                 </button>

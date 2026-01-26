@@ -65,16 +65,16 @@ function InvoiceGenerator() {
 
   const getStatusBadge = (status) => {
     const badges = {
-      Draft: 'bg-gray-700 text-gray-300 border-gray-600',
-      Sent: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
-      Paid: 'bg-green-500/20 text-green-400 border-green-500/30',
-      Overdue: 'bg-red-500/20 text-red-400 border-red-500/30',
-      Cancelled: 'bg-gray-700 text-gray-400 border-gray-600',
-      Finalized: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-      Archived: 'bg-gray-600 text-gray-300 border-gray-500',
+      Draft: 'bg-gray-100 text-gray-600 border-gray-300',
+      Sent: 'bg-purple-100 text-purple-700 border-purple-300 shadow-sm shadow-purple-500/20',
+      Paid: 'bg-emerald-100 text-emerald-700 border-emerald-300 shadow-sm shadow-emerald-500/20',
+      Overdue: 'bg-rose-100 text-rose-700 border-rose-300 shadow-sm shadow-rose-500/20',
+      Cancelled: 'bg-gray-100 text-gray-500 border-gray-300',
+      Finalized: 'bg-blue-100 text-blue-700 border-blue-300 shadow-sm shadow-blue-500/20',
+      Archived: 'bg-gray-100 text-gray-600 border-gray-300',
     };
     return (
-      <span className={`px-3 py-1 text-xs font-bold rounded-full border ${badges[status] || badges.Draft}`}>
+      <span className={`px-3 py-1 text-xs font-bold rounded-full border-2 ${badges[status] || badges.Draft}`}>
         {status}
       </span>
     );
@@ -95,23 +95,23 @@ function InvoiceGenerator() {
   if (loading && invoices.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className={themeClasses.bgPrimary}>
+    <div>
       {/* Page Header */}
       <div className="mb-8">
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h1 className={`text-3xl font-bold mb-2 ${themeClasses.textPrimary}`}>Invoices</h1>
-            <p className={themeClasses.textSecondary}>Manage and track all your invoices</p>
+            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">Invoices</h1>
+            <p className="text-gray-600 font-medium">Manage and track all your invoices</p>
           </div>
           <button
             onClick={() => navigate('/admin/invoices/create')}
-            className="px-6 py-3 bg-cyan-500 text-white rounded-xl font-semibold hover:bg-cyan-600 transition-all border border-cyan-400/50 hover:border-cyan-400 flex items-center gap-2"
+            className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold hover:shadow-xl hover:shadow-purple-500/30 transition-all hover:scale-105 flex items-center gap-2"
           >
             <span className="text-xl">+</span>
             Create Invoice
@@ -119,16 +119,16 @@ function InvoiceGenerator() {
         </div>
 
         {/* Tabs */}
-        <div className={`border-b ${theme === 'light' ? 'border-gray-200' : 'border-gray-800'}`}>
+        <div className="border-b-2 border-purple-100">
           <nav className="flex space-x-8">
             <button
               onClick={() => setActiveTab('active')}
               className={`
-                py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200
+                py-4 px-1 border-b-2 font-bold text-sm transition-all duration-200
                 ${
                   activeTab === 'active'
-                    ? 'border-cyan-400 text-cyan-400'
-                    : `border-transparent ${theme === 'light' ? 'text-gray-600 hover:text-gray-800 hover:border-gray-300' : 'text-gray-500 hover:text-gray-300 hover:border-gray-700'}`
+                    ? 'border-purple-500 text-purple-600'
+                    : 'border-transparent text-gray-500 hover:text-purple-600 hover:border-purple-300'
                 }
               `}
             >
@@ -137,11 +137,11 @@ function InvoiceGenerator() {
             <button
               onClick={() => setActiveTab('archived')}
               className={`
-                py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200
+                py-4 px-1 border-b-2 font-bold text-sm transition-all duration-200
                 ${
                   activeTab === 'archived'
-                    ? 'border-cyan-400 text-cyan-400'
-                    : `border-transparent ${theme === 'light' ? 'text-gray-600 hover:text-gray-800 hover:border-gray-300' : 'text-gray-500 hover:text-gray-300 hover:border-gray-700'}`
+                    ? 'border-purple-500 text-purple-600'
+                    : 'border-transparent text-gray-500 hover:text-purple-600 hover:border-purple-300'
                 }
               `}
             >
@@ -152,54 +152,54 @@ function InvoiceGenerator() {
       </div>
 
       {error && (
-        <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-4 mb-6">
-          <p className="text-sm text-red-400">{error}</p>
+        <div className="bg-red-50 border-2 border-red-300 rounded-xl p-4 mb-6 shadow-sm">
+          <p className="text-sm text-red-700 font-semibold">{error}</p>
         </div>
       )}
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className={`${themeClasses.cardBg} border-cyan-500/30 rounded-xl p-6 ${themeClasses.cardHover} transition-all`}>
-          <div className="text-sm text-cyan-400 mb-1 font-medium">Total Invoices</div>
-          <div className={`text-3xl font-bold ${themeClasses.textPrimary}`}>{invoices.length}</div>
+        <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:shadow-xl hover:border-purple-300 transition-all">
+          <div className="text-sm font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">Total Invoices</div>
+          <div className="text-4xl font-black text-gray-800">{invoices.length}</div>
         </div>
-        <div className={`${themeClasses.cardBg} border-green-500/30 rounded-xl p-6 hover:border-green-500/50 transition-all`}>
-          <div className="text-sm text-cyan-400 mb-1 font-medium">Paid Revenue</div>
-          <div className="text-3xl font-bold text-green-400">${totalRevenue.toFixed(2)}</div>
+        <div className="bg-white border-2 border-emerald-200 rounded-2xl p-6 hover:shadow-xl hover:border-emerald-300 transition-all">
+          <div className="text-sm font-bold text-emerald-600 mb-2">Paid Revenue</div>
+          <div className="text-4xl font-black text-emerald-600">${totalRevenue.toFixed(2)}</div>
         </div>
-        <div className={`${themeClasses.cardBg} border-yellow-500/30 rounded-xl p-6 hover:border-yellow-500/50 transition-all`}>
-          <div className="text-sm text-cyan-400 mb-1 font-medium">Pending</div>
-          <div className="text-3xl font-bold text-yellow-400">${pendingAmount.toFixed(2)}</div>
+        <div className="bg-white border-2 border-amber-200 rounded-2xl p-6 hover:shadow-xl hover:border-amber-300 transition-all">
+          <div className="text-sm font-bold text-amber-600 mb-2">Pending</div>
+          <div className="text-4xl font-black text-amber-600">${pendingAmount.toFixed(2)}</div>
         </div>
-        <div className={`${themeClasses.cardBg} border-red-500/30 rounded-xl p-6 hover:border-red-500/50 transition-all`}>
-          <div className="text-sm text-cyan-400 mb-1 font-medium">Overdue</div>
-          <div className="text-3xl font-bold text-red-400">${overdueAmount.toFixed(2)}</div>
+        <div className="bg-white border-2 border-rose-200 rounded-2xl p-6 hover:shadow-xl hover:border-rose-300 transition-all">
+          <div className="text-sm font-bold text-rose-600 mb-2">Overdue</div>
+          <div className="text-4xl font-black text-rose-600">${overdueAmount.toFixed(2)}</div>
         </div>
       </div>
 
       {/* Search and Filters */}
-      <div className={`${themeClasses.cardBg} ${themeClasses.borderPrimary} rounded-2xl p-6 mb-6`}>
+      <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 mb-6 shadow-lg">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="text-gray-400 text-lg">🔍</span>
+                <span className="text-purple-400 text-lg">🔍</span>
               </div>
               <input
                 type="text"
                 placeholder="Search by invoice number, project name, or client..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className={`block w-full pl-10 pr-3 py-2.5 ${themeClasses.inputBg} ${themeClasses.inputText} rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50 ${themeClasses.inputPlaceholder}`}
+                className="block w-full pl-10 pr-3 py-3 bg-purple-50 border-2 border-purple-200 text-gray-800 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 placeholder-purple-400"
               />
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <label className={`text-sm ${themeClasses.textSecondary} whitespace-nowrap`}>Status:</label>
+            <label className="text-sm text-gray-700 font-bold whitespace-nowrap">Status:</label>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className={`px-4 py-2.5 ${themeClasses.inputBg} ${themeClasses.inputText} rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50`}
+              className="px-4 py-3 bg-purple-50 border-2 border-purple-200 text-gray-800 font-medium rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             >
               <option value="All">All</option>
               <option value="Draft">Draft</option>
@@ -209,11 +209,11 @@ function InvoiceGenerator() {
               <option value="Finalized">Finalized</option>
               <option value="Cancelled">Cancelled</option>
             </select>
-            <label className={`text-sm ${themeClasses.textSecondary} whitespace-nowrap ml-4`}>Client:</label>
+            <label className="text-sm text-gray-700 font-bold whitespace-nowrap ml-4">Client:</label>
             <select
               value={filterClient}
               onChange={(e) => setFilterClient(e.target.value)}
-              className={`px-4 py-2.5 ${themeClasses.inputBg} ${themeClasses.inputText} rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50`}
+              className="px-4 py-3 bg-purple-50 border-2 border-purple-200 text-gray-800 font-medium rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             >
               <option value="All">All Clients</option>
               {clients.map(client => (
@@ -228,10 +228,10 @@ function InvoiceGenerator() {
 
       {/* Invoices List */}
       {filteredInvoices.length === 0 ? (
-        <div className={`${themeClasses.cardBg} ${themeClasses.borderPrimary} rounded-2xl p-12 text-center`}>
+        <div className="bg-white border-2 border-purple-200 rounded-2xl p-12 text-center shadow-lg">
           <div className="text-6xl mb-4">📄</div>
-          <h3 className={`text-xl font-bold mb-2 ${themeClasses.textPrimary}`}>No invoices found</h3>
-          <p className={`${themeClasses.textSecondary} mb-6`}>
+          <h3 className="text-xl font-bold text-gray-800 mb-2">No invoices found</h3>
+          <p className="text-gray-600 font-medium mb-6">
             {searchTerm || filterStatus !== 'All' || filterClient !== 'All'
               ? 'Try adjusting your search or filters'
               : 'Get started by creating an invoice from a client'}
@@ -239,61 +239,61 @@ function InvoiceGenerator() {
           {!searchTerm && filterStatus === 'All' && filterClient === 'All' && activeTab === 'active' && (
             <button
               onClick={() => navigate('/admin/invoices/create')}
-              className="px-6 py-3 bg-cyan-500 text-white rounded-xl font-semibold hover:bg-cyan-600 transition-all border border-cyan-400/50"
+              className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold hover:shadow-xl hover:shadow-purple-500/30 transition-all hover:scale-105"
             >
               Create Your First Invoice
             </button>
           )}
         </div>
       ) : (
-        <div className={`${themeClasses.cardBg} ${themeClasses.borderPrimary} rounded-2xl overflow-hidden`}>
+        <div className="bg-white border-2 border-purple-200 rounded-2xl overflow-hidden shadow-lg">
           <div className="overflow-x-auto">
-            <table className={`min-w-full divide-y ${theme === 'light' ? 'divide-gray-200' : 'divide-gray-800'}`}>
-              <thead className={themeClasses.bgTertiary}>
+            <table className="min-w-full divide-y-2 divide-purple-100">
+              <thead className="bg-gradient-to-r from-purple-500 to-pink-500">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-cyan-400 uppercase">Invoice #</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-cyan-400 uppercase">Client</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-cyan-400 uppercase">Project</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-cyan-400 uppercase">Issue Date</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-cyan-400 uppercase">Due Date</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-cyan-400 uppercase">Amount</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-cyan-400 uppercase">Status</th>
-                  <th className="px-6 py-4 text-right text-xs font-bold text-cyan-400 uppercase">Actions</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Invoice #</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Client</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Project</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Issue Date</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Due Date</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Amount</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-4 text-right text-xs font-bold text-white uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className={themeClasses.bgSecondary}>
+              <tbody className="bg-white divide-y divide-gray-200">
                 {filteredInvoices.map((invoice) => (
-                  <tr key={invoice.id} className={`${themeClasses.bgSecondary} transition-colors duration-150 ${theme === 'light' ? 'hover:bg-gray-100' : 'hover:bg-[#252525]'}`}>
+                  <tr key={invoice.id} className="hover:bg-purple-50 transition-colors duration-150">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className={`text-sm font-semibold ${themeClasses.textPrimary}`}>{invoice.invoice_number}</div>
+                      <div className="text-sm font-bold text-gray-800">{invoice.invoice_number}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={() => navigate(`/admin/clients/${invoice.client_id}`)}
-                        className="text-sm text-cyan-400 hover:text-cyan-300 hover:underline"
+                        className="text-sm text-purple-600 hover:text-purple-700 hover:underline font-semibold"
                       >
                         {invoice.client?.first_name} {invoice.client?.last_name}
                       </button>
                     </td>
                     <td className="px-6 py-4">
-                      <div className={`text-sm max-w-xs truncate ${themeClasses.textSecondary}`}>
+                      <div className="text-sm max-w-xs truncate text-gray-600 font-medium">
                         {invoice.project_name || 'N/A'}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className={`text-sm ${themeClasses.textSecondary}`}>{formatDate(invoice.issue_date)}</div>
+                      <div className="text-sm text-gray-600 font-medium">{formatDate(invoice.issue_date)}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className={`text-sm ${themeClasses.textSecondary}`}>{formatDate(invoice.due_date)}</div>
+                      <div className="text-sm text-gray-600 font-medium">{formatDate(invoice.due_date)}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className={`text-sm font-bold ${themeClasses.textPrimary}`}>${invoice.total.toFixed(2)}</div>
+                      <div className="text-sm font-black text-gray-800">${invoice.total.toFixed(2)}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{getStatusBadge(invoice.status)}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
                         onClick={() => navigate(`/admin/invoices/${invoice.id}`)}
-                        className="text-cyan-400 hover:text-cyan-300 mr-4"
+                        className="text-purple-600 hover:text-purple-700 font-bold hover:underline mr-4"
                       >
                         View
                       </button>

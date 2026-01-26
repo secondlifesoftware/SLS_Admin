@@ -214,12 +214,12 @@ function Subscriptions() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-white">Subscriptions</h1>
-            <p className="text-gray-400 mt-1">Track and manage all your subscriptions</p>
+            <h1 className="text-3xl font-bold text-gray-800">Subscriptions</h1>
+            <p className="text-gray-600 mt-1">Track and manage all your subscriptions</p>
           </div>
           <button
             onClick={() => navigate('/admin/ideas/clearpath')}
-            className="px-4 py-2 text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+            className="px-4 py-2 text-gray-600 hover:text-white transition-colors flex items-center gap-2"
           >
             <span>←</span>
             Back to ClearPath
@@ -229,28 +229,28 @@ function Subscriptions() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-xl p-6 shadow-lg">
-          <p className="text-gray-400 text-sm mb-1">Total Monthly</p>
-          <p className="text-3xl font-bold text-cyan-400">
+        <div className="bg-white border border-purple-300/30 rounded-xl p-6 shadow-lg">
+          <p className="text-gray-600 text-sm mb-1">Total Monthly</p>
+          <p className="text-3xl font-bold text-purple-600">
             ${subscriptions.reduce((sum, sub) => sum + calculateCost(sub, 'monthly'), 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
         </div>
-        <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-xl p-6 shadow-lg">
-          <p className="text-gray-400 text-sm mb-1">Total Quarterly</p>
-          <p className="text-3xl font-bold text-cyan-400">
+        <div className="bg-white border border-purple-300/30 rounded-xl p-6 shadow-lg">
+          <p className="text-gray-600 text-sm mb-1">Total Quarterly</p>
+          <p className="text-3xl font-bold text-purple-600">
             ${subscriptions.reduce((sum, sub) => sum + calculateCost(sub, 'quarterly'), 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
         </div>
-        <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-xl p-6 shadow-lg">
-          <p className="text-gray-400 text-sm mb-1">Total Yearly</p>
-          <p className="text-3xl font-bold text-cyan-400">
+        <div className="bg-white border border-purple-300/30 rounded-xl p-6 shadow-lg">
+          <p className="text-gray-600 text-sm mb-1">Total Yearly</p>
+          <p className="text-3xl font-bold text-purple-600">
             ${subscriptions.reduce((sum, sub) => sum + calculateCost(sub, 'yearly'), 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
         </div>
       </div>
 
       {/* View Mode Selector & Selected Total */}
-      <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-4 shadow-lg mb-6">
+      <div className="bg-white border border-purple-200 rounded-xl p-4 shadow-lg mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <span className="text-gray-300 font-medium">View Costs:</span>
@@ -261,8 +261,8 @@ function Subscriptions() {
                   onClick={() => setViewMode(period)}
                   className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                     viewMode === period
-                      ? 'bg-cyan-500 text-white'
-                      : 'bg-[#1a1a1a] text-gray-400 border border-gray-700 hover:border-cyan-500/50'
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                      : 'bg-white text-gray-600 border border-purple-200 hover:border-purple-300/50'
                   }`}
                 >
                   {period.charAt(0).toUpperCase() + period.slice(1)}
@@ -272,8 +272,8 @@ function Subscriptions() {
           </div>
           {selectedSubscriptions.size > 0 && (
             <div className="text-right">
-              <p className="text-sm text-gray-400">Selected Total ({viewMode}):</p>
-              <p className="text-2xl font-bold text-cyan-400">
+              <p className="text-sm text-gray-600">Selected Total ({viewMode}):</p>
+              <p className="text-2xl font-bold text-purple-600">
                 ${getTotalCost().toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
@@ -285,7 +285,7 @@ function Subscriptions() {
       <div className="mb-6 flex justify-end">
         <button
           onClick={() => setShowAddModal(true)}
-          className="px-6 py-3 bg-cyan-500 text-white rounded-xl font-semibold hover:bg-cyan-600 transition-all shadow-lg hover:shadow-cyan-500/30"
+          className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all shadow-lg hover:shadow-cyan-500/30"
         >
           + Add Subscription
         </button>
@@ -294,8 +294,8 @@ function Subscriptions() {
       {/* Subscriptions List */}
       <div className="space-y-4">
         {subscriptions.length === 0 ? (
-          <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-12 text-center">
-            <p className="text-gray-400 text-lg">No subscriptions added yet</p>
+          <div className="bg-white border border-purple-200 rounded-xl p-12 text-center">
+            <p className="text-gray-600 text-lg">No subscriptions added yet</p>
             <p className="text-gray-500 text-sm mt-2">Click "Add Subscription" to get started</p>
           </div>
         ) : (
@@ -305,8 +305,8 @@ function Subscriptions() {
             return (
               <div
                 key={subscription.id}
-                className={`bg-[#1f1f1f] border rounded-xl p-6 shadow-lg transition-all ${
-                  isSelected ? 'border-cyan-500/50 bg-cyan-500/10' : 'border-gray-700 hover:border-cyan-500/50'
+                className={`bg-white border rounded-xl p-6 shadow-lg transition-all ${
+                  isSelected ? 'border-purple-300/50 bg-gradient-to-r from-purple-500 to-pink-500/10' : 'border-purple-200 hover:border-purple-300/50'
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -315,32 +315,32 @@ function Subscriptions() {
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => toggleSubscriptionSelection(subscription.id)}
-                      className="mt-1 w-5 h-5 text-cyan-500 bg-[#1a1a1a] border-gray-700 rounded focus:ring-cyan-500"
+                      className="mt-1 w-5 h-5 text-purple-600 bg-white border-purple-200 rounded focus:ring-purple-500"
                     />
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-bold text-white">{subscription.name}</h3>
-                        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#1a1a1a] text-cyan-400 border border-cyan-500/30">
+                        <h3 className="text-xl font-bold text-gray-800">{subscription.name}</h3>
+                        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-600 border border-purple-300/30">
                           {subscription.owner}
                         </span>
                       </div>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div>
-                          <p className="text-gray-400">Cost ({subscription.billing_period})</p>
+                          <p className="text-gray-600">Cost ({subscription.billing_period})</p>
                           <p className="text-white font-semibold">${subscription.cost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                         </div>
                         <div>
-                          <p className="text-gray-400">Cost ({viewMode})</p>
-                          <p className="text-cyan-400 font-semibold">
+                          <p className="text-gray-600">Cost ({viewMode})</p>
+                          <p className="text-purple-600 font-semibold">
                             ${calculateCost(subscription, viewMode).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                           </p>
                         </div>
                         <div>
-                          <p className="text-gray-400">Account</p>
+                          <p className="text-gray-600">Account</p>
                           <p className="text-white font-semibold">{subscription.username_email || 'N/A'}</p>
                         </div>
                         <div>
-                          <p className="text-gray-400">Cancel Date</p>
+                          <p className="text-gray-600">Cancel Date</p>
                           <p className="text-white font-semibold">
                             {cancelDate ? cancelDate.toLocaleDateString() : 'Not set'}
                           </p>
@@ -352,7 +352,7 @@ function Subscriptions() {
                             href={subscription.cancel_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-cyan-400 hover:text-cyan-300 text-sm flex items-center gap-2"
+                            className="text-purple-600 hover:text-cyan-300 text-sm flex items-center gap-2"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -381,12 +381,12 @@ function Subscriptions() {
       {/* Add Subscription Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-xl p-6 max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-white border border-purple-300/30 rounded-xl p-6 max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold text-white">Add Subscription</h3>
+              <h3 className="text-2xl font-bold text-gray-800">Add Subscription</h3>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-600 hover:text-white transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -401,7 +401,7 @@ function Subscriptions() {
                   type="text"
                   value={newSubscription.name}
                   onChange={(e) => setNewSubscription({...newSubscription, name: e.target.value})}
-                  className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
+                  className="w-full bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2 text-gray-800 font-semibold focus:border-purple-300 focus:outline-none"
                   required
                 />
               </div>
@@ -414,7 +414,7 @@ function Subscriptions() {
                     value={newSubscription.cost}
                     onChange={(e) => setNewSubscription({...newSubscription, cost: e.target.value})}
                     step="0.01"
-                    className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
+                    className="w-full bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2 text-gray-800 font-semibold focus:border-purple-300 focus:outline-none"
                     required
                   />
                 </div>
@@ -423,7 +423,7 @@ function Subscriptions() {
                   <select
                     value={newSubscription.billing_period}
                     onChange={(e) => setNewSubscription({...newSubscription, billing_period: e.target.value})}
-                    className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
+                    className="w-full bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2 text-gray-800 font-semibold focus:border-purple-300 focus:outline-none"
                   >
                     <option value="monthly">Monthly</option>
                     <option value="yearly">Yearly</option>
@@ -439,7 +439,7 @@ function Subscriptions() {
                   value={newSubscription.cancel_url}
                   onChange={(e) => setNewSubscription({...newSubscription, cancel_url: e.target.value})}
                   placeholder="https://..."
-                  className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
+                  className="w-full bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2 text-gray-800 font-semibold focus:border-purple-300 focus:outline-none"
                 />
               </div>
 
@@ -450,7 +450,7 @@ function Subscriptions() {
                   value={newSubscription.username_email}
                   onChange={(e) => setNewSubscription({...newSubscription, username_email: e.target.value})}
                   placeholder="username@example.com"
-                  className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
+                  className="w-full bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2 text-gray-800 font-semibold focus:border-purple-300 focus:outline-none"
                 />
               </div>
 
@@ -460,7 +460,7 @@ function Subscriptions() {
                   <select
                     value={newSubscription.owner}
                     onChange={(e) => setNewSubscription({...newSubscription, owner: e.target.value})}
-                    className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
+                    className="w-full bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2 text-gray-800 font-semibold focus:border-purple-300 focus:outline-none"
                   >
                     <option value="Darius">Darius</option>
                     <option value="Katia">Katia</option>
@@ -472,7 +472,7 @@ function Subscriptions() {
                     type="date"
                     value={newSubscription.paid_date}
                     onChange={(e) => setNewSubscription({...newSubscription, paid_date: e.target.value})}
-                    className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
+                    className="w-full bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2 text-gray-800 font-semibold focus:border-purple-300 focus:outline-none"
                   />
                 </div>
               </div>
@@ -482,7 +482,7 @@ function Subscriptions() {
                 <select
                   value={newSubscription.cancel_timing}
                   onChange={(e) => setNewSubscription({...newSubscription, cancel_timing: e.target.value})}
-                  className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none mb-2"
+                  className="w-full bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2 text-gray-800 font-semibold focus:border-purple-300 focus:outline-none mb-2"
                 >
                   <option value="7days">7 Days</option>
                   <option value="1month">1 Month</option>
@@ -495,7 +495,7 @@ function Subscriptions() {
                     type="date"
                     value={newSubscription.custom_cancel_date}
                     onChange={(e) => setNewSubscription({...newSubscription, custom_cancel_date: e.target.value})}
-                    className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-cyan-500 focus:outline-none mt-2"
+                    className="w-full bg-purple-50 border-2 border-purple-200 rounded-lg px-4 py-2 text-gray-800 font-semibold focus:border-purple-300 focus:outline-none mt-2"
                   />
                 )}
               </div>
@@ -510,7 +510,7 @@ function Subscriptions() {
               </button>
               <button
                 onClick={handleAddSubscription}
-                className="px-6 py-2 bg-cyan-500 text-white rounded-lg font-semibold hover:bg-cyan-600 transition-all"
+                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all"
               >
                 Add Subscription
               </button>

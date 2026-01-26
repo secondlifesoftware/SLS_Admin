@@ -223,49 +223,41 @@ function ClientDetail() {
   const hasBookingDetails = bookingDetails !== null;
 
   return (
-    <div className="min-h-screen bg-[#1a1a1a] relative">
-      {/* Grid Pattern Background */}
-      <div className="fixed inset-0 bg-[#1a1a1a] opacity-100" style={{
-        backgroundImage: `
-          linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px)
-        `,
-        backgroundSize: '40px 40px'
-      }}></div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 relative">
       
       <div className="relative z-10">
         {/* Header */}
         <div className="mb-8 pt-6">
           <button
             onClick={() => navigate('/admin/clients')}
-            className="text-sm text-gray-400 hover:text-cyan-400 mb-6 flex items-center gap-2 transition-colors"
+            className="text-sm text-gray-600 hover:text-purple-600 mb-6 flex items-center gap-2 transition-colors font-semibold"
           >
             ← Back to Clients
           </button>
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-white font-bold text-3xl shadow-lg shadow-cyan-500/20">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-white font-bold text-3xl shadow-lg shadow-purple-500/20">
                 {client.first_name.charAt(0)}{client.last_name.charAt(0)}
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-white mb-1">
+                <h1 className="text-4xl font-bold text-gray-800 mb-1">
                   {client.first_name} {client.last_name}
                 </h1>
                 {client.company && (
-                  <p className="text-lg text-gray-400">{client.company}</p>
+                  <p className="text-lg text-gray-600 font-medium">{client.company}</p>
                 )}
               </div>
             </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => navigate(`/admin/clients/${id}/invoices`)}
-                className="px-5 py-2.5 text-sm font-medium text-cyan-400 bg-[#1f1f1f] border border-cyan-500/30 rounded-xl hover:bg-[#252525] hover:border-cyan-500/50 transition-all duration-200"
+                className="px-5 py-2.5 text-sm font-bold text-purple-600 bg-white border-2 border-purple-200 rounded-xl hover:bg-purple-50 hover:border-purple-300 hover:shadow-lg transition-all duration-200"
               >
                 📄 Invoices
               </button>
               <button
                 onClick={() => navigate(`/admin/clients/${id}/edit`)}
-                className="px-5 py-2.5 text-sm font-medium text-white bg-[#1f1f1f] border border-gray-700 rounded-xl hover:bg-[#252525] hover:border-gray-600 transition-all duration-200"
+                className="px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 border-2 border-purple-300 rounded-xl hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all duration-200"
               >
                 Edit
               </button>
@@ -274,18 +266,18 @@ function ClientDetail() {
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-gray-800 mb-8">
+        <div className="border-b-2 border-purple-100 mb-8">
           <nav className="flex space-x-8">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  py-4 px-1 border-b-2 font-medium text-sm transition-all duration-200
+                  py-4 px-1 border-b-2 font-bold text-sm transition-all duration-200
                   ${
                     activeTab === tab.id
-                      ? 'border-cyan-400 text-cyan-400'
-                      : 'border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-700'
+                      ? 'border-purple-500 text-purple-600'
+                      : 'border-transparent text-gray-500 hover:text-purple-600 hover:border-purple-300'
                   }
                 `}
               >
@@ -301,58 +293,58 @@ function ClientDetail() {
         <div className="space-y-8 pb-12">
           {/* Hero Status Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/50 transition-all duration-300">
-              <div className="text-cyan-400 text-xs mb-2 font-medium uppercase tracking-wider">Status</div>
-              <div className="text-2xl font-bold text-white">{client.status}</div>
+            <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:shadow-xl transition-all duration-300">
+              <div className="text-purple-600 text-xs mb-2 font-bold uppercase tracking-wider">Status</div>
+              <div className="text-2xl font-black text-gray-800">{client.status}</div>
             </div>
-            <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/50 transition-all duration-300">
-              <div className="text-cyan-400 text-xs mb-2 font-medium uppercase tracking-wider">Contract Status</div>
-              <div className="text-2xl font-bold text-white">{client.contract_status || 'No Contract'}</div>
+            <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:shadow-xl transition-all duration-300">
+              <div className="text-purple-600 text-xs mb-2 font-bold uppercase tracking-wider">Contract Status</div>
+              <div className="text-2xl font-black text-gray-800">{client.contract_status || 'No Contract'}</div>
             </div>
-            <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/50 transition-all duration-300">
-              <div className="text-cyan-400 text-xs mb-2 font-medium uppercase tracking-wider">Client Since</div>
-              <div className="text-xl font-bold text-white">{formatDate(client.client_date)}</div>
+            <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:shadow-xl transition-all duration-300">
+              <div className="text-purple-600 text-xs mb-2 font-bold uppercase tracking-wider">Client Since</div>
+              <div className="text-xl font-black text-gray-800">{formatDate(client.client_date)}</div>
             </div>
           </div>
 
           {/* Contract Details - Hero Widgets */}
           {(client.contract_type || client.contract_due_date || client.timeline || client.hourly_rate || client.client_date) && (
             <div>
-              <h2 className="text-2xl font-bold text-white mb-6">Contract Details</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Contract Details</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 {client.contract_type && (
-                  <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/60 hover:bg-[#252525] transition-all duration-300 cursor-pointer group">
+                  <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:bg-purple-50 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
                     <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">📋</div>
-                    <div className="text-cyan-400 text-xs mb-2 font-medium uppercase tracking-wider">Contract Type</div>
-                    <div className="text-xl font-bold text-white">{client.contract_type}</div>
+                    <div className="text-purple-600 text-xs mb-2 font-bold uppercase tracking-wider">Contract Type</div>
+                    <div className="text-xl font-black text-gray-800">{client.contract_type}</div>
                   </div>
                 )}
                 {client.contract_due_date && (
-                  <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/60 hover:bg-[#252525] transition-all duration-300 cursor-pointer group">
+                  <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:bg-purple-50 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
                     <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">📅</div>
-                    <div className="text-cyan-400 text-xs mb-2 font-medium uppercase tracking-wider">Due Date</div>
-                    <div className="text-lg font-bold text-white">{formatDate(client.contract_due_date)}</div>
+                    <div className="text-purple-600 text-xs mb-2 font-bold uppercase tracking-wider">Due Date</div>
+                    <div className="text-lg font-black text-gray-800">{formatDate(client.contract_due_date)}</div>
                   </div>
                 )}
                 {client.timeline && (
-                  <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/60 hover:bg-[#252525] transition-all duration-300 cursor-pointer group">
+                  <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:bg-purple-50 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
                     <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">⏱️</div>
-                    <div className="text-cyan-400 text-xs mb-2 font-medium uppercase tracking-wider">Timeline</div>
-                    <div className="text-lg font-bold text-white">{client.timeline}</div>
+                    <div className="text-purple-600 text-xs mb-2 font-bold uppercase tracking-wider">Timeline</div>
+                    <div className="text-lg font-black text-gray-800">{client.timeline}</div>
                   </div>
                 )}
                 {client.hourly_rate && (
-                  <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/60 hover:bg-[#252525] transition-all duration-300 cursor-pointer group">
+                  <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:bg-purple-50 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
                     <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">💰</div>
-                    <div className="text-cyan-400 text-xs mb-2 font-medium uppercase tracking-wider">Hourly Rate</div>
-                    <div className="text-2xl font-bold text-white">${client.hourly_rate}<span className="text-lg text-gray-400">/hr</span></div>
+                    <div className="text-purple-600 text-xs mb-2 font-bold uppercase tracking-wider">Hourly Rate</div>
+                    <div className="text-2xl font-black text-gray-800">${client.hourly_rate}<span className="text-lg text-gray-600">/hr</span></div>
                   </div>
                 )}
                 {client.client_date && (
-                  <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/60 hover:bg-[#252525] transition-all duration-300 cursor-pointer group">
+                  <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:bg-purple-50 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
                     <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🚀</div>
-                    <div className="text-cyan-400 text-xs mb-2 font-medium uppercase tracking-wider">Start Date</div>
-                    <div className="text-xl font-bold text-white">{formatDate(client.client_date)}</div>
+                    <div className="text-purple-600 text-xs mb-2 font-bold uppercase tracking-wider">Start Date</div>
+                    <div className="text-xl font-black text-gray-800">{formatDate(client.client_date)}</div>
                   </div>
                 )}
               </div>
@@ -364,24 +356,24 @@ function ClientDetail() {
             {/* Left Sidebar - Contact & Points of Contact */}
             <div className="lg:col-span-4 space-y-6">
               {/* Contact Information */}
-              <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/50 transition-all">
-                <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+              <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:shadow-xl transition-all">
+                <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-3">
                   <span className="text-2xl">📞</span>
                   Contact Information
                 </h2>
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3 p-4 bg-[#252525] rounded-xl border border-gray-800 hover:border-cyan-500/30 transition-colors">
-                    <div className="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center border border-cyan-500/30">
-                      <span className="text-cyan-400 text-xl">📧</span>
+                  <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-xl border-2 border-purple-200 hover:border-purple-300 transition-colors">
+                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center shadow-md">
+                      <span className="text-white text-xl">📧</span>
                     </div>
-                    <span className="text-white font-medium">{client.email}</span>
+                    <span className="text-gray-800 font-semibold">{client.email}</span>
                   </div>
                   {client.address && (
-                    <div className="flex items-start gap-3 p-4 bg-[#252525] rounded-xl border border-gray-800 hover:border-cyan-500/30 transition-colors">
-                      <div className="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center border border-cyan-500/30">
-                        <span className="text-cyan-400 text-xl">📍</span>
+                    <div className="flex items-start gap-3 p-4 bg-purple-50 rounded-xl border-2 border-purple-200 hover:border-purple-300 transition-colors">
+                      <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center shadow-md">
+                        <span className="text-white text-xl">📍</span>
                       </div>
-                      <span className="text-white font-medium">{client.address}</span>
+                      <span className="text-gray-800 font-semibold">{client.address}</span>
                     </div>
                   )}
                 </div>
@@ -389,8 +381,8 @@ function ClientDetail() {
 
               {/* Points of Contact */}
               {client.contacts && client.contacts.length > 0 && (
-                <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/50 transition-all">
-                  <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:shadow-xl transition-all">
+                  <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-3">
                     <span className="text-2xl">👥</span>
                     Points of Contact
                   </h2>
@@ -399,24 +391,24 @@ function ClientDetail() {
                       .filter(c => c.name)
                       .sort((a, b) => a.order - b.order)
                       .map((contact, index) => (
-                        <div key={contact.id || index} className="p-4 bg-[#252525] rounded-xl border border-gray-800 hover:border-cyan-500/40 transition-all">
-                          <div className="font-bold text-white mb-1">
+                        <div key={contact.id || index} className="p-4 bg-purple-50 rounded-xl border-2 border-purple-200 hover:border-purple-300 transition-all">
+                          <div className="font-black text-gray-800 mb-1">
                             {contact.name}
                           </div>
                           {contact.title && (
-                            <div className="text-sm text-cyan-400 mb-3 font-medium">{contact.title}</div>
+                            <div className="text-sm text-purple-600 mb-3 font-bold">{contact.title}</div>
                           )}
-                          <div className="space-y-2 text-sm text-gray-400">
+                          <div className="space-y-2 text-sm text-gray-600">
                             {contact.email && (
                               <div className="flex items-center gap-2">
-                                <span className="text-cyan-400">📧</span>
-                                <span>{contact.email}</span>
+                                <span className="text-purple-600">📧</span>
+                                <span className="font-semibold">{contact.email}</span>
                               </div>
                             )}
                             {contact.phone && (
                               <div className="flex items-center gap-2">
-                                <span className="text-cyan-400">📞</span>
-                                <span>{contact.phone}</span>
+                                <span className="text-purple-600">📞</span>
+                                <span className="font-semibold">{contact.phone}</span>
                               </div>
                             )}
                           </div>
@@ -431,54 +423,54 @@ function ClientDetail() {
             <div className="lg:col-span-5 space-y-6">
               {/* Booking Request Details */}
               {hasBookingDetails && (
-                <div className="bg-[#1f1f1f] border border-cyan-500/40 rounded-2xl p-8 hover:border-cyan-500/60 transition-all">
+                <div className="bg-white border-2 border-purple-200 rounded-2xl p-8 hover:border-purple-300 hover:shadow-xl transition-all">
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold text-white">🎯 Booking Request</h2>
-                    <span className="text-xs bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 px-3 py-1.5 rounded-full font-bold">NEW</span>
+                    <h2 className="text-2xl font-bold text-gray-800">🎯 Booking Request</h2>
+                    <span className="text-xs bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1.5 rounded-full font-bold shadow-md">NEW</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 bg-[#252525] border border-gray-800 rounded-xl p-5">
+                  <div className="grid grid-cols-2 gap-4 bg-purple-50 border-2 border-purple-200 rounded-xl p-5">
                     {bookingDetails.role_type && (
                       <div>
-                        <div className="text-cyan-400 text-xs mb-2 font-medium uppercase tracking-wider">Role</div>
-                        <div className="text-lg font-bold text-white capitalize">
+                        <div className="text-purple-600 text-xs mb-2 font-bold uppercase tracking-wider">Role</div>
+                        <div className="text-lg font-black text-gray-800 capitalize">
                           {bookingDetails.role_type.replace(/_/g, ' ')}
                         </div>
                       </div>
                     )}
                     {bookingDetails.budget && (
                       <div>
-                        <div className="text-cyan-400 text-xs mb-2 font-medium uppercase tracking-wider">Budget</div>
-                        <div className="text-2xl font-bold text-white">
+                        <div className="text-purple-600 text-xs mb-2 font-bold uppercase tracking-wider">Budget</div>
+                        <div className="text-2xl font-black text-gray-800">
                           ${bookingDetails.budget.toLocaleString()}
                         </div>
                       </div>
                     )}
                     {bookingDetails.urgency !== null && (
                       <div className="col-span-2">
-                        <div className="text-cyan-400 text-xs mb-3 font-medium uppercase tracking-wider">Urgency Level</div>
+                        <div className="text-purple-600 text-xs mb-3 font-bold uppercase tracking-wider">Urgency Level</div>
                         <div className="flex items-center gap-4">
-                          <div className="flex-1 bg-[#1a1a1a] border border-gray-800 rounded-full h-3 overflow-hidden">
+                          <div className="flex-1 bg-purple-100 border-2 border-purple-200 rounded-full h-3 overflow-hidden">
                             <div
-                              className="bg-gradient-to-r from-cyan-500 to-blue-500 h-3 rounded-full transition-all duration-500"
+                              className="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full transition-all duration-500"
                               style={{ width: `${(bookingDetails.urgency / 10) * 100}%` }}
                             ></div>
                           </div>
-                          <span className="text-xl font-bold text-white">{bookingDetails.urgency}/10</span>
+                          <span className="text-xl font-black text-gray-800">{bookingDetails.urgency}/10</span>
                         </div>
                       </div>
                     )}
                     {bookingDetails.start_date && (
                       <div>
-                        <div className="text-cyan-400 text-xs mb-2 font-medium uppercase tracking-wider">Start Date</div>
-                        <div className="text-lg font-bold text-white">
+                        <div className="text-purple-600 text-xs mb-2 font-bold uppercase tracking-wider">Start Date</div>
+                        <div className="text-lg font-black text-gray-800">
                           {formatDate(bookingDetails.start_date)}
                         </div>
                       </div>
                     )}
                     {bookingDetails.end_date && (
                       <div>
-                        <div className="text-cyan-400 text-xs mb-2 font-medium uppercase tracking-wider">End Date</div>
-                        <div className="text-lg font-bold text-white">
+                        <div className="text-purple-600 text-xs mb-2 font-bold uppercase tracking-wider">End Date</div>
+                        <div className="text-lg font-black text-gray-800">
                           {formatDate(bookingDetails.end_date)}
                         </div>
                       </div>
@@ -489,21 +481,21 @@ function ClientDetail() {
 
               {/* Description of Idea - Big & Beautiful */}
               {client.description && (
-                <div className="bg-[#1f1f1f] border border-cyan-500/40 rounded-2xl p-8 hover:border-cyan-500/60 transition-all">
+                <div className="bg-white border-2 border-purple-200 rounded-2xl p-8 hover:border-purple-300 hover:shadow-xl transition-all">
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                    <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
                       <span className="text-3xl">💡</span>
                       Project Description
                     </h2>
                     <button
                       onClick={() => setExpandedDescription(true)}
-                      className="px-5 py-2.5 bg-cyan-500 text-white rounded-xl font-semibold hover:bg-cyan-600 transition-all duration-200 border border-cyan-400/50 hover:border-cyan-400"
+                      className="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all duration-200"
                     >
                       View Full →
                     </button>
                   </div>
-                  <div className="bg-[#252525] border border-gray-800 rounded-xl p-6">
-                    <div className="text-gray-300 text-lg leading-relaxed line-clamp-6 markdown-content">
+                  <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-6">
+                    <div className="text-gray-700 text-lg leading-relaxed line-clamp-6 markdown-content">
                       <ReactMarkdown>{truncateText(client.description, 400)}</ReactMarkdown>
                     </div>
                   </div>
@@ -515,22 +507,22 @@ function ClientDetail() {
             <div className="lg:col-span-3 space-y-6">
               {/* Meeting Notes */}
               {(meetingNotes.length > 0 || client.notes_from_last_meeting) && (
-                <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/50 transition-all">
+                <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:shadow-xl transition-all">
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h2 className="text-xl font-bold text-white flex items-center gap-3">
+                      <h2 className="text-xl font-bold text-gray-800 flex items-center gap-3">
                         <span className="text-2xl">📝</span>
                         Meeting Notes
                       </h2>
                       {meetingNotes.length > 0 && (
-                        <p className="text-xs text-cyan-400 mt-2 font-medium">
+                        <p className="text-xs text-purple-600 mt-2 font-bold">
                           {meetingNotes.length} meeting{meetingNotes.length !== 1 ? 's' : ''} recorded
                         </p>
                       )}
                     </div>
                     <button
                       onClick={() => setShowAddNoteModal(true)}
-                      className="text-sm text-cyan-400 hover:text-cyan-300 font-bold bg-cyan-500/10 border border-cyan-500/30 px-3 py-1.5 rounded-lg hover:bg-cyan-500/20 transition-all"
+                      className="text-sm text-purple-600 hover:text-white font-bold bg-purple-100 border-2 border-purple-200 px-3 py-1.5 rounded-lg hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:border-purple-300 transition-all"
                     >
                       + Add
                     </button>
@@ -541,7 +533,7 @@ function ClientDetail() {
                       {meetingNotes.slice(0, 2).map((note, index) => (
                         <div
                           key={note.id}
-                          className="p-4 bg-[#252525] border border-gray-800 rounded-xl hover:border-cyan-500/40 transition-all cursor-pointer group"
+                          className="p-4 bg-purple-50 border-2 border-purple-200 rounded-xl hover:border-purple-300 hover:shadow-md transition-all cursor-pointer group"
                           onClick={() => {
                             setSelectedNoteIndex(index);
                             setExpandedNotes(true);
@@ -549,24 +541,24 @@ function ClientDetail() {
                         >
                           <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center gap-2">
-                              <span className="px-2 py-1 text-xs font-bold bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-full">
+                              <span className="px-2 py-1 text-xs font-bold bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full shadow-sm">
                                 Meeting
                               </span>
                               {note.meeting_date && (
-                                <span className="text-xs text-gray-400 font-medium">
+                                <span className="text-xs text-gray-600 font-semibold">
                                   {formatDate(note.meeting_date)}
                                 </span>
                               )}
                             </div>
-                            <span className="text-xs text-cyan-400 font-bold group-hover:translate-x-1 transition-transform">→</span>
+                            <span className="text-xs text-purple-600 font-bold group-hover:translate-x-1 transition-transform">→</span>
                           </div>
                           {note.title && (
-                            <h4 className="font-bold text-white mb-2 text-sm">{note.title}</h4>
+                            <h4 className="font-black text-gray-800 mb-2 text-sm">{note.title}</h4>
                           )}
-                          <p className="text-sm text-gray-300 line-clamp-3 mb-2">
+                          <p className="text-sm text-gray-700 line-clamp-3 mb-2">
                             {truncateText(note.content, 120)}
                           </p>
-                          <p className="text-xs text-gray-500 font-medium">
+                          <p className="text-xs text-gray-500 font-semibold">
                             {formatDateTime(note.created_at)}
                           </p>
                         </div>
@@ -574,7 +566,7 @@ function ClientDetail() {
                       {meetingNotes.length > 2 && (
                         <button
                           onClick={() => setActiveTab('notes')}
-                          className="w-full text-sm text-cyan-400 hover:text-cyan-300 font-bold py-3 bg-[#252525] border border-gray-800 rounded-lg hover:border-cyan-500/40 transition-all"
+                          className="w-full text-sm text-purple-600 hover:text-white font-bold py-3 bg-purple-50 border-2 border-purple-200 rounded-lg hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:border-purple-300 hover:shadow-md transition-all"
                         >
                           View all {meetingNotes.length} notes →
                         </button>
@@ -582,23 +574,23 @@ function ClientDetail() {
                     </div>
                   ) : client.notes_from_last_meeting ? (
                     <div
-                      className="p-4 bg-[#252525] border border-gray-800 rounded-xl hover:border-cyan-500/40 transition-all cursor-pointer group"
+                      className="p-4 bg-purple-50 border-2 border-purple-200 rounded-xl hover:border-purple-300 hover:shadow-md transition-all cursor-pointer group"
                       onClick={() => setExpandedNotes(true)}
                     >
                       <div className="flex items-center justify-between mb-3">
                         <div>
-                          <span className="px-2 py-1 text-xs font-bold bg-gray-700 text-gray-300 border border-gray-600 rounded-full">
+                          <span className="px-2 py-1 text-xs font-bold bg-gray-200 text-gray-700 border-2 border-gray-300 rounded-full">
                             Legacy
                           </span>
                           {client.updated_at && (
-                            <span className="text-xs text-gray-500 ml-2 font-medium">
+                            <span className="text-xs text-gray-600 ml-2 font-semibold">
                               {formatDateTime(client.updated_at)}
                             </span>
                           )}
                         </div>
-                        <span className="text-xs text-cyan-400 font-bold group-hover:translate-x-1 transition-transform">→</span>
+                        <span className="text-xs text-purple-600 font-bold group-hover:translate-x-1 transition-transform">→</span>
                       </div>
-                      <p className="text-sm text-gray-300 line-clamp-4">
+                      <p className="text-sm text-gray-700 line-clamp-4">
                         {hasBookingDetails && bookingDetails.original_description
                           ? truncateText(bookingDetails.original_description, 150)
                           : truncateText(client.notes_from_last_meeting, 150)}
@@ -610,15 +602,15 @@ function ClientDetail() {
 
               {/* Add Note Button if no notes exist */}
               {meetingNotes.length === 0 && !client.notes_from_last_meeting && (
-                <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/50 transition-all">
-                  <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:shadow-xl transition-all">
+                  <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-3">
                     <span className="text-2xl">📝</span>
                     Meeting Notes
                   </h2>
-                  <p className="text-gray-400 mb-4 text-sm">No meeting notes yet.</p>
+                  <p className="text-gray-600 mb-4 text-sm font-medium">No meeting notes yet.</p>
                   <button
                     onClick={() => setShowAddNoteModal(true)}
-                    className="w-full px-4 py-3 bg-cyan-500 text-white rounded-xl font-bold hover:bg-cyan-600 transition-all border border-cyan-400/50 hover:border-cyan-400"
+                    className="w-full px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all"
                   >
                     + Add First Note
                   </button>
@@ -652,18 +644,18 @@ function ClientDetail() {
       {/* Description Modal */}
       {expandedDescription && client.description && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#1f1f1f] border border-cyan-500/40 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="px-8 py-6 border-b border-gray-800 flex items-center justify-between">
-              <h3 className="text-2xl font-bold text-white">Description of Idea</h3>
+          <div className="bg-white border-2 border-purple-300 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="px-8 py-6 border-b-2 border-purple-200 flex items-center justify-between bg-gradient-to-r from-purple-50 to-pink-50">
+              <h3 className="text-2xl font-bold text-gray-800">Description of Idea</h3>
               <button
                 onClick={() => setExpandedDescription(false)}
-                className="text-gray-400 hover:text-white text-3xl leading-none transition-colors"
+                className="text-gray-600 hover:text-purple-600 text-3xl leading-none transition-colors font-bold"
               >
                 ×
               </button>
             </div>
             <div className="px-8 py-8 overflow-y-auto flex-1">
-              <div className="markdown-content-full">
+              <div className="markdown-content-full text-gray-700">
                 <ReactMarkdown>{client.description}</ReactMarkdown>
               </div>
             </div>
@@ -674,29 +666,29 @@ function ClientDetail() {
       {/* Notes Modal */}
       {expandedNotes && (meetingNotes.length > 0 || client.notes_from_last_meeting) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#1f1f1f] border border-cyan-500/40 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="px-8 py-6 border-b border-gray-800 flex items-center justify-between">
+          <div className="bg-white border-2 border-purple-300 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="px-8 py-6 border-b-2 border-purple-200 flex items-center justify-between bg-gradient-to-r from-purple-50 to-pink-50">
               <div>
-                <h3 className="text-2xl font-bold text-white">
-                  {meetingNotes.length > 0 
+                <h3 className="text-2xl font-bold text-gray-800">
+                  {meetingNotes.length > 0
                     ? `Meeting Note: ${meetingNotes[selectedNoteIndex]?.title || 'Untitled'}`
                     : 'Meeting Notes'}
                 </h3>
                 {meetingNotes.length > 0 && meetingNotes[selectedNoteIndex] ? (
-                  <p className="text-sm text-cyan-400 mt-2">
-                    {meetingNotes[selectedNoteIndex].meeting_date 
+                  <p className="text-sm text-purple-600 mt-2 font-bold">
+                    {meetingNotes[selectedNoteIndex].meeting_date
                       ? `Meeting Date: ${formatDate(meetingNotes[selectedNoteIndex].meeting_date)}`
                       : `Created: ${formatDateTime(meetingNotes[selectedNoteIndex].created_at)}`}
                   </p>
                 ) : client.updated_at && (
-                  <p className="text-sm text-cyan-400 mt-2">
+                  <p className="text-sm text-purple-600 mt-2 font-bold">
                     Last updated: {formatDateTime(client.updated_at)}
                   </p>
                 )}
               </div>
               <button
                 onClick={() => setExpandedNotes(false)}
-                className="text-gray-400 hover:text-white text-3xl leading-none transition-colors"
+                className="text-gray-600 hover:text-purple-600 text-3xl leading-none transition-colors font-bold"
               >
                 ×
               </button>
@@ -705,75 +697,75 @@ function ClientDetail() {
               {meetingNotes.length > 0 && meetingNotes[selectedNoteIndex] ? (
                 <>
                   {meetingNotes[selectedNoteIndex].title && (
-                    <h4 className="font-bold text-white mb-4 text-xl">
+                    <h4 className="font-black text-gray-800 mb-4 text-xl">
                       {meetingNotes[selectedNoteIndex].title}
                     </h4>
                   )}
-                  <p className="text-gray-300 text-lg leading-relaxed whitespace-pre-wrap mb-6">
+                  <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-wrap mb-6">
                     {meetingNotes[selectedNoteIndex].content}
                   </p>
-                  <div className="text-sm text-gray-500 border-t border-gray-800 pt-4">
+                  <div className="text-sm text-gray-600 border-t-2 border-purple-200 pt-4 font-semibold">
                     Created {formatDateTime(meetingNotes[selectedNoteIndex].created_at)}
-                    {meetingNotes[selectedNoteIndex].created_by && 
+                    {meetingNotes[selectedNoteIndex].created_by &&
                       ` by ${meetingNotes[selectedNoteIndex].created_by}`}
                   </div>
                 </>
               ) : (
                 <>
                   {hasBookingDetails && (
-                    <div className="mb-6 bg-[#252525] border border-cyan-500/30 rounded-xl p-5">
-                      <h4 className="font-bold text-white mb-4">Booking Request Details</h4>
+                    <div className="mb-6 bg-purple-50 border-2 border-purple-200 rounded-xl p-5">
+                      <h4 className="font-black text-gray-800 mb-4">Booking Request Details</h4>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         {bookingDetails.role_type && (
                           <div>
-                            <span className="text-cyan-400">Role Type: </span>
-                            <span className="font-medium text-white capitalize">
+                            <span className="text-purple-600 font-bold">Role Type: </span>
+                            <span className="font-bold text-gray-800 capitalize">
                               {bookingDetails.role_type.replace(/_/g, ' ')}
                             </span>
                           </div>
                         )}
                         {bookingDetails.budget && (
                           <div>
-                            <span className="text-cyan-400">Budget: </span>
-                            <span className="font-medium text-white">
+                            <span className="text-purple-600 font-bold">Budget: </span>
+                            <span className="font-bold text-gray-800">
                               ${bookingDetails.budget.toLocaleString()}
                             </span>
                           </div>
                         )}
                         {bookingDetails.urgency !== null && (
                           <div>
-                            <span className="text-cyan-400">Urgency Level: </span>
-                            <span className="font-medium text-white">{bookingDetails.urgency}/10</span>
+                            <span className="text-purple-600 font-bold">Urgency Level: </span>
+                            <span className="font-bold text-gray-800">{bookingDetails.urgency}/10</span>
                           </div>
                         )}
                         {bookingDetails.start_date && (
                           <div>
-                            <span className="text-cyan-400">Start Date: </span>
-                            <span className="font-medium text-white">
+                            <span className="text-purple-600 font-bold">Start Date: </span>
+                            <span className="font-bold text-gray-800">
                               {formatDate(bookingDetails.start_date)}
                             </span>
                           </div>
                         )}
                         {bookingDetails.end_date && (
                           <div>
-                            <span className="text-cyan-400">End Date: </span>
-                            <span className="font-medium text-white">
+                            <span className="text-purple-600 font-bold">End Date: </span>
+                            <span className="font-bold text-gray-800">
                               {formatDate(bookingDetails.end_date)}
                             </span>
                           </div>
                         )}
                       </div>
                       {bookingDetails.original_description && (
-                        <div className="mt-5 pt-5 border-t border-gray-800">
-                          <h5 className="font-bold text-white mb-3">Original Project Description:</h5>
-                          <p className="text-gray-300 whitespace-pre-wrap">{bookingDetails.original_description}</p>
+                        <div className="mt-5 pt-5 border-t-2 border-purple-200">
+                          <h5 className="font-black text-gray-800 mb-3">Original Project Description:</h5>
+                          <p className="text-gray-700 whitespace-pre-wrap font-medium">{bookingDetails.original_description}</p>
                         </div>
                       )}
                     </div>
                   )}
                   <div>
-                    <h4 className="font-bold text-white mb-3 text-lg">Full Notes:</h4>
-                    <p className="text-gray-300 text-lg leading-relaxed whitespace-pre-wrap">{client.notes_from_last_meeting}</p>
+                    <h4 className="font-black text-gray-800 mb-3 text-lg">Full Notes:</h4>
+                    <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-wrap">{client.notes_from_last_meeting}</p>
                   </div>
                 </>
               )}
@@ -785,59 +777,59 @@ function ClientDetail() {
       {/* Add Note Modal */}
       {showAddNoteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#1f1f1f] border border-cyan-500/40 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-800 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-white">Add Meeting Note</h3>
+          <div className="bg-white border-2 border-purple-300 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b-2 border-purple-200 flex items-center justify-between bg-gradient-to-r from-purple-50 to-pink-50">
+              <h3 className="text-xl font-bold text-gray-800">Add Meeting Note</h3>
               <button
                 onClick={() => setShowAddNoteModal(false)}
-                className="text-gray-400 hover:text-white text-2xl leading-none transition-colors"
+                className="text-gray-600 hover:text-purple-600 text-2xl leading-none transition-colors font-bold"
               >
                 ×
               </button>
             </div>
             <form onSubmit={handleAddNote} className="p-6 space-y-5">
               <div>
-                <label className="block text-sm font-medium text-cyan-400 mb-2">Meeting Date *</label>
+                <label className="block text-sm font-bold text-purple-600 mb-2">Meeting Date *</label>
                 <input
                   type="date"
                   value={newNoteData.meeting_date}
                   onChange={(e) => setNewNoteData({ ...newNoteData, meeting_date: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                  className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-cyan-400 mb-2">Title (Optional)</label>
+                <label className="block text-sm font-bold text-purple-600 mb-2">Title (Optional)</label>
                 <input
                   type="text"
                   value={newNoteData.title}
                   onChange={(e) => setNewNoteData({ ...newNoteData, title: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                  className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
                   placeholder="e.g., Initial Consultation, Follow-up Meeting"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-cyan-400 mb-2">Notes *</label>
+                <label className="block text-sm font-bold text-purple-600 mb-2">Notes *</label>
                 <textarea
                   value={newNoteData.content}
                   onChange={(e) => setNewNoteData({ ...newNoteData, content: e.target.value })}
                   rows="8"
-                  className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                  className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
                   required
                   placeholder="Write your meeting notes here..."
                 />
               </div>
-              <div className="flex justify-end gap-3 pt-4 border-t border-gray-800">
+              <div className="flex justify-end gap-3 pt-4 border-t-2 border-purple-200">
                 <button
                   type="button"
                   onClick={() => setShowAddNoteModal(false)}
-                  className="px-6 py-2.5 text-sm font-medium text-gray-300 bg-[#252525] border border-gray-800 rounded-xl hover:bg-[#2a2a2a] hover:border-gray-700 transition-all"
+                  className="px-6 py-2.5 text-sm font-bold text-gray-700 bg-gray-100 border-2 border-gray-200 rounded-xl hover:bg-gray-200 hover:border-gray-300 transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 text-sm font-medium text-white bg-cyan-500 rounded-xl hover:bg-cyan-600 border border-cyan-400/50 transition-all"
+                  className="px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all"
                 >
                   Add Note
                 </button>

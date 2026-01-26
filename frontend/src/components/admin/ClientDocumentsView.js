@@ -119,7 +119,7 @@ function ClientDocumentsView({ clientId }) {
   if (loading && documents.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -127,10 +127,10 @@ function ClientDocumentsView({ clientId }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold text-white">Documents</h3>
+        <h3 className="text-2xl font-black text-gray-800">Documents</h3>
         <button
           onClick={() => setShowUploadForm(!showUploadForm)}
-          className="px-5 py-2.5 bg-cyan-500 text-white rounded-xl font-semibold hover:bg-cyan-600 transition-all border border-cyan-400/50 hover:border-cyan-400"
+          className="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 rounded-xl transition-all"
         >
           {showUploadForm ? 'Cancel' : '+ Upload Document'}
         </button>
@@ -143,25 +143,25 @@ function ClientDocumentsView({ clientId }) {
       )}
 
       {showUploadForm && (
-        <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-xl p-6 mb-6">
-          <h4 className="text-lg font-bold text-white mb-4">Upload Document</h4>
+        <div className="bg-white border-2 border-purple-200 rounded-xl p-6 mb-6 hover:border-purple-300 hover:shadow-xl transition-all">
+          <h4 className="text-lg font-black text-gray-800 mb-4">Upload Document</h4>
           <form onSubmit={handleUpload} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-cyan-400 mb-2">Title *</label>
+              <label className="block text-sm font-bold text-purple-600 mb-2">Title *</label>
               <input
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 required
-                className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-cyan-400 mb-2">Document Type</label>
+              <label className="block text-sm font-bold text-purple-600 mb-2">Document Type</label>
               <select
                 value={formData.document_type}
                 onChange={(e) => setFormData({ ...formData, document_type: e.target.value })}
-                className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
               >
                 <option value="SOW">SOW (Scope of Work)</option>
                 <option value="Contract">Contract</option>
@@ -169,35 +169,35 @@ function ClientDocumentsView({ clientId }) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-cyan-400 mb-2">Description</label>
+              <label className="block text-sm font-bold text-purple-600 mb-2">Description</label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows="3"
-                className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-cyan-400 mb-2">File *</label>
+              <label className="block text-sm font-bold text-purple-600 mb-2">File *</label>
               <input
                 type="file"
                 onChange={handleFileChange}
                 required
-                className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
               />
             </div>
             <div className="flex justify-end gap-3">
               <button
                 type="button"
                 onClick={() => setShowUploadForm(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-300 bg-[#252525] border border-gray-800 rounded-xl hover:bg-[#2a2a2a] transition-all"
+                className="px-4 py-2 text-sm font-bold text-purple-600 bg-white border-2 border-purple-200 rounded-xl hover:bg-purple-50 transition-all"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={uploading}
-                className="px-4 py-2 text-sm font-medium text-white bg-cyan-500 rounded-xl hover:bg-cyan-600 disabled:opacity-50 border border-cyan-400/50 transition-all"
+                className="px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 disabled:opacity-50 transition-all"
               >
                 {uploading ? 'Uploading...' : 'Upload'}
               </button>
@@ -207,37 +207,37 @@ function ClientDocumentsView({ clientId }) {
       )}
 
       {documents.length === 0 ? (
-        <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-12 text-center">
+        <div className="bg-white border-2 border-purple-200 rounded-2xl p-12 text-center hover:border-purple-300 hover:shadow-xl transition-all">
           <div className="text-6xl mb-4">📄</div>
-          <h3 className="text-lg font-bold text-white mb-2">No documents</h3>
-          <p className="text-gray-400">Upload documents related to this client</p>
+          <h3 className="text-lg font-black text-gray-800 mb-2">No documents</h3>
+          <p className="text-gray-600 font-semibold">Upload documents related to this client</p>
         </div>
       ) : (
         <div className="space-y-3">
           {documents.map((doc) => (
             <div
               key={doc.id}
-              className="bg-[#1f1f1f] border border-cyan-500/30 rounded-xl p-4 flex items-center justify-between hover:border-cyan-500/50 transition-all"
+              className="bg-white border-2 border-purple-200 rounded-xl p-4 flex items-center justify-between hover:border-purple-300 hover:shadow-xl transition-all"
             >
               <div className="flex items-center gap-4 flex-1">
-                <div className="w-12 h-12 bg-cyan-500/20 border border-cyan-500/30 rounded-xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-100 to-pink-100 border-2 border-purple-200 rounded-xl flex items-center justify-center">
                   <span className="text-2xl">📄</span>
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-bold text-white">{doc.title}</h4>
-                  <div className="flex items-center gap-4 mt-1 text-sm text-gray-400 flex-wrap">
+                  <h4 className="font-black text-gray-800">{doc.title}</h4>
+                  <div className="flex items-center gap-4 mt-1 text-sm text-gray-600 font-semibold flex-wrap">
                     <span>{doc.file_name}</span>
                     <span>•</span>
                     <span>{formatFileSize(doc.file_size)}</span>
                     <span>•</span>
-                    <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-full text-xs font-medium">
+                    <span className="px-2 py-0.5 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-600 border-2 border-purple-200 rounded-full text-xs font-bold">
                       {doc.document_type}
                     </span>
                     <span>•</span>
                     <span>{formatDate(doc.created_at)}</span>
                   </div>
                   {doc.description && (
-                    <p className="text-sm text-gray-400 mt-1">{doc.description}</p>
+                    <p className="text-sm text-gray-600 font-semibold mt-1">{doc.description}</p>
                   )}
                 </div>
               </div>
@@ -245,20 +245,20 @@ function ClientDocumentsView({ clientId }) {
                 {canViewInBrowser(doc.file_name) && (
                   <button
                     onClick={() => handleView(doc)}
-                    className="px-3 py-2 text-sm font-semibold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 rounded-xl hover:bg-cyan-500/20 transition-all"
+                    className="px-3 py-2 text-sm font-bold text-purple-600 bg-white border-2 border-purple-200 rounded-xl hover:bg-purple-50 transition-all"
                   >
                     View
                   </button>
                 )}
                 <button
                   onClick={() => handleDownload(doc.id, doc.file_name)}
-                  className="px-3 py-2 text-sm font-semibold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 rounded-xl hover:bg-cyan-500/20 transition-all"
+                  className="px-3 py-2 text-sm font-bold text-purple-600 bg-white border-2 border-purple-200 rounded-xl hover:bg-purple-50 transition-all"
                 >
                   Download
                 </button>
                 <button
                   onClick={() => handleDelete(doc.id)}
-                  className="px-3 py-2 text-sm font-semibold text-red-400 bg-red-500/10 border border-red-500/30 rounded-xl hover:bg-red-500/20 transition-all"
+                  className="px-3 py-2 text-sm font-bold text-red-400 bg-red-500/10 border border-red-500/30 rounded-xl hover:bg-red-500/20 transition-all"
                 >
                   Delete
                 </button>
@@ -271,12 +271,12 @@ function ClientDocumentsView({ clientId }) {
       {/* View Document Modal */}
       {viewingDocument && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-[#1f1f1f] border border-cyan-500/40 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col">
-            <div className="p-6 border-b border-gray-800 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-white">{viewingDocument.title}</h3>
+          <div className="bg-white border-2 border-purple-200 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col">
+            <div className="p-6 border-b border-purple-200 flex items-center justify-between">
+              <h3 className="text-xl font-black text-gray-800">{viewingDocument.title}</h3>
               <button
                 onClick={() => setViewingDocument(null)}
-                className="text-gray-400 hover:text-white text-2xl font-bold transition-all"
+                className="text-gray-600 hover:text-gray-800 text-2xl font-bold transition-all"
               >
                 ×
               </button>
@@ -287,7 +287,7 @@ function ClientDocumentsView({ clientId }) {
                   {viewingDocument.file_name.toLowerCase().endsWith('.pdf') ? (
                     <iframe
                       src={clientDocumentAPI.getViewUrl(viewingDocument.id)}
-                      className="w-full h-full min-h-[600px] rounded-lg border border-gray-800"
+                      className="w-full h-full min-h-[600px] rounded-lg border-2 border-purple-200"
                       title={viewingDocument.title}
                     />
                   ) : viewingDocument.file_name.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
@@ -295,33 +295,33 @@ function ClientDocumentsView({ clientId }) {
                       <img
                         src={clientDocumentAPI.getViewUrl(viewingDocument.id)}
                         alt={viewingDocument.title}
-                        className="max-w-full max-h-full rounded-lg border border-gray-800"
+                        className="max-w-full max-h-full rounded-lg border-2 border-purple-200"
                       />
                     </div>
                   ) : (
                     <iframe
                       src={clientDocumentAPI.getViewUrl(viewingDocument.id)}
-                      className="w-full h-full min-h-[600px] rounded-lg border border-gray-800 bg-white"
+                      className="w-full h-full min-h-[600px] rounded-lg border-2 border-purple-200 bg-white"
                       title={viewingDocument.title}
                     />
                   )}
                 </div>
               ) : (
                 <div className="flex items-center justify-center h-full min-h-[400px]">
-                  <p className="text-gray-400">This file type cannot be viewed in the browser. Please download it.</p>
+                  <p className="text-gray-600 font-semibold">This file type cannot be viewed in the browser. Please download it.</p>
                 </div>
               )}
             </div>
-            <div className="p-6 border-t border-gray-800 flex justify-end gap-3">
+            <div className="p-6 border-t border-purple-200 flex justify-end gap-3">
               <button
                 onClick={() => handleDownload(viewingDocument.id, viewingDocument.file_name)}
-                className="px-4 py-2 text-sm font-medium text-white bg-cyan-500 rounded-xl hover:bg-cyan-600 border border-cyan-400/50 transition-all"
+                className="px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all"
               >
                 Download
               </button>
               <button
                 onClick={() => setViewingDocument(null)}
-                className="px-4 py-2 text-sm font-medium text-gray-300 bg-[#252525] border border-gray-800 rounded-xl hover:bg-[#2a2a2a] transition-all"
+                className="px-4 py-2 text-sm font-bold text-purple-600 bg-white border-2 border-purple-200 rounded-xl hover:bg-purple-50 transition-all"
               >
                 Close
               </button>

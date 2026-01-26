@@ -194,7 +194,7 @@ function IdeaDetail() {
           <h1 className="text-2xl font-bold text-white mb-4">Idea Not Found</h1>
           <button
             onClick={() => navigate('/admin/ideas')}
-            className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600"
+            className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:shadow-xl hover:shadow-purple-500/30"
           >
             Back to Ideas
           </button>
@@ -212,7 +212,7 @@ function IdeaDetail() {
       );
     }
     return (
-      <span className="px-4 py-2 text-sm font-semibold rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+      <span className="px-4 py-2 text-sm font-semibold rounded-full bg-gradient-to-r from-purple-500 to-pink-500/20 text-purple-600 border border-purple-300/30">
         ⏳ Coming Soon
       </span>
     );
@@ -244,13 +244,13 @@ function IdeaDetail() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('/admin/budget')}
-              className="px-6 py-3 bg-[#1f1f1f] text-cyan-400 border border-cyan-500/30 rounded-xl font-semibold hover:bg-[#252525] hover:border-cyan-500/50 transition-all shadow-lg hover:shadow-cyan-500/20"
+              className="px-6 py-3 bg-white text-purple-600 border border-purple-300/30 rounded-xl font-semibold hover:bg-purple-50 hover:border-purple-300/50 transition-all shadow-lg hover:shadow-purple-500/20"
             >
               💰 Budget
             </button>
             <button
               onClick={() => navigate('/admin/subscriptions')}
-              className="px-6 py-3 bg-[#1f1f1f] text-cyan-400 border border-cyan-500/30 rounded-xl font-semibold hover:bg-[#252525] hover:border-cyan-500/50 transition-all shadow-lg hover:shadow-cyan-500/20"
+              className="px-6 py-3 bg-white text-purple-600 border border-purple-300/30 rounded-xl font-semibold hover:bg-purple-50 hover:border-purple-300/50 transition-all shadow-lg hover:shadow-purple-500/20"
             >
               📱 Subscriptions
             </button>
@@ -283,15 +283,15 @@ function IdeaDetail() {
 
               {/* Debt Amounts */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <div className="bg-[#1a1a1a]/50 border border-red-500/30 rounded-xl p-4">
+                <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
                   <p className="text-gray-400 text-sm mb-1">Total Debt</p>
                   <p className="text-2xl font-bold text-white">${totalDebt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
-                <div className="bg-[#1a1a1a]/50 border border-orange-500/30 rounded-xl p-4">
+                <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4">
                   <p className="text-gray-400 text-sm mb-1">Remaining</p>
                   <p className="text-2xl font-bold text-red-400">${currentDebt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
-                <div className="bg-[#1a1a1a]/50 border border-green-500/30 rounded-xl p-4">
+                <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
                   <p className="text-gray-400 text-sm mb-1">Paid Off</p>
                   <p className="text-2xl font-bold text-green-400">${amountPaid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
@@ -321,7 +321,7 @@ function IdeaDetail() {
                   <>
                     <button
                       onClick={() => setIsEditing(true)}
-                      className="px-4 py-2 bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/30 transition-all duration-200 text-sm font-semibold"
+                      className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500/20 text-purple-600 border border-purple-300/30 rounded-lg hover:bg-gradient-to-r from-purple-500 to-pink-500/30 transition-all duration-200 text-sm font-semibold"
                     >
                       ✏️ Update Debt
                     </button>
@@ -351,11 +351,11 @@ function IdeaDetail() {
                       value={editAmount}
                       onChange={(e) => setEditAmount(e.target.value)}
                       placeholder="Enter new debt amount"
-                      className="flex-1 px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50"
+                      className="flex-1 px-4 py-2 bg-purple-50 border-2 border-purple-200 rounded-lg text-gray-800 font-semibold placeholder-gray-400 focus:outline-none focus:border-purple-300/50"
                     />
                     <button
                       onClick={handleUpdateDebt}
-                      className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-all duration-200 text-sm font-semibold"
+                      className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-200 text-sm font-semibold"
                     >
                       Update
                     </button>
@@ -381,7 +381,7 @@ function IdeaDetail() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-400">Progress</span>
-            <span className="text-sm font-semibold text-cyan-400">{idea.progress}%</span>
+            <span className="text-sm font-semibold text-purple-600">{idea.progress}%</span>
           </div>
           <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
             <div
@@ -394,7 +394,7 @@ function IdeaDetail() {
 
       {/* Coming Soon Badge (if applicable) */}
       {idea.status === 'coming-soon' && (
-        <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-xl p-6 shadow-lg">
+        <div className="bg-white border border-purple-300/30 rounded-xl p-6 shadow-lg">
           <div className="text-center">
             <div className="text-4xl mb-2">⏳</div>
             <p className="text-white font-semibold mb-1">Coming Soon</p>

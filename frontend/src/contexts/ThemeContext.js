@@ -13,13 +13,13 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Set initial theme class and data attribute
-    document.documentElement.classList.add('dark');
-    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.classList.add('light');
+    document.documentElement.setAttribute('data-theme', 'light');
     
     // Load theme preference from user profile
     const loadTheme = async () => {
@@ -35,19 +35,19 @@ export const ThemeProvider = ({ children }) => {
               document.documentElement.setAttribute('data-theme', profile.theme_preference);
             }
           } catch (err) {
-            // Profile not found or error, use default dark
+            // Profile not found or error, use default light
             console.log('Could not load theme preference:', err);
-            setTheme('dark');
-            document.documentElement.setAttribute('data-theme', 'dark');
+            setTheme('light');
+            document.documentElement.setAttribute('data-theme', 'light');
           }
         } else {
-          setTheme('dark');
-          document.documentElement.setAttribute('data-theme', 'dark');
+          setTheme('light');
+          document.documentElement.setAttribute('data-theme', 'light');
         }
       } catch (err) {
         console.error('Error loading theme:', err);
-        setTheme('dark');
-        document.documentElement.setAttribute('data-theme', 'dark');
+        setTheme('light');
+        document.documentElement.setAttribute('data-theme', 'light');
       } finally {
         setLoading(false);
       }

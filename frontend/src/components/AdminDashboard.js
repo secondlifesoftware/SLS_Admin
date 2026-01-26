@@ -46,30 +46,32 @@ function AdminDashboard({ user, onLogout }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1a1a] relative">
-      {/* Grid Pattern Background */}
-      <div className="fixed inset-0 bg-[#1a1a1a] opacity-100" style={{
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF9] via-[#F8F5F2] to-[#FFF8F5] relative">
+      {/* Decorative Background Pattern */}
+      <div className="fixed inset-0 opacity-40" style={{
         backgroundImage: `
-          linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px)
+          radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+          radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.08) 0%, transparent 50%),
+          linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px)
         `,
-        backgroundSize: '40px 40px'
+        backgroundSize: 'cover, cover, 60px 60px, 60px 60px'
       }}></div>
-      
+
       <div className="relative z-10">
         {/* Top Navigation Bar */}
-        <nav className="bg-[#1f1f1f] border-b border-cyan-500/30 sticky top-0 z-50 backdrop-blur-lg bg-[#1f1f1f]/95">
+        <nav className="bg-white/95 border-b-2 border-purple-100 sticky top-0 z-50 backdrop-blur-xl shadow-sm">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex items-center justify-between h-16">
               {/* Logo/Brand */}
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center border border-cyan-400/30">
+                <div className="w-9 h-9 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30 border border-purple-200">
                   <span className="text-white text-sm font-bold">SLS</span>
                 </div>
-                <span className="text-xl font-bold text-white">Admin</span>
+                <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Admin</span>
                 <button
                   onClick={() => navigate('/')}
-                  className="ml-4 px-3 py-1.5 text-sm font-medium text-gray-400 hover:text-white hover:bg-[#252525] rounded-lg transition-colors duration-200 flex items-center border border-gray-800"
+                  className="ml-4 px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-all duration-200 flex items-center border border-gray-200 hover:border-purple-300"
                   title="Go to main website"
                 >
                   <span className="mr-1.5">🏠</span>
@@ -79,7 +81,7 @@ function AdminDashboard({ user, onLogout }) {
                   href={process.env.REACT_APP_DEMO_URL || 'http://localhost:5173'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ml-2 px-3 py-1.5 text-sm font-medium text-gray-400 hover:text-white hover:bg-[#252525] rounded-lg transition-colors duration-200 flex items-center border border-gray-800"
+                  className="ml-2 px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-all duration-200 flex items-center border border-gray-200 hover:border-purple-300"
                   title="Open demo application"
                 >
                   <span className="mr-1.5">🎨</span>
@@ -88,17 +90,17 @@ function AdminDashboard({ user, onLogout }) {
               </div>
 
               {/* Navigation Links */}
-              <div className="flex items-center space-x-1">
+              <div className="flex items-center space-x-2">
                 {navItems.map((item) => (
                   <button
                     key={item.path}
                     onClick={() => navigate(item.path)}
                     className={`
-                      px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 border
+                      px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 border-2
                       ${
                         isActive(item.path)
-                          ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/40'
-                          : 'text-gray-400 hover:text-white hover:bg-[#252525] border-transparent hover:border-cyan-500/30'
+                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white border-transparent shadow-lg shadow-purple-500/30'
+                          : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50 border-transparent hover:border-purple-200'
                       }
                     `}
                   >
@@ -110,13 +112,13 @@ function AdminDashboard({ user, onLogout }) {
 
               {/* User Info & Logout */}
               <div className="flex items-center space-x-4">
-                <div className="text-right">
-                  <p className="text-sm font-semibold text-white">{user?.email}</p>
-                  <p className="text-xs text-cyan-400">Administrator</p>
+                <div className="text-right bg-purple-50 px-4 py-2 rounded-xl border border-purple-100">
+                  <p className="text-sm font-bold text-gray-800">{user?.email}</p>
+                  <p className="text-xs font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Administrator</p>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 text-sm font-semibold text-red-400 hover:bg-red-500/10 border border-red-500/30 rounded-lg transition-colors duration-200 hover:border-red-500/50"
+                  className="px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-50 border-2 border-red-200 rounded-xl transition-all duration-200 hover:border-red-400 hover:shadow-lg hover:shadow-red-500/20"
                 >
                   Sign Out
                 </button>

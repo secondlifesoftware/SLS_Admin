@@ -216,7 +216,7 @@ function ClientTimelineView({ clientId, onRefresh }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -224,23 +224,23 @@ function ClientTimelineView({ clientId, onRefresh }) {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-white">Client Timeline</h2>
+        <h2 className="text-2xl font-black text-gray-800">Client Timeline</h2>
         <div className="flex gap-3">
           <button
             onClick={() => setShowRoadmap(!showRoadmap)}
-            className="px-5 py-2.5 bg-purple-500 text-white rounded-xl font-semibold hover:bg-purple-600 transition-all border border-purple-400/50 hover:border-purple-400"
+            className="px-5 py-2.5 bg-white border-2 border-purple-200 text-purple-600 font-bold hover:bg-purple-50 rounded-xl transition-all"
           >
             {showRoadmap ? 'List View' : 'Roadmap View'}
           </button>
           <button
             onClick={() => setShowImportModal(true)}
-            className="px-5 py-2.5 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition-all border border-blue-400/50 hover:border-blue-400"
+            className="px-5 py-2.5 bg-white border-2 border-purple-200 text-purple-600 font-bold hover:bg-purple-50 rounded-xl transition-all"
           >
             Import from Notion
           </button>
           <button
             onClick={() => setShowAddModal(true)}
-            className="px-5 py-2.5 bg-cyan-500 text-white rounded-xl font-semibold hover:bg-cyan-600 transition-all border border-cyan-400/50 hover:border-cyan-400"
+            className="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 rounded-xl transition-all"
           >
             + Add Event
           </button>
@@ -256,20 +256,20 @@ function ClientTimelineView({ clientId, onRefresh }) {
       {showRoadmap && timeline.length > 0 ? (
         <RoadmapView timeline={timeline} projectInfo={projectInfo} />
       ) : timeline.length === 0 ? (
-        <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-12 text-center">
+        <div className="bg-white border-2 border-purple-200 rounded-2xl p-12 text-center hover:border-purple-300 hover:shadow-xl transition-all">
           <div className="text-6xl mb-4">📅</div>
-          <h3 className="text-xl font-bold text-white mb-2">No timeline events yet</h3>
-          <p className="text-gray-400 mb-6">Start tracking your client journey by adding the first event or importing from Notion</p>
+          <h3 className="text-xl font-black text-gray-800 mb-2">No timeline events yet</h3>
+          <p className="text-gray-600 font-semibold mb-6">Start tracking your client journey by adding the first event or importing from Notion</p>
           <div className="flex gap-3 justify-center">
             <button
               onClick={() => setShowImportModal(true)}
-              className="px-6 py-3 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition-all border border-blue-400/50"
+              className="px-6 py-3 bg-white border-2 border-purple-200 text-purple-600 font-bold hover:bg-purple-50 rounded-xl transition-all"
             >
               Import from Notion
             </button>
             <button
               onClick={() => setShowAddModal(true)}
-              className="px-6 py-3 bg-cyan-500 text-white rounded-xl font-semibold hover:bg-cyan-600 transition-all border border-cyan-400/50"
+              className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 rounded-xl transition-all"
             >
               Add First Event
             </button>
@@ -280,11 +280,11 @@ function ClientTimelineView({ clientId, onRefresh }) {
           {timeline.map((event, index) => (
             <div
               key={event.id}
-              className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/50 transition-all relative"
+              className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:shadow-xl transition-all relative"
             >
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-lg border border-cyan-400/30">
+                  <div className="w-14 h-14 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-black text-lg">
                     {index + 1}
                   </div>
                 </div>
@@ -292,27 +292,27 @@ function ClientTimelineView({ clientId, onRefresh }) {
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="px-3 py-1 text-xs font-bold bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-full">
+                        <span className="px-3 py-1 text-xs font-bold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-600 border-2 border-purple-200 rounded-full">
                           {event.event_type}
                         </span>
-                        <span className="text-sm text-gray-400">{formatDate(event.event_date)}</span>
+                        <span className="text-sm text-gray-600 font-semibold">{formatDate(event.event_date)}</span>
                       </div>
-                      <h3 className="text-lg font-bold text-white">{event.title}</h3>
+                      <h3 className="text-lg font-black text-gray-800">{event.title}</h3>
                     </div>
                     <button
                       onClick={() => handleDelete(event.id)}
-                      className="text-red-400 hover:text-red-300 text-sm font-medium"
+                      className="text-red-400 hover:text-red-300 text-sm font-bold"
                     >
                       Delete
                     </button>
                   </div>
                   {event.description && (
-                    <p className="text-gray-300 mb-3 whitespace-pre-wrap">{event.description}</p>
+                    <p className="text-gray-700 font-semibold mb-3 whitespace-pre-wrap">{event.description}</p>
                   )}
                   {event.next_steps && (
-                    <div className="bg-[#252525] border border-cyan-500/20 rounded-xl p-4">
-                      <div className="text-sm font-bold text-cyan-400 mb-2">Next Steps:</div>
-                      <p className="text-sm text-gray-300 whitespace-pre-wrap">{event.next_steps}</p>
+                    <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-4">
+                      <div className="text-sm font-black text-purple-600 mb-2">Next Steps:</div>
+                      <p className="text-sm text-gray-700 font-semibold whitespace-pre-wrap">{event.next_steps}</p>
                     </div>
                   )}
                 </div>
@@ -325,17 +325,17 @@ function ClientTimelineView({ clientId, onRefresh }) {
       {/* Add Event Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-[#1f1f1f] border border-cyan-500/40 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-800">
-              <h3 className="text-xl font-bold text-white">Add Timeline Event</h3>
+          <div className="bg-white border-2 border-purple-200 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-purple-200">
+              <h3 className="text-xl font-black text-gray-800">Add Timeline Event</h3>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
               <div>
-                <label className="block text-sm font-medium text-cyan-400 mb-2">Event Type</label>
+                <label className="block text-sm font-bold text-purple-600 mb-2">Event Type</label>
                 <select
                   value={formData.event_type}
                   onChange={(e) => setFormData({ ...formData, event_type: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                  className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
                   required
                 >
                   {eventTypes.map((type) => (
@@ -347,59 +347,59 @@ function ClientTimelineView({ clientId, onRefresh }) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-cyan-400 mb-2">Title *</label>
+                <label className="block text-sm font-bold text-purple-600 mb-2">Title *</label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                  className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-cyan-400 mb-2">Date *</label>
+                <label className="block text-sm font-bold text-purple-600 mb-2">Date *</label>
                 <input
                   type="date"
                   value={formData.event_date}
                   onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                  className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-cyan-400 mb-2">Description</label>
+                <label className="block text-sm font-bold text-purple-600 mb-2">Description</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows="4"
-                  className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                  className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-cyan-400 mb-2">Next Steps</label>
+                <label className="block text-sm font-bold text-purple-600 mb-2">Next Steps</label>
                 <textarea
                   value={formData.next_steps}
                   onChange={(e) => setFormData({ ...formData, next_steps: e.target.value })}
                   rows="3"
-                  className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+                  className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300"
                   placeholder="What are the next steps after this event?"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-gray-800">
+              <div className="flex justify-end gap-3 pt-4 border-t border-purple-200">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-6 py-2.5 text-sm font-medium text-gray-300 bg-[#252525] border border-gray-800 rounded-xl hover:bg-[#2a2a2a] hover:border-gray-700 transition-all"
+                  className="px-6 py-2.5 text-sm font-bold text-purple-600 bg-white border-2 border-purple-200 rounded-xl hover:bg-purple-50 transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 text-sm font-medium text-white bg-cyan-500 rounded-xl hover:bg-cyan-600 border border-cyan-400/50 transition-all"
+                  className="px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 transition-all"
                 >
                   Add Event
                 </button>
@@ -412,29 +412,29 @@ function ClientTimelineView({ clientId, onRefresh }) {
       {/* Import from Notion Modal */}
       {showImportModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-[#1f1f1f] border border-cyan-500/40 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-800">
-              <h3 className="text-xl font-bold text-white">Import Timeline with AI</h3>
-              <p className="text-sm text-gray-400 mt-2">Paste any timeline text - AI will intelligently parse it and create a roadmap. Works with Notion exports, sprint tables, milestone lists, or free-form text.</p>
+          <div className="bg-white border-2 border-purple-200 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-purple-200">
+              <h3 className="text-xl font-black text-gray-800">Import Timeline with AI</h3>
+              <p className="text-sm text-gray-600 font-semibold mt-2">Paste any timeline text - AI will intelligently parse it and create a roadmap. Works with Notion exports, sprint tables, milestone lists, or free-form text.</p>
             </div>
             <div className="p-6 space-y-5">
               {importing && (
                 <div className="flex flex-col items-center justify-center py-8">
-                  <div className="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                  <p className="text-cyan-400 font-medium">Parsing timeline with AI...</p>
-                  <p className="text-gray-400 text-sm mt-2">This may take a few moments</p>
+                  <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                  <p className="text-purple-600 font-bold">Parsing timeline with AI...</p>
+                  <p className="text-gray-600 font-semibold text-sm mt-2">This may take a few moments</p>
                 </div>
               )}
               {!importing && (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-cyan-400 mb-2">Timeline Text *</label>
+                    <label className="block text-sm font-bold text-purple-600 mb-2">Timeline Text *</label>
                     <textarea
                       value={importText}
                       onChange={(e) => setImportText(e.target.value)}
                       rows="15"
                       disabled={importing}
-                      className="w-full px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50 font-mono disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full px-4 py-2.5 bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300 font-mono disabled:opacity-50 disabled:cursor-not-allowed"
                       placeholder="Paste any timeline text here - sprint tables, milestone lists, or free-form text. AI will intelligently parse it and create your roadmap..."
                     />
                   </div>
@@ -445,7 +445,7 @@ function ClientTimelineView({ clientId, onRefresh }) {
                   )}
                 </>
               )}
-              <div className="flex justify-end gap-3 pt-4 border-t border-gray-800">
+              <div className="flex justify-end gap-3 pt-4 border-t border-purple-200">
                 <button
                   type="button"
                   onClick={() => {
@@ -453,14 +453,14 @@ function ClientTimelineView({ clientId, onRefresh }) {
                     setImportText('');
                     setError('');
                   }}
-                  className="px-6 py-2.5 text-sm font-medium text-gray-300 bg-[#252525] border border-gray-800 rounded-xl hover:bg-[#2a2a2a] hover:border-gray-700 transition-all"
+                  className="px-6 py-2.5 text-sm font-bold text-purple-600 bg-white border-2 border-purple-200 rounded-xl hover:bg-purple-50 transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleImport}
                   disabled={importing || !importText.trim()}
-                  className="px-6 py-2.5 text-sm font-medium text-white bg-cyan-500 rounded-xl hover:bg-cyan-600 disabled:opacity-50 border border-cyan-400/50 transition-all"
+                  className="px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 disabled:opacity-50 transition-all"
                 >
                   {importing ? 'Importing...' : 'Import Timeline'}
                 </button>
@@ -531,33 +531,33 @@ function RoadmapView({ timeline, projectInfo }) {
   };
 
   return (
-    <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6">
+    <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-300 hover:shadow-xl transition-all">
       {projectInfo && (
-        <div className="mb-6 p-4 bg-[#252525] border border-cyan-500/20 rounded-xl">
-          <h3 className="text-lg font-bold text-white mb-3">Project Information</h3>
+        <div className="mb-6 p-4 bg-purple-50 border-2 border-purple-200 rounded-xl">
+          <h3 className="text-lg font-black text-gray-800 mb-3">Project Information</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             {projectInfo.duration && (
               <div>
-                <span className="text-cyan-400 font-medium">Duration:</span>
-                <span className="text-gray-300 ml-2">{projectInfo.duration}</span>
+                <span className="text-purple-600 font-bold">Duration:</span>
+                <span className="text-gray-700 font-semibold ml-2">{projectInfo.duration}</span>
               </div>
             )}
             {projectInfo.startDate && (
               <div>
-                <span className="text-cyan-400 font-medium">Start:</span>
-                <span className="text-gray-300 ml-2">{formatDate(projectInfo.startDate)}</span>
+                <span className="text-purple-600 font-bold">Start:</span>
+                <span className="text-gray-700 font-semibold ml-2">{formatDate(projectInfo.startDate)}</span>
               </div>
             )}
             {projectInfo.endDate && (
               <div>
-                <span className="text-cyan-400 font-medium">End:</span>
-                <span className="text-gray-300 ml-2">{formatDate(projectInfo.endDate)}</span>
+                <span className="text-purple-600 font-bold">End:</span>
+                <span className="text-gray-700 font-semibold ml-2">{formatDate(projectInfo.endDate)}</span>
               </div>
             )}
             {projectInfo.engagement && (
               <div>
-                <span className="text-cyan-400 font-medium">Engagement:</span>
-                <span className="text-gray-300 ml-2">{projectInfo.engagement}</span>
+                <span className="text-purple-600 font-bold">Engagement:</span>
+                <span className="text-gray-700 font-semibold ml-2">{projectInfo.engagement}</span>
               </div>
             )}
           </div>
@@ -566,8 +566,8 @@ function RoadmapView({ timeline, projectInfo }) {
 
       <div className="relative">
         {/* Timeline axis */}
-        <div className="relative h-2 bg-gray-800 rounded-full mb-8">
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/50 to-blue-500/50 rounded-full"></div>
+        <div className="relative h-2 bg-purple-100 rounded-full mb-8">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
           {milestones.map((milestone, index) => {
             const position = getDatePosition(milestone.start_date || milestone.event_date);
             return (
@@ -576,8 +576,8 @@ function RoadmapView({ timeline, projectInfo }) {
                 className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2"
                 style={{ left: `${position}%` }}
               >
-                <div className="w-4 h-4 bg-cyan-500 rounded-full border-2 border-white shadow-lg"></div>
-                <div className="absolute top-6 left-1/2 transform -translate-x-1/2 whitespace-nowrap text-xs text-gray-400">
+                <div className="w-4 h-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full border-2 border-white shadow-lg"></div>
+                <div className="absolute top-6 left-1/2 transform -translate-x-1/2 whitespace-nowrap text-xs text-gray-600 font-semibold">
                   {formatDate(milestone.start_date || milestone.event_date)}
                 </div>
               </div>
@@ -596,16 +596,16 @@ function RoadmapView({ timeline, projectInfo }) {
             return (
               <div
                 key={milestone.id}
-                className="bg-[#252525] border border-cyan-500/30 rounded-xl p-4 hover:border-cyan-500/50 transition-all"
+                className="bg-purple-50 border-2 border-purple-200 rounded-xl p-4 hover:border-purple-300 hover:shadow-xl transition-all"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold border border-cyan-400/30">
+                    <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white font-black">
                       {milestone.milestone_number || index + 1}
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-white">{milestone.title}</h3>
-                      <div className="flex items-center gap-4 mt-1 text-sm text-gray-400">
+                      <h3 className="text-lg font-black text-gray-800">{milestone.title}</h3>
+                      <div className="flex items-center gap-4 mt-1 text-sm text-gray-600 font-semibold">
                         {milestone.start_date && (
                           <span>Start: {formatDate(milestone.start_date)}</span>
                         )}
@@ -625,15 +625,15 @@ function RoadmapView({ timeline, projectInfo }) {
                     </div>
                   </div>
                 </div>
-                
+
                 {milestone.description && (
-                  <p className="text-gray-300 mb-3 whitespace-pre-wrap">{milestone.description}</p>
+                  <p className="text-gray-700 font-semibold mb-3 whitespace-pre-wrap">{milestone.description}</p>
                 )}
 
                 {/* Visual timeline bar */}
-                <div className="relative h-3 bg-gray-800 rounded-full overflow-hidden">
+                <div className="relative h-3 bg-purple-100 rounded-full overflow-hidden">
                   <div
-                    className="absolute h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
+                    className="absolute h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
                     style={{ left: `${left}%`, width: `${width}%` }}
                   ></div>
                 </div>

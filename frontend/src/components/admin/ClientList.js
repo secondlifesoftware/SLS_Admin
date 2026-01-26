@@ -58,13 +58,13 @@ function ClientList() {
 
   const getStatusBadge = (status) => {
     const badges = {
-      Active: 'bg-green-500/20 text-green-400 border-green-500/30',
-      Inactive: 'bg-gray-700 text-gray-300 border-gray-600',
-      Lead: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
-      Prospect: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+      Active: 'bg-emerald-100 text-emerald-700 border-emerald-300 shadow-sm shadow-emerald-500/20',
+      Inactive: 'bg-gray-100 text-gray-600 border-gray-300',
+      Lead: 'bg-purple-100 text-purple-700 border-purple-300 shadow-sm shadow-purple-500/20',
+      Prospect: 'bg-amber-100 text-amber-700 border-amber-300 shadow-sm shadow-amber-500/20',
     };
     return (
-      <span className={`px-3 py-1 text-xs font-bold rounded-full border ${badges[status] || badges.Inactive}`}>
+      <span className={`px-3 py-1 text-xs font-bold rounded-full border-2 ${badges[status] || badges.Inactive}`}>
         {status}
       </span>
     );
@@ -72,13 +72,13 @@ function ClientList() {
 
   const getContractStatusBadge = (status) => {
     const badges = {
-      'No Contract': 'bg-gray-700 text-gray-300 border-gray-600',
-      'Negotiation': 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-      'Contract Signed': 'bg-green-500/20 text-green-400 border-green-500/30',
-      'Not Heard Back': 'bg-red-500/20 text-red-400 border-red-500/30',
+      'No Contract': 'bg-gray-100 text-gray-600 border-gray-300',
+      'Negotiation': 'bg-amber-100 text-amber-700 border-amber-300 shadow-sm shadow-amber-500/20',
+      'Contract Signed': 'bg-emerald-100 text-emerald-700 border-emerald-300 shadow-sm shadow-emerald-500/20',
+      'Not Heard Back': 'bg-rose-100 text-rose-700 border-rose-300 shadow-sm shadow-rose-500/20',
     };
     return (
-      <span className={`px-3 py-1 text-xs font-bold rounded-full border ${badges[status] || badges['No Contract']}`}>
+      <span className={`px-3 py-1 text-xs font-bold rounded-full border-2 ${badges[status] || badges['No Contract']}`}>
         {status}
       </span>
     );
@@ -106,7 +106,7 @@ function ClientList() {
   if (loading && clients.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -116,12 +116,12 @@ function ClientList() {
       {/* Page Header */}
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Clients</h1>
-          <p className="text-gray-400">Manage your client relationships and projects</p>
+          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">Clients</h1>
+          <p className="text-gray-600 font-medium">Manage your client relationships and projects</p>
         </div>
         <button
           onClick={() => navigate('/admin/clients/new')}
-          className="px-6 py-3 bg-cyan-500 text-white rounded-xl font-semibold hover:bg-cyan-600 transition-all border border-cyan-400/50 hover:border-cyan-400 flex items-center gap-2"
+          className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold hover:shadow-xl hover:shadow-purple-500/30 transition-all border-2 border-transparent hover:scale-105 flex items-center gap-2"
         >
           <span className="text-xl">+</span>
           Add Client
@@ -129,8 +129,8 @@ function ClientList() {
       </div>
 
       {error && (
-        <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-4 mb-6">
-          <p className="text-sm text-red-400">{error}</p>
+        <div className="bg-red-50 border-2 border-red-300 rounded-xl p-4 mb-6 shadow-sm">
+          <p className="text-sm text-red-700 font-semibold">{error}</p>
         </div>
       )}
 
@@ -138,82 +138,82 @@ function ClientList() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <button
           onClick={() => handleStatClick('status', 'All')}
-          className={`bg-[#1f1f1f] border rounded-xl p-6 transition-all duration-200 text-left hover:border-cyan-500/50 ${
+          className={`bg-white border-2 rounded-2xl p-6 transition-all duration-200 text-left hover:shadow-xl ${
             filterStatus === 'All' && filterContractStatus === 'All'
-              ? 'border-cyan-500/60 shadow-lg shadow-cyan-500/20'
-              : 'border-cyan-500/30'
+              ? 'border-purple-400 shadow-2xl shadow-purple-500/30 scale-105'
+              : 'border-gray-200 hover:border-purple-300'
           }`}
         >
-          <div className="text-sm text-cyan-400 mb-1 font-medium">Total Clients</div>
-          <div className="text-3xl font-bold text-white">{clients.length}</div>
+          <div className="text-sm font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">Total Clients</div>
+          <div className="text-4xl font-black text-gray-800">{clients.length}</div>
         </button>
         <button
           onClick={() => handleStatClick('status', 'Active')}
-          className={`bg-[#1f1f1f] border rounded-xl p-6 transition-all duration-200 text-left hover:border-green-500/50 ${
+          className={`bg-white border-2 rounded-2xl p-6 transition-all duration-200 text-left hover:shadow-xl ${
             filterStatus === 'Active'
-              ? 'border-green-500/60 shadow-lg shadow-green-500/20'
-              : 'border-cyan-500/30'
+              ? 'border-emerald-400 shadow-2xl shadow-emerald-500/30 scale-105'
+              : 'border-gray-200 hover:border-emerald-300'
           }`}
         >
-          <div className="text-sm text-cyan-400 mb-1 font-medium">Active Clients</div>
-          <div className="text-3xl font-bold text-green-400">
+          <div className="text-sm font-bold text-emerald-600 mb-2">Active Clients</div>
+          <div className="text-4xl font-black text-emerald-600">
             {clients.filter((c) => c.status === 'Active').length}
           </div>
         </button>
         <button
           onClick={() => handleStatClick('contract', 'Contract Signed')}
-          className={`bg-[#1f1f1f] border rounded-xl p-6 transition-all duration-200 text-left hover:border-blue-500/50 ${
+          className={`bg-white border-2 rounded-2xl p-6 transition-all duration-200 text-left hover:shadow-xl ${
             filterContractStatus === 'Contract Signed'
-              ? 'border-blue-500/60 shadow-lg shadow-blue-500/20'
-              : 'border-cyan-500/30'
+              ? 'border-blue-400 shadow-2xl shadow-blue-500/30 scale-105'
+              : 'border-gray-200 hover:border-blue-300'
           }`}
         >
-          <div className="text-sm text-cyan-400 mb-1 font-medium">With Contracts</div>
-          <div className="text-3xl font-bold text-blue-400">
+          <div className="text-sm font-bold text-blue-600 mb-2">With Contracts</div>
+          <div className="text-4xl font-black text-blue-600">
             {clients.filter((c) => c.contract_status === 'Contract Signed').length}
           </div>
         </button>
         <button
           onClick={() => handleStatClick('contract', 'Negotiation')}
-          className={`bg-[#1f1f1f] border rounded-xl p-6 transition-all duration-200 text-left hover:border-yellow-500/50 ${
+          className={`bg-white border-2 rounded-2xl p-6 transition-all duration-200 text-left hover:shadow-xl ${
             filterContractStatus === 'Negotiation'
-              ? 'border-yellow-500/60 shadow-lg shadow-yellow-500/20'
-              : 'border-cyan-500/30'
+              ? 'border-amber-400 shadow-2xl shadow-amber-500/30 scale-105'
+              : 'border-gray-200 hover:border-amber-300'
           }`}
         >
-          <div className="text-sm text-cyan-400 mb-1 font-medium">In Negotiation</div>
-          <div className="text-3xl font-bold text-yellow-400">
+          <div className="text-sm font-bold text-amber-600 mb-2">In Negotiation</div>
+          <div className="text-4xl font-black text-amber-600">
             {clients.filter((c) => c.contract_status === 'Negotiation').length}
           </div>
         </button>
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 mb-6">
+      <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 mb-6 shadow-lg">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="text-gray-400 text-lg">🔍</span>
+                <span className="text-purple-400 text-lg">🔍</span>
               </div>
               <input
                 type="text"
                 placeholder="Search clients by name, email, or company..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50 transition-all duration-200 placeholder-gray-500"
+                className="block w-full pl-10 pr-3 py-3 bg-purple-50 border-2 border-purple-200 text-gray-800 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 placeholder-purple-400"
               />
             </div>
           </div>
 
           {/* Filters */}
           <div className="flex items-center gap-3">
-            <label className="text-sm text-gray-400 whitespace-nowrap">Status:</label>
+            <label className="text-sm text-gray-700 font-bold whitespace-nowrap">Status:</label>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+              className="px-4 py-3 bg-purple-50 border-2 border-purple-200 text-gray-800 font-medium rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             >
               <option value="All">All</option>
               <option value="Active">Active</option>
@@ -222,11 +222,11 @@ function ClientList() {
               <option value="Prospect">Prospect</option>
             </select>
 
-            <label className="text-sm text-gray-400 whitespace-nowrap ml-4">Contract:</label>
+            <label className="text-sm text-gray-700 font-bold whitespace-nowrap ml-4">Contract:</label>
             <select
               value={filterContractStatus}
               onChange={(e) => setFilterContractStatus(e.target.value)}
-              className="px-4 py-2.5 bg-[#252525] border border-gray-800 text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500/50"
+              className="px-4 py-3 bg-purple-50 border-2 border-purple-200 text-gray-800 font-medium rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             >
               <option value="All">All</option>
               <option value="No Contract">No Contract</option>
@@ -241,10 +241,10 @@ function ClientList() {
 
       {/* Clients Grid */}
       {filteredClients.length === 0 ? (
-        <div className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-12 text-center">
+        <div className="bg-white border-2 border-purple-200 rounded-2xl p-12 text-center shadow-lg">
           <div className="text-6xl mb-4">📋</div>
-          <h3 className="text-xl font-bold text-white mb-2">No clients found</h3>
-          <p className="text-gray-400 mb-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-2">No clients found</h3>
+          <p className="text-gray-600 font-medium mb-6">
             {searchTerm || filterStatus !== 'All' || filterContractStatus !== 'All'
               ? 'Try adjusting your search or filters'
               : 'Get started by adding your first client'}
@@ -252,7 +252,7 @@ function ClientList() {
           {!searchTerm && filterStatus === 'All' && filterContractStatus === 'All' && (
             <button
               onClick={() => navigate('/admin/clients/new')}
-              className="px-6 py-3 bg-cyan-500 text-white rounded-xl font-semibold hover:bg-cyan-600 transition-all border border-cyan-400/50"
+              className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold hover:shadow-xl hover:shadow-purple-500/30 transition-all hover:scale-105"
             >
               Add Your First Client
             </button>
@@ -263,36 +263,36 @@ function ClientList() {
           {filteredClients.map((client) => (
             <div
               key={client.id}
-              className="bg-[#1f1f1f] border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/60 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-200 cursor-pointer"
+              className="bg-white border-2 border-purple-200 rounded-2xl p-6 hover:border-purple-400 hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-200 cursor-pointer hover:scale-105"
               onClick={() => navigate(`/admin/clients/${client.id}`)}
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-lg border border-cyan-400/30">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-purple-500/30">
                     {client.first_name.charAt(0)}{client.last_name.charAt(0)}
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-white">
+                    <h3 className="text-lg font-bold text-gray-800">
                       {client.first_name} {client.last_name}
                     </h3>
                     {client.company && (
-                      <p className="text-sm text-gray-400">{client.company}</p>
+                      <p className="text-sm text-gray-600 font-medium">{client.company}</p>
                     )}
                   </div>
                 </div>
               </div>
 
               <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2 text-sm text-gray-400">
+                <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
                   <span>📧</span>
                   <span className="truncate">{client.email}</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
+                <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
                   <span>📅</span>
                   <span>Client since {formatDate(client.client_date)}</span>
                 </div>
                 {client.hourly_rate && (
-                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                  <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
                     <span>💰</span>
                     <span>${client.hourly_rate}/hr</span>
                   </div>
@@ -305,16 +305,16 @@ function ClientList() {
               </div>
 
               {client.description && (
-                <p className="text-sm text-gray-400 line-clamp-2 mb-4">{client.description}</p>
+                <p className="text-sm text-gray-600 line-clamp-2 mb-4">{client.description}</p>
               )}
 
-              <div className="flex items-center justify-between pt-4 border-t border-gray-800">
+              <div className="flex items-center justify-between pt-4 border-t-2 border-purple-100">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate(`/admin/clients/${client.id}`);
                   }}
-                  className="text-sm font-semibold text-cyan-400 hover:text-cyan-300"
+                  className="text-sm font-bold text-purple-600 hover:text-purple-700 hover:underline"
                 >
                   View Details →
                 </button>
@@ -323,7 +323,7 @@ function ClientList() {
                     e.stopPropagation();
                     handleDelete(client.id, `${client.first_name} ${client.last_name}`);
                   }}
-                  className="text-sm font-semibold text-red-400 hover:text-red-300"
+                  className="text-sm font-bold text-red-600 hover:text-red-700 hover:underline"
                 >
                   Delete
                 </button>
