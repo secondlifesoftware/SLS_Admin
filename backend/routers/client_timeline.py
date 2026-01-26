@@ -38,7 +38,7 @@ def create_timeline_event(event: ClientTimelineCreate, db: Session = Depends(get
     if not client:
         raise HTTPException(status_code=404, detail="Client not found")
     
-    db_event = ClientTimeline(**event.dict())
+    db_event = ClientTimeline(**event.model_dump())
     db.add(db_event)
     db.commit()
     db.refresh(db_event)

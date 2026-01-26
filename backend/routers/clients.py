@@ -57,7 +57,7 @@ def get_client(client_id: int, db: Session = Depends(get_db)):
 @router.post("/", response_model=ClientSchema)
 def create_client(client: ClientCreate, db: Session = Depends(get_db)):
     """Create a new client with contacts"""
-    client_data = client.dict()
+    client_data = client.model_dump()
     contacts_data = client_data.pop('contacts', [])
     
     db_client = Client(**client_data)

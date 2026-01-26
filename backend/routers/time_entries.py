@@ -71,7 +71,7 @@ def create_time_entry(entry: InvoiceItemCreate, db: Session = Depends(get_db)):
     amount = round(hours * entry.rate, 2)
     
     # Create entry
-    entry_data = entry.dict()
+    entry_data = entry.model_dump()
     entry_data['hours'] = hours
     entry_data['amount'] = amount
     

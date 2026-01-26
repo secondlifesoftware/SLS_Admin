@@ -35,7 +35,7 @@ def create_note(note: ClientNoteCreate, db: Session = Depends(get_db)):
     if not client:
         raise HTTPException(status_code=404, detail="Client not found")
     
-    db_note = ClientNote(**note.dict())
+    db_note = ClientNote(**note.model_dump())
     db.add(db_note)
     db.commit()
     db.refresh(db_note)

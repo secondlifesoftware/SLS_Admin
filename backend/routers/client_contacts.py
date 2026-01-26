@@ -35,7 +35,7 @@ def create_contact(contact: ClientContactCreate, db: Session = Depends(get_db)):
     if not client:
         raise HTTPException(status_code=404, detail="Client not found")
     
-    db_contact = ClientContact(**contact.dict())
+    db_contact = ClientContact(**contact.model_dump())
     db.add(db_contact)
     db.commit()
     db.refresh(db_contact)

@@ -53,7 +53,7 @@ def create_profile(profile: UserProfileCreate, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(status_code=400, detail="Profile already exists")
     
-    db_profile = UserProfile(**profile.dict())
+    db_profile = UserProfile(**profile.model_dump())
     db.add(db_profile)
     db.commit()
     db.refresh(db_profile)

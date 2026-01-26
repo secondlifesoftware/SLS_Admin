@@ -35,7 +35,7 @@ def create_contract(contract: ContractCreate, db: Session = Depends(get_db)):
     if not client:
         raise HTTPException(status_code=404, detail="Client not found")
     
-    contract_data = contract.dict()
+    contract_data = contract.model_dump()
     milestones_data = contract_data.pop('milestones', [])
     
     db_contract = Contract(**contract_data)
@@ -89,7 +89,7 @@ def create_milestone(contract_id: int, milestone: ContractMilestoneCreate, db: S
     if not contract:
         raise HTTPException(status_code=404, detail="Contract not found")
     
-    milestone_data = milestone.dict()
+    milestone_data = milestone.model_dump()
     milestone_data['contract_id'] = contract_id
     db_milestone = ContractMilestone(**milestone_data)
     db.add(db_milestone)
