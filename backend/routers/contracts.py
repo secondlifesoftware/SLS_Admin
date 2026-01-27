@@ -60,7 +60,7 @@ def update_contract(contract_id: int, contract_update: ContractUpdate, db: Sessi
     if not db_contract:
         raise HTTPException(status_code=404, detail="Contract not found")
     
-    update_data = contract_update.dict(exclude_unset=True)
+    update_data = contract_update.model_dump(exclude_unset=True)
     for field, value in update_data.items():
         setattr(db_contract, field, value)
     
