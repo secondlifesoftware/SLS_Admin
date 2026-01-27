@@ -237,13 +237,13 @@ class ClientList(ClientBase):
 # Invoice Item Schemas (Time Entries)
 class InvoiceItemBase(BaseModel):
     date: datetime
-    start_time: str  # Format: HH:MM
-    end_time: str  # Format: HH:MM
+    start_time: Optional[str] = None  # Format: HH:MM (optional for manual entries)
+    end_time: Optional[str] = None  # Format: HH:MM (optional for manual entries)
     person: str
     description: str
-    hours: float
+    hours: Optional[float] = None  # Calculated from start/end time or manually entered
     rate: float
-    amount: float
+    amount: float  # Calculated: hours * rate or manually entered
 
 
 class InvoiceItemCreate(InvoiceItemBase):

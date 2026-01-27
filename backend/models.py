@@ -74,13 +74,13 @@ class InvoiceItem(Base):
     invoice_id = Column(Integer, ForeignKey("invoices.id"), nullable=True)  # Nullable for unbilled time entries
     client_id = Column(Integer, ForeignKey("clients.id"), nullable=False)
     date = Column(DateTime(timezone=True), nullable=False)
-    start_time = Column(String(10), nullable=False)  # Format: HH:MM
-    end_time = Column(String(10), nullable=False)  # Format: HH:MM
+    start_time = Column(String(10), nullable=True)  # Format: HH:MM (optional for manual entries)
+    end_time = Column(String(10), nullable=True)  # Format: HH:MM (optional for manual entries)
     person = Column(String(255), nullable=False)
     description = Column(String(500), nullable=False)
-    hours = Column(Float, nullable=False)  # Calculated from start/end time
+    hours = Column(Float, nullable=True)  # Calculated from start/end time or manually entered
     rate = Column(Float, nullable=False)
-    amount = Column(Float, nullable=False)  # Calculated: hours * rate
+    amount = Column(Float, nullable=False)  # Calculated: hours * rate or manually entered
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 

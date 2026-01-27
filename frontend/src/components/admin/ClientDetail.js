@@ -6,6 +6,7 @@ import ClientNotesView from './ClientNotesView';
 import ClientContractsView from './ClientContractsView';
 import ClientDocumentsView from './ClientDocumentsView';
 import ClientTechAndAccountsView from './ClientTechAndAccountsView';
+import TimeTracking from './TimeTracking';
 import { auth } from '../../firebase';
 import ReactMarkdown from 'react-markdown';
 
@@ -212,6 +213,7 @@ function ClientDetail() {
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: '📋' },
+    { id: 'time-tracking', label: 'Time Tracking', icon: '⏱️' },
     { id: 'timeline', label: 'Timeline', icon: '📅' },
     { id: 'notes', label: 'Notes', icon: '📝' },
     { id: 'contracts', label: 'Contracts', icon: '📄' },
@@ -635,6 +637,10 @@ function ClientDetail() {
 
       {activeTab === 'documents' && (
         <ClientDocumentsView clientId={id} />
+      )}
+
+      {activeTab === 'time-tracking' && (
+        <TimeTracking clientId={id} />
       )}
 
       {activeTab === 'tech' && (

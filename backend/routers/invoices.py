@@ -3,9 +3,9 @@ from fastapi.responses import StreamingResponse, Response
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 import csv
-from io import StringIO
+from io import StringIO, BytesIO
 from database import get_db
 from models import Invoice, InvoiceItem, InvoiceExpense, Client, Contract
 from schemas import Invoice as InvoiceSchema, InvoiceCreate, InvoiceUpdate, InvoiceGenerateRequest
@@ -409,4 +409,56 @@ def generate_invoice_csv_endpoint(invoice_id: int, db: Session = Depends(get_db)
             "Content-Disposition": f'attachment; filename="SLS_{invoice.invoice_number}.csv"'
         }
     )
+
+
+class SendEmailRequest(BaseModel):
+    to_email: EmailStr
+
+
+@router.post("/{invoice_id}/send-email")
+def send_invoice_email(invoice_id: int, request: SendEmailRequest, db: Session = Depends(get_db)):
+    """Send invoice PDF via email to client"""
+    invoice = db.query(Invoice).filter(Invoice.id == invoice_id).first()
+    if not invoice:
+        raise HTTPException(status_code=404, detail="Invoice not found")
+    
+    client = db.query(Client).filter(Client.id == invoice.client_id).first()
+    if not client:
+        raise HTTPException(status_code=404, detail="Client not found")
+    
+    # Get time entries and expenses
+    time_entries = db.query(InvoiceItem).filter(
+        InvoiceItem.invoice_id == invoice_id
+    ).order_by(InvoiceItem.date.asc(), InvoiceItem.start_time.asc()).all()
+    
+    expenses = db.query(InvoiceExpense).filter(
+        InvoiceExpense.invoice_id == invoice_id
+    ).order_by(InvoiceExpense.date.asc()).all()
+    
+    if not time_entries and not expenses:
+        raise HTTPException(status_code=400, detail="No time entries or expenses found for this invoice")
+    
+    # Load client contacts
+    from models import ClientContact
+    client.contacts = db.query(ClientContact).filter(
+        ClientContact.client_id == client.id
+    ).order_by(ClientContact.order).all()
+    
+    # Generate PDF
+    pdf_buffer = generate_invoice_pdf(invoice, client, time_entries, expenses)
+    pdf_buffer.seek(0)
+    pdf_data = pdf_buffer.read()
+    
+    # For now, return success message
+    # TODO: Integrate with email service (SendGrid, AWS SES, etc.)
+    # This is a placeholder - you'll need to add actual email sending
+    # For production, use a service like SendGrid, AWS SES, or similar
+    
+    return {
+        "message": f"Invoice PDF generated successfully. Email sending not yet implemented.",
+        "invoice_number": invoice.invoice_number,
+        "to_email": request.to_email,
+        "pdf_size": len(pdf_data),
+        "note": "Email functionality needs to be configured with an email service provider"
+    }
 

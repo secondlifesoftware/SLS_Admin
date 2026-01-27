@@ -2,11 +2,34 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import datetime
+from pydantic import BaseModel
+import os
 from database import get_db
 from models import InvoiceItem, Client
 from schemas import InvoiceItem as InvoiceItemSchema, InvoiceItemCreate, InvoiceItemUpdate
 
 router = APIRouter(prefix="/api/time-entries", tags=["time-entries"])
+
+# Initialize OpenAI client for description enhancement
+openai_client = None
+try:
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    if openai_api_key:
+        from openai import OpenAI
+        openai_client = OpenAI(api_key=openai_api_key)
+except ImportError:
+    openai_client = None
+except Exception as e:
+    print(f"⚠️  WARNING: Error initializing OpenAI client: {e}")
+    openai_client = None
+
+
+class DescriptionEnhancementRequest(BaseModel):
+    description: str
+
+
+class DescriptionEnhancementResponse(BaseModel):
+    enhanced_description: str
 
 
 def calculate_hours(start_time: str, end_time: str) -> float:
@@ -64,11 +87,20 @@ def create_time_entry(entry: InvoiceItemCreate, db: Session = Depends(get_db)):
     if not client:
         raise HTTPException(status_code=404, detail="Client not found")
     
-    # Calculate hours
-    hours = calculate_hours(entry.start_time, entry.end_time)
+    # Calculate hours if start_time and end_time are provided
+    hours = None
+    if entry.start_time and entry.end_time:
+        hours = calculate_hours(entry.start_time, entry.end_time)
+    elif entry.hours:
+        hours = entry.hours
     
     # Calculate amount
-    amount = round(hours * entry.rate, 2)
+    if hours and entry.rate:
+        amount = round(hours * entry.rate, 2)
+    elif entry.amount:
+        amount = entry.amount
+    else:
+        raise HTTPException(status_code=400, detail="Either provide start/end time with rate, or provide hours with rate, or provide amount directly")
     
     # Create entry
     entry_data = entry.model_dump()
@@ -93,20 +125,30 @@ def update_time_entry(entry_id: int, entry_update: InvoiceItemUpdate, db: Sessio
     if db_entry.invoice_id:
         raise HTTPException(status_code=400, detail="Cannot update time entry that is already invoiced")
     
-    update_data = entry_update.dict(exclude_unset=True)
+    update_data = entry_update.model_dump(exclude_unset=True)
     
     # Recalculate hours and amount if times or rate changed
     start_time = update_data.get('start_time', db_entry.start_time)
     end_time = update_data.get('end_time', db_entry.end_time)
     rate = update_data.get('rate', db_entry.rate)
     
-    if 'start_time' in update_data or 'end_time' in update_data:
+    # If start_time and end_time are provided, calculate hours from them
+    if start_time and end_time:
         hours = calculate_hours(start_time, end_time)
         update_data['hours'] = hours
-    
-    if 'hours' in update_data or 'rate' in update_data:
-        hours = update_data.get('hours', db_entry.hours)
-        update_data['amount'] = round(hours * rate, 2)
+        # Calculate amount from hours × rate
+        if rate:
+            update_data['amount'] = round(hours * rate, 2)
+    # If hours is manually set and no start/end time, use manual hours
+    elif 'hours' in update_data and update_data['hours']:
+        hours = update_data['hours']
+        # Calculate amount from hours × rate if rate is set
+        if rate:
+            update_data['amount'] = round(hours * rate, 2)
+    # If amount is manually set and no start/end time, allow manual amount
+    elif 'amount' in update_data and not start_time and not end_time:
+        # Allow manual amount entry
+        pass
     
     for field, value in update_data.items():
         setattr(db_entry, field, value)
@@ -130,4 +172,46 @@ def delete_time_entry(entry_id: int, db: Session = Depends(get_db)):
     db.delete(db_entry)
     db.commit()
     return {"message": "Time entry deleted successfully"}
+
+
+@router.post("/enhance-description", response_model=DescriptionEnhancementResponse)
+def enhance_description(request: DescriptionEnhancementRequest):
+    """Enhance time entry description using AI - improve formatting, grammar, and clarity (30 words or less)"""
+    if not request.description or not request.description.strip():
+        raise HTTPException(status_code=400, detail="Description is required")
+    
+    if not openai_client:
+        # Return original if OpenAI is not configured
+        return DescriptionEnhancementResponse(enhanced_description=request.description)
+    
+    try:
+        response = openai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a professional time entry description editor. Your task is to improve time entry descriptions to be clear, concise, professional, and exactly 30 words or less. Fix grammar, improve clarity, and ensure professional formatting. Return ONLY the enhanced description, nothing else."
+                },
+                {
+                    "role": "user",
+                    "content": f"Enhance this time entry description to be professional, clear, and exactly 30 words or less:\n\n{request.description}"
+                }
+            ],
+            max_tokens=100,
+            temperature=0.3,
+        )
+        
+        enhanced = response.choices[0].message.content.strip()
+        
+        # Ensure it's 30 words or less
+        words = enhanced.split()
+        if len(words) > 30:
+            enhanced = ' '.join(words[:30])
+        
+        return DescriptionEnhancementResponse(enhanced_description=enhanced)
+    
+    except Exception as e:
+        print(f"Error enhancing description: {e}")
+        # Return original on error
+        return DescriptionEnhancementResponse(enhanced_description=request.description)
 
