@@ -18,10 +18,10 @@ function ClientForm() {
     hourly_rate: '',
     notes_from_last_meeting: '',
     timeline: '',
-    contract_status: 'No Contract',
-    contract_type: '',
+    contract_status: 'Negotiation',  // Default: Negotiation
+    contract_type: '',  // Default: None (empty string)
     contract_due_date: '',
-    status: 'Active',
+    status: 'Active',  // Default: Active
     company: '',
     address: '',
   });
@@ -56,7 +56,7 @@ function ClientForm() {
         hourly_rate: client.hourly_rate || '',
         notes_from_last_meeting: client.notes_from_last_meeting || '',
         timeline: client.timeline || '',
-        contract_status: client.contract_status || 'No Contract',
+        contract_status: client.contract_status || 'Negotiation',
         contract_type: client.contract_type || '',
         contract_due_date: contractDueDate,
         status: client.status || 'Active',
@@ -103,6 +103,28 @@ function ClientForm() {
     setLoading(true);
     setError('');
 
+    // Validate required fields
+    if (!formData.first_name.trim()) {
+      setError('First Name is required');
+      setLoading(false);
+      return;
+    }
+    if (!formData.last_name.trim()) {
+      setError('Last Name is required');
+      setLoading(false);
+      return;
+    }
+    if (!formData.email.trim()) {
+      setError('Email is required');
+      setLoading(false);
+      return;
+    }
+    if (!formData.client_date) {
+      setError('Client Date is required');
+      setLoading(false);
+      return;
+    }
+
     try {
       // Clean up the data - convert empty strings to null
       const cleanData = {};
@@ -120,6 +142,7 @@ function ClientForm() {
         hourly_rate: cleanData.hourly_rate ? parseFloat(cleanData.hourly_rate) : null,
         client_date: new Date(cleanData.client_date).toISOString(),
         contract_due_date: cleanData.contract_due_date ? new Date(cleanData.contract_due_date).toISOString() : null,
+        contract_type: cleanData.contract_type || null,  // Ensure empty string becomes null
         contacts: contacts.filter(c => c.name.trim() !== '').map(c => ({
           name: c.name,
           email: c.email || null,
@@ -337,8 +360,8 @@ function ClientForm() {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
               >
-                <option value="No Contract">No Contract</option>
                 <option value="Negotiation">Negotiation</option>
+                <option value="No Contract">No Contract</option>
                 <option value="Contract Signed">Contract Signed</option>
                 <option value="Completed">Completed</option>
                 <option value="Not Heard Back">Not Heard Back</option>

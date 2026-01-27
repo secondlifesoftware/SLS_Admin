@@ -174,20 +174,20 @@ class Contract(ContractBase):
 
 # Client Schemas
 class ClientBase(BaseModel):
-    first_name: str
-    last_name: str
-    email: EmailStr
-    client_date: datetime
-    description: Optional[str] = None
-    hourly_rate: Optional[float] = None
-    notes_from_last_meeting: Optional[str] = None
-    timeline: Optional[str] = None
-    contract_status: str = "No Contract"  # No Contract, Negotiation, Contract Signed, Not Heard Back, Completed
-    contract_type: Optional[str] = None  # Fixed Price, Milestone Based, Hourly, None
-    contract_due_date: Optional[datetime] = None
-    status: str = "Active"
-    company: Optional[str] = None
-    address: Optional[str] = None
+    first_name: str  # Required
+    last_name: str  # Required
+    email: EmailStr  # Required
+    client_date: datetime  # Required
+    description: Optional[str] = None  # Optional
+    hourly_rate: Optional[float] = None  # Optional
+    notes_from_last_meeting: Optional[str] = None  # Optional
+    timeline: Optional[str] = None  # Optional
+    contract_status: str = "Negotiation"  # Default: Negotiation (No Contract, Negotiation, Contract Signed, Not Heard Back, Completed)
+    contract_type: Optional[str] = None  # Default: None (Fixed Price, Milestone Based, Hourly, None)
+    contract_due_date: Optional[datetime] = None  # Optional
+    status: str = "Active"  # Default: Active
+    company: Optional[str] = None  # Optional
+    address: Optional[str] = None  # Optional
 
 
 class ClientCreate(ClientBase):
