@@ -5,12 +5,28 @@ from typing import List, Optional
 from datetime import datetime
 from pydantic import BaseModel, EmailStr
 import csv
+import os
+import base64
 from io import StringIO, BytesIO
 from database import get_db
 from models import Invoice, InvoiceItem, InvoiceExpense, Client, Contract
 from schemas import Invoice as InvoiceSchema, InvoiceCreate, InvoiceUpdate, InvoiceGenerateRequest
 from utils.invoice_number import get_next_invoice_number
 from utils.pdf_generator import generate_invoice_pdf
+
+# Initialize Resend email client
+resend_client = None
+try:
+    resend_api_key = os.getenv("RESEND_API_KEY")
+    if resend_api_key:
+        import resend
+        resend.api_key = resend_api_key
+        resend_client = resend
+except ImportError:
+    resend_client = None
+except Exception as e:
+    print(f"⚠️  WARNING: Error initializing Resend client: {e}")
+    resend_client = None
 
 router = APIRouter(prefix="/api/invoices", tags=["invoices"])
 
@@ -449,16 +465,96 @@ def send_invoice_email(invoice_id: int, request: SendEmailRequest, db: Session =
     pdf_buffer.seek(0)
     pdf_data = pdf_buffer.read()
     
-    # For now, return success message
-    # TODO: Integrate with email service (SendGrid, AWS SES, etc.)
-    # This is a placeholder - you'll need to add actual email sending
-    # For production, use a service like SendGrid, AWS SES, or similar
+    # Send email using Resend
+    if not resend_client:
+        raise HTTPException(
+            status_code=500,
+            detail="Email service not configured. Please set RESEND_API_KEY environment variable."
+        )
     
-    return {
-        "message": f"Invoice PDF generated successfully. Email sending not yet implemented.",
-        "invoice_number": invoice.invoice_number,
-        "to_email": request.to_email,
-        "pdf_size": len(pdf_data),
-        "note": "Email functionality needs to be configured with an email service provider"
-    }
+    try:
+        # Get sender email from environment or use default
+        from_email = os.getenv("RESEND_FROM_EMAIL", "invoices@secondlifesoftware.com")
+        from_name = os.getenv("RESEND_FROM_NAME", "Second Life Software")
+        
+        # Encode PDF as base64 for attachment
+        pdf_base64 = base64.b64encode(pdf_data).decode('utf-8')
+        
+        # Prepare email content
+        client_name = f"{client.first_name} {client.last_name}".strip() or client.email
+        subject = f"Invoice {invoice.invoice_number} from Second Life Software"
+        
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }}
+                .content {{ background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }}
+                .invoice-details {{ background: white; padding: 20px; border-radius: 8px; margin: 20px 0; }}
+                .footer {{ text-align: center; margin-top: 30px; color: #666; font-size: 12px; }}
+                .button {{ display: inline-block; padding: 12px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>Invoice {invoice.invoice_number}</h1>
+                    <p>Second Life Software</p>
+                </div>
+                <div class="content">
+                    <p>Dear {client_name},</p>
+                    <p>Please find attached your invoice <strong>{invoice.invoice_number}</strong> for the amount of <strong>${invoice.total:.2f}</strong>.</p>
+                    
+                    <div class="invoice-details">
+                        <p><strong>Invoice Number:</strong> {invoice.invoice_number}</p>
+                        <p><strong>Date:</strong> {invoice.date.strftime('%B %d, %Y') if invoice.date else 'N/A'}</p>
+                        <p><strong>Due Date:</strong> {invoice.due_date.strftime('%B %d, %Y') if invoice.due_date else 'N/A'}</p>
+                        <p><strong>Total Amount:</strong> ${invoice.total:.2f}</p>
+                    </div>
+                    
+                    <p>The detailed invoice is attached as a PDF. If you have any questions, please don't hesitate to contact us.</p>
+                    
+                    <p>Best regards,<br>Second Life Software Team</p>
+                </div>
+                <div class="footer">
+                    <p>This is an automated email. Please do not reply directly to this message.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        
+        # Send email via Resend
+        params = {
+            "from": f"{from_name} <{from_email}>",
+            "to": [request.to_email],
+            "subject": subject,
+            "html": html_content,
+            "attachments": [
+                {
+                    "filename": f"SLS_Invoice_{invoice.invoice_number}.pdf",
+                    "content": pdf_base64,
+                }
+            ],
+        }
+        
+        email_response = resend_client.Emails.send(params)
+        
+        return {
+            "message": f"Invoice {invoice.invoice_number} sent successfully to {request.to_email}",
+            "invoice_number": invoice.invoice_number,
+            "to_email": request.to_email,
+            "email_id": email_response.get("id"),
+        }
+        
+    except Exception as e:
+        print(f"Error sending email via Resend: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to send email: {str(e)}"
+        )
 
