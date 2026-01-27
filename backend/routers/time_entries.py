@@ -90,17 +90,26 @@ def create_time_entry(entry: InvoiceItemCreate, db: Session = Depends(get_db)):
     # Calculate hours if start_time and end_time are provided
     hours = None
     if entry.start_time and entry.end_time:
-        hours = calculate_hours(entry.start_time, entry.end_time)
+        calculated_hours = calculate_hours(entry.start_time, entry.end_time)
+        # Only use calculated hours if > 0, otherwise allow manual hours
+        if calculated_hours > 0:
+            hours = calculated_hours
+        elif entry.hours:
+            hours = entry.hours
     elif entry.hours:
         hours = entry.hours
     
     # Calculate amount
-    if hours and entry.rate:
+    # Priority: 1) hours × rate (if hours > 0), 2) manual amount, 3) error
+    if hours and hours > 0 and entry.rate:
         amount = round(hours * entry.rate, 2)
-    elif entry.amount:
+    elif entry.amount and entry.amount > 0:
         amount = entry.amount
     else:
-        raise HTTPException(status_code=400, detail="Either provide start/end time with rate, or provide hours with rate, or provide amount directly")
+        raise HTTPException(
+            status_code=400, 
+            detail="Amount must be greater than 0. Either provide start/end time with rate (resulting in hours > 0), or provide hours > 0 with rate, or provide amount > 0 directly."
+        )
     
     # Create entry
     entry_data = entry.model_dump()

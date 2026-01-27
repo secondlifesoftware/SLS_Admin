@@ -187,25 +187,32 @@ function TimeTracking({ clientId }) {
       
       // Recalculate hours if times change
       if (name === 'start_time' || name === 'end_time') {
-        const hours = calculateHours(updated.start_time, updated.end_time);
-        updated.hours = hours ? hours.toFixed(2) : '';
-        if (hours && updated.rate) {
-          updated.amount = (hours * parseFloat(updated.rate)).toFixed(2);
+        const calculatedHours = calculateHours(updated.start_time, updated.end_time);
+        // Only auto-calculate if hours > 0, otherwise allow manual entry
+        if (calculatedHours > 0) {
+          updated.hours = calculatedHours.toFixed(2);
+          if (updated.rate) {
+            updated.amount = (calculatedHours * parseFloat(updated.rate)).toFixed(2);
+          }
+        } else {
+          // If hours = 0, clear auto-calculated amount to allow manual entry
+          if (!updated.amount || updated.amount === '0.00') {
+            updated.amount = '';
+          }
         }
       }
       
-      // Recalculate amount if rate or hours change
+      // Recalculate amount if rate or hours change (only if hours > 0)
       if (name === 'rate' || name === 'hours') {
         const hours = parseFloat(updated.hours) || calculateHours(updated.start_time, updated.end_time);
-        if (hours && updated.rate) {
+        if (hours > 0 && updated.rate) {
           updated.amount = (hours * parseFloat(updated.rate)).toFixed(2);
         }
+        // If hours = 0, don't auto-calculate amount (allow manual entry)
       }
       
-      // If amount is manually changed and no start/end time, allow manual amount
-      if (name === 'amount' && !updated.start_time && !updated.end_time) {
-        // Allow manual amount entry
-      }
+      // Allow manual amount entry when hours = 0 or no start/end time
+      // (handled by disabled state in the input field)
       
       return updated;
     });
@@ -249,11 +256,26 @@ function TimeTracking({ clientId }) {
       }
       
       const dateTime = new Date(`${formData.date}T${formData.start_time || '00:00'}:00`);
-      const hours = parseFloat(formData.hours) || calculateHours(formData.start_time, formData.end_time);
+      const calculatedHours = calculateHours(formData.start_time, formData.end_time);
+      const hours = parseFloat(formData.hours) || (calculatedHours > 0 ? calculatedHours : null);
       const rate = parseFloat(formData.rate) || client?.hourly_rate || 0;
-      const amount = formData.start_time && formData.end_time 
-        ? (hours * rate) 
-        : parseFloat(formData.amount) || 0;
+      
+      // Calculate amount: if we have valid hours and rate, use that; otherwise use manual amount
+      let amount = 0;
+      if (hours && hours > 0 && rate) {
+        amount = hours * rate;
+      } else if (formData.amount) {
+        amount = parseFloat(formData.amount) || 0;
+      } else if (calculatedHours > 0 && rate) {
+        amount = calculatedHours * rate;
+      }
+      
+      // Validate that we have a non-zero amount
+      if (amount <= 0) {
+        setError('Amount must be greater than 0. Please enter hours with rate, or enter amount directly.');
+        setLoading(false);
+        return;
+      }
       
       const entryData = {
         client_id: parseInt(clientId),
@@ -430,23 +452,44 @@ function TimeTracking({ clientId }) {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-gray-900">Time Tracker</h2>
-          <button
-            onClick={handleStartStop}
-            className={`px-6 py-3 rounded-xl font-semibold text-white transition-all ${
-              isTracking
-                ? 'bg-red-600 hover:bg-red-700 animate-pulse'
-                : 'bg-green-600 hover:bg-green-700'
-            }`}
-          >
-            {isTracking ? (
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 bg-white rounded-full"></span>
-                <span>Stop ({formatTime(elapsedTime)})</span>
-              </div>
-            ) : (
-              '▶ Start Timer'
-            )}
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                setShowManualForm(true);
+                setEditingEntry(null);
+                setFormData({
+                  date: new Date().toISOString().split('T')[0],
+                  start_time: '',
+                  end_time: '',
+                  person: auth?.currentUser?.email || '',
+                  description: '',
+                  hours: '',
+                  rate: client?.hourly_rate?.toString() || '',
+                  amount: '',
+                });
+              }}
+              className="px-6 py-3 rounded-xl font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all border border-gray-300"
+            >
+              + Manual Entry
+            </button>
+            <button
+              onClick={handleStartStop}
+              className={`px-6 py-3 rounded-xl font-semibold text-white transition-all ${
+                isTracking
+                  ? 'bg-red-600 hover:bg-red-700 animate-pulse'
+                  : 'bg-green-600 hover:bg-green-700'
+              }`}
+            >
+              {isTracking ? (
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 bg-white rounded-full"></span>
+                  <span>Stop ({formatTime(elapsedTime)})</span>
+                </div>
+              ) : (
+                '▶ Start Timer'
+              )}
+            </button>
+          </div>
         </div>
         
         {isTracking && (
@@ -542,16 +585,19 @@ function TimeTracking({ clientId }) {
                 <input
                   type="number"
                   step="0.01"
+                  min="0"
                   name="amount"
                   value={formData.amount}
                   onChange={handleInputChange}
-                  disabled={formData.start_time && formData.end_time}
+                  disabled={formData.start_time && formData.end_time && calculateHours(formData.start_time, formData.end_time) > 0}
                   className={`w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    formData.start_time && formData.end_time ? 'bg-gray-50 text-gray-600' : ''
+                    (formData.start_time && formData.end_time && calculateHours(formData.start_time, formData.end_time) > 0) ? 'bg-gray-50 text-gray-600' : ''
                   }`}
                 />
-                {formData.start_time && formData.end_time && (
+                {formData.start_time && formData.end_time && calculateHours(formData.start_time, formData.end_time) > 0 ? (
                   <p className="text-xs text-gray-500 mt-1">Calculated from hours × rate</p>
+                ) : (
+                  <p className="text-xs text-gray-500 mt-1">Enter amount manually if hours = 0 or no start/end time</p>
                 )}
               </div>
             </div>
