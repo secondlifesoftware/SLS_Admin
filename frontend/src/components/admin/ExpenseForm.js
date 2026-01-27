@@ -6,10 +6,10 @@ function ExpenseForm({ clientId, onSuccess, onCancel }) {
     date: new Date().toISOString().split('T')[0],
     start_time: '',
     end_time: '',
-    person: 'System',
+    person: 'System',  // Default to 'System' for fixed expenses
     description: '',
     hours: '',
-    amount: '',
+    amount: '0',  // Default to 0 for fixed expenses
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -45,8 +45,19 @@ function ExpenseForm({ clientId, onSuccess, onCancel }) {
     setError('');
     setLoading(true);
 
-    if (!formData.description || !formData.amount) {
-      setError('Description and amount are required');
+    // Validate required fields
+    if (!formData.date) {
+      setError('Date is required');
+      setLoading(false);
+      return;
+    }
+    if (!formData.description || !formData.description.trim()) {
+      setError('Description is required');
+      setLoading(false);
+      return;
+    }
+    if (!formData.amount || parseFloat(formData.amount) <= 0) {
+      setError('Amount is required and must be greater than 0');
       setLoading(false);
       return;
     }
@@ -149,6 +160,7 @@ function ExpenseForm({ clientId, onSuccess, onCancel }) {
           <input
             type="number"
             step="0.01"
+            min="0"
             name="amount"
             value={formData.amount}
             onChange={handleInputChange}
