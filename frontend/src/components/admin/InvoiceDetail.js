@@ -96,7 +96,7 @@ function InvoiceDetail() {
 
   const handleExportPDF = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:8000'}/api/invoices/${id}/generate-pdf`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/invoices/${id}/generate-pdf`);
       if (!response.ok) {
         throw new Error('Failed to generate PDF');
       }
@@ -116,7 +116,7 @@ function InvoiceDetail() {
 
   const handleExportCSV = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:8000'}/api/invoices/${id}/generate-csv`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/invoices/${id}/generate-csv`);
       if (!response.ok) {
         throw new Error('Failed to generate CSV');
       }

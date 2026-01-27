@@ -230,7 +230,7 @@ function ScopeOfWorkEdit() {
 
   const handleExportPDF = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:8000'}/api/scope-of-work/${id}/generate-pdf`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/scope-of-work/${id}/generate-pdf`);
       if (!response.ok) {
         throw new Error('Failed to generate PDF');
       }

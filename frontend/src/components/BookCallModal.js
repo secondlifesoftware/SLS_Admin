@@ -273,7 +273,7 @@ const BookCallModal = ({ isOpen, onClose }) => {
     setCaptchaError('');
 
     try {
-      const API_BASE_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:8000';
+      const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
       
       // Simulate progress
       progressIntervalRef.current = setInterval(() => {
@@ -379,7 +379,7 @@ const BookCallModal = ({ isOpen, onClose }) => {
     setError('');
 
     try {
-      const API_BASE_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:8000';
+      const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
       
       const response = await fetch(`${API_BASE_URL}/api/clients/${clientId}/create-calendar-event`, {
         method: 'POST',
@@ -415,7 +415,7 @@ const BookCallModal = ({ isOpen, onClose }) => {
   // Check for upcoming bookings
   const checkUpcomingBookings = async (clientId) => {
     try {
-      const API_BASE_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:8000';
+      const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
       const response = await fetch(`${API_BASE_URL}/api/clients/${clientId}/upcoming-bookings`);
       if (response.ok) {
         const data = await response.json();
@@ -1093,7 +1093,7 @@ const BookCallModal = ({ isOpen, onClose }) => {
                                       onClick={async () => {
                                         setSavingSummary(true);
                                         try {
-                                          const API_BASE_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:8000';
+                                          const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
                                           const response = await fetch(`${API_BASE_URL}/api/clients/${submittedData.client_id}/description`, {
                                             method: 'PATCH',
                                             headers: {

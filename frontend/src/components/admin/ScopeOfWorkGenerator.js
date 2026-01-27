@@ -502,7 +502,7 @@ Hourly Rate: $${hourlyRate || '[TBD]'}/hour
       // Show success message and option to export PDF
       if (window.confirm('SOW saved successfully! Would you like to export it as PDF for client signature?')) {
         try {
-          const response = await fetch(`${process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:8000'}/api/scope-of-work/${created.id}/generate-pdf`);
+          const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/scope-of-work/${created.id}/generate-pdf`);
           if (response.ok) {
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);

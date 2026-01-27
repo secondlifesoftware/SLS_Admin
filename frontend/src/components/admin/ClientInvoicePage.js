@@ -521,7 +521,7 @@ function ClientInvoicePage() {
                     <button
                       onClick={async () => {
                         try {
-                          const response = await fetch(`${process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:8000'}/api/invoices/${invoice.id}/generate-pdf`);
+                          const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/invoices/${invoice.id}/generate-pdf`);
                           if (!response.ok) throw new Error('Failed to generate PDF');
                           const blob = await response.blob();
                           const url = window.URL.createObjectURL(blob);
@@ -543,7 +543,7 @@ function ClientInvoicePage() {
                     <button
                       onClick={async () => {
                         try {
-                          const response = await fetch(`${process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:8000'}/api/invoices/${invoice.id}/generate-csv`);
+                          const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/invoices/${invoice.id}/generate-csv`);
                           if (!response.ok) throw new Error('Failed to generate CSV');
                           const blob = await response.blob();
                           const url = window.URL.createObjectURL(blob);
